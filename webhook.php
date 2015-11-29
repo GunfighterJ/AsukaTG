@@ -7,7 +7,7 @@ use Asuka\Commands;
 
 $telegram = new Api($api_key);
 
-if (in_array('setwebhook', $_GET)) {
+if (array_key_exists('setwebhook', $_GET)) {
     $response = $telegram->setWebhook($webhook_url);
     echo $response;
     return;
