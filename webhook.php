@@ -5,7 +5,8 @@ require 'config.php';
 use Telegram\Bot\Api;
 use Asuka\Commands;
 
-$telegram = new Api($api_key);
+$async = true;
+$telegram = new Api($api_key, $async);
 
 if (array_key_exists('setwebhook', $_GET)) {
     $response = $telegram->setWebhook($webhook_url);
