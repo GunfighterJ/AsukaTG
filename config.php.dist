@@ -1,0 +1,3 @@
+<?php
+$api_key = '155585324:AAF_Fr4PWz9Y4-oLQzCTZmeq2sQSgEMnSns';
+$webhook_url = 'https://example.com/webhook.php';
