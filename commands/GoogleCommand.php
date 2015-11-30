@@ -1,6 +1,7 @@
 <?php
 namespace Asuka\Commands;
 
+use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
 class GoogleCommand extends Command
@@ -14,6 +15,8 @@ class GoogleCommand extends Command
             $this->replyWithMessage('Search terms cannot be empty!');
             return;
         }
+
+        $this->replyWithChatAction(Actions::TYPING);
 
         $query = urlencode($arguments);
         $url = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=".$query;
