@@ -24,7 +24,7 @@ use Telegram\Bot\Commands\Command;
 class GoogleCommand extends Command
 {
     protected $name = "g";
-    protected $description = "Returns the first Google result for search terms";
+    protected $description = "Returns the first Google result for search terms.";
 
     public function handle($arguments)
     {
