@@ -1,7 +1,6 @@
 <?php
 namespace Asuka\Commands;
 
-use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
 class EchoCommand extends Command
