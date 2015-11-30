@@ -6,7 +6,7 @@ use Telegram\Bot\Commands\Command;
 class EchoCommand extends Command
 {
 	protected $name = "echo";
-	protected $description = "returns whatever input you send";
+	protected $description = "Returns whatever input you send";
 
     public function handle($arguments)
     {
