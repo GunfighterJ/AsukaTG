@@ -14,6 +14,7 @@ class EchoCommand extends Command
             $this->replyWithMessage('Arguments cannot be empty!');
             return;
         }
-        $this->replyWithMessage($arguments);
+
+        $this->replyWithMessage($arguments, true, $this->getUpdate()->getMessage()->getMessageId(), null);
     }
 }
