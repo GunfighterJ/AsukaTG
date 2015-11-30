@@ -20,8 +20,8 @@ class GoogleCommand extends Command
         $body = file_get_contents($url);
         $json = json_decode($body);
 
-        $response = $json->responseData->results[0]->url;
+        $response = $json->responseData->results[0]->unescapedUrl;
 
-        $this->replyWithMessage($response);
+        $this->replyWithMessage($response, false, $this->getUpdate()->getMessage()->getMessageId(), null);
     }
 }
