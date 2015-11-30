@@ -34,4 +34,5 @@ if (array_key_exists('setwebhook', $_GET)) {
 $telegram->addCommand(Asuka\Commands\HelpCommand::class);
 $telegram->addCommand(Asuka\Commands\EchoCommand::class);
 $telegram->addCommand(Asuka\Commands\GoogleCommand::class);
+$telegram->addCommand(Asuka\Commands\ImdbCommand::class);
 $telegram->commandsHandler(true);

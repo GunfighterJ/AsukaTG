@@ -32,6 +32,10 @@ class EchoCommand extends Command
             return;
         }
 
-        $this->replyWithMessage($arguments, true, $this->getUpdate()->getMessage()->getMessageId(), null);
+        $this->reply($arguments);
+    }
+
+    private function reply($response) {
+        $this->replyWithMessage($response, true, $this->getUpdate()->getMessage()->getMessageId(), null);
     }
 }

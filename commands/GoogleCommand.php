@@ -29,7 +29,7 @@ class GoogleCommand extends Command
     public function handle($arguments)
     {
         if (empty($arguments)) {
-            $this->replyWithMessage('Search terms cannot be empty!');
+            $this->reply('Search terms cannot be empty!');
             return;
         }
 
@@ -42,6 +42,10 @@ class GoogleCommand extends Command
 
         $response = $json->responseData->results[0]->unescapedUrl;
 
+        $this->reply($response);
+    }
+
+    private function reply($response) {
         $this->replyWithMessage($response, false, $this->getUpdate()->getMessage()->getMessageId(), null);
     }
 }
