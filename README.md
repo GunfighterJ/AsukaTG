@@ -21,3 +21,5 @@ eg. https://example.com/2447b56339fa202b9e8df1c3d73e6129fd7364aca92cb21fcd44db70
 Browse to your webhook URL and add ?setwebhook to the URL to set your webhook endpoint with the Telegram bot API.
 
 eg. https://example.com/2447b56339fa202b9e8df1c3d73e6129fd7364aca92cb21fcd44db70da6045c5/webhook.php?setwebhook
+
+You should see [true] your webhook set successfully.
