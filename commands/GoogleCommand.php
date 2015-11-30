@@ -2,7 +2,6 @@
 namespace Asuka\Commands;
 
 use Telegram\Bot\Commands\Command;
-use League\HTMLToMarkdown\HtmlConverter;
 
 class GoogleCommand extends Command
 {
@@ -21,7 +20,7 @@ class GoogleCommand extends Command
         $body = file_get_contents($url);
         $json = json_decode($body);
 
-        $response = $json->responseData->results[0]->url . "\n";
+        $response = $json->responseData->results[0]->url;
 
         $this->replyWithMessage($response);
     }
