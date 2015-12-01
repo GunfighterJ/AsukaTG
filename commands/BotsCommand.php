@@ -16,24 +16,21 @@
  * along with AsukaTG.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require 'vendor/autoload.php';
-require 'config.php';
+namespace Asuka\Commands;
 
-use Telegram\Bot\Api;
-use Asuka\Commands;
+use Telegram\Bot\Commands\Command;
 
-$async = true;
-$telegram = new Api($api_key, $async);
+class BotsCommand extends Command
+{
+    protected $name = "bots";
+    protected $description = "Report in!";
 
-if (array_key_exists('setwebhook', $_GET)) {
-    $response = $telegram->setWebhook($webhook_url);
-    echo $response;
-    return;
+    public function handle($arguments)
+    {
+        $this->reply('Reporting in! [PHP]');
+    }
+
+    private function reply($response) {
+        $this->replyWithMessage($response, true, $this->getUpdate()->getMessage()->getMessageId(), null);
+    }
 }
-
-$telegram->addCommand(Asuka\Commands\HelpCommand::class);
-$telegram->addCommand(Asuka\Commands\EchoCommand::class);
-$telegram->addCommand(Asuka\Commands\GoogleCommand::class);
-$telegram->addCommand(Asuka\Commands\ImdbCommand::class);
-$telegram->addCommand(Asuka\Commands\BotsCommand::class);
-$telegram->commandsHandler(true);
