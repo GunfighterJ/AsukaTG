@@ -2,8 +2,8 @@
 
 namespace Asuka\Commands;
 
-use Asuka\Models\Asuka;
 use Telegram\Bot\Commands\Command;
+use Asuka\Models\Asuka;
 
 class DesktopCommand extends Command
 {
