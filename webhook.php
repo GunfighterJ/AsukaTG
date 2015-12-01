@@ -52,6 +52,5 @@ $telegram->addCommands([
     Commands\ImdbCommand::class,
     Commands\BotsCommand::class
 ]);
-$desktop_command = new Commands\DesktopCommand($bot);
-$telegram->addCommand($desktop_command);
+$telegram->addCommand(new Commands\DesktopCommand($bot));
 $telegram->commandsHandler(true);
