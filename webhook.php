@@ -31,10 +31,12 @@ if (array_key_exists('setwebhook', $_GET)) {
     return;
 }
 
-$telegram->addCommand(Asuka\Commands\HelpCommand::class);
-$telegram->addCommand(Asuka\Commands\EchoCommand::class);
-$telegram->addCommand(Asuka\Commands\GoogleCommand::class);
-$telegram->addCommand(Asuka\Commands\ImdbCommand::class);
-$telegram->addCommand(Asuka\Commands\BotsCommand::class);
-$telegram->addCommand(Asuka\Commands\StartCommand::class);
+$telegram->addCommands([
+    Asuka\Commands\HelpCommand::class,
+    Asuka\Commands\EchoCommand::class,
+    Asuka\Commands\GoogleCommand::class,
+    Asuka\Commands\ImdbCommand::class,
+    Asuka\Commands\BotsCommand::class,
+    Asuka\Commands\StartCommand::class,
+]);
 $telegram->commandsHandler(true);
