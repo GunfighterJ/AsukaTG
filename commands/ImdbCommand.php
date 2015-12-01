@@ -18,9 +18,9 @@
 
 namespace Asuka\Commands;
 
+use Imdb\TitleSearch;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
-use Imdb\TitleSearch;
 
 class ImdbCommand extends Command
 {
@@ -52,7 +52,8 @@ class ImdbCommand extends Command
         $this->reply($response);
     }
 
-    private function reply($response) {
+    private function reply($response)
+    {
         $this->replyWithMessage($response, true, $this->getUpdate()->getMessage()->getMessageId(), null);
     }
 }

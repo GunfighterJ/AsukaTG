@@ -20,6 +20,7 @@ require 'vendor/autoload.php';
 
 use Telegram\Bot\Api;
 use Asuka\Commands;
+use Asuka\Models\Asuka;
 
 $config = parse_ini_file('config.ini', true);
 $telegram_config = $config['telegram'];
@@ -36,12 +37,20 @@ if (array_key_exists('setwebhook', $_GET)) {
     return;
 }
 
+$database = new medoo([
+    'database_type' => 'sqlite',
+    'database_file' => 'asuka.db',
+]);
+
+$bot = new Asuka($database);
+
+$telegram->addCommand(new Commands\DesktopCommand($bot));
 $telegram->addCommands([
-    Asuka\Commands\HelpCommand::class,
-    Asuka\Commands\StartCommand::class,
-    Asuka\Commands\EchoCommand::class,
-    Asuka\Commands\GoogleCommand::class,
-    Asuka\Commands\ImdbCommand::class,
-    Asuka\Commands\BotsCommand::class
+    Commands\HelpCommand::class,
+    Commands\StartCommand::class,
+    Commands\EchoCommand::class,
+    Commands\GoogleCommand::class,
+    Commands\ImdbCommand::class,
+    Commands\BotsCommand::class
 ]);
 $telegram->commandsHandler(true);
