@@ -23,7 +23,7 @@ use Telegram\Bot\Commands\Command;
 
 class HelpCommand extends Command
 {
-    protected $name = "help";
+    protected $name = "?";
     protected $description = "Displays a list of bot commands.";
 
     public function handle($arguments)
@@ -51,6 +51,6 @@ class StartCommand extends Command
 
     public function handle($arguments)
     {
-        $this->triggerCommand('help');
+        $this->triggerCommand('?');
     }
 }

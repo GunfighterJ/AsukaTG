@@ -38,10 +38,10 @@ if (array_key_exists('setwebhook', $_GET)) {
 
 $telegram->addCommands([
     Asuka\Commands\HelpCommand::class,
+    Asuka\Commands\StartCommand::class,
     Asuka\Commands\EchoCommand::class,
     Asuka\Commands\GoogleCommand::class,
     Asuka\Commands\ImdbCommand::class,
-    Asuka\Commands\BotsCommand::class,
-    Asuka\Commands\StartCommand::class,
+    Asuka\Commands\BotsCommand::class
 ]);
 $telegram->commandsHandler(true);
