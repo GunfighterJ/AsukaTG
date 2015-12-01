@@ -18,8 +18,8 @@
 
 require 'vendor/autoload.php';
 
-use Telegram\Bot\Api;
 use Asuka\Commands;
+use Telegram\Bot\Api;
 
 $config = parse_ini_file('config.ini', true);
 $telegram_config = $config['telegram'];
