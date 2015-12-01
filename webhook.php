@@ -44,7 +44,6 @@ $database = new medoo([
 
 $bot = new Asuka($database);
 
-$telegram->addCommand(new Commands\DesktopCommand($bot));
 $telegram->addCommands([
     Commands\HelpCommand::class,
     Commands\StartCommand::class,
@@ -53,4 +52,5 @@ $telegram->addCommands([
     Commands\ImdbCommand::class,
     Commands\BotsCommand::class
 ]);
+$telegram->addCommand(new Commands\DesktopCommand($bot));
 $telegram->commandsHandler(true);
