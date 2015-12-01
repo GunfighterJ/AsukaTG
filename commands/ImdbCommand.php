@@ -44,11 +44,12 @@ class ImdbCommand extends Command
             return;
         }
 
-        $response = sprintf("URL: %s\n", $result->main_url());
-        $response .= sprintf("Title: %s\n", $result->title());
-        $response .= sprintf("Year: %s\n", $result->year());
-        $response .= sprintf("Rating: %s/10\n\n", $result->rating());
-        $response .= sprintf("%s", $result->plotoutline(true));
+        $response = sprintf("URL: %s" . PHP_EOL, $result->main_url());
+        $response .= sprintf("Title: %s" . PHP_EOL, $result->title());
+        $response .= sprintf("Year: %s" . PHP_EOL, $result->year());
+        $response .= sprintf("Rating: %s/10" . PHP_EOL, $result->rating());
+        $response .= PHP_EOL;
+        $response .= $result->plotoutline(true);
         $this->reply($response);
     }
 
