@@ -36,4 +36,5 @@ $telegram->addCommand(Asuka\Commands\EchoCommand::class);
 $telegram->addCommand(Asuka\Commands\GoogleCommand::class);
 $telegram->addCommand(Asuka\Commands\ImdbCommand::class);
 $telegram->addCommand(Asuka\Commands\BotsCommand::class);
+$telegram->addCommand(Asuka\Commands\StartCommand::class);
 $telegram->commandsHandler(true);
