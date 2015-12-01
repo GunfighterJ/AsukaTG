@@ -39,8 +39,7 @@ class HelpCommand extends Command
         $this->reply($response);
     }
 
-    private function reply($response)
-    {
+    private function reply($response) {
         $this->replyWithMessage($response, true, $this->getUpdate()->getMessage()->getMessageId(), null);
     }
 }

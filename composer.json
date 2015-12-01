@@ -1,13 +1,11 @@
 {
     "require": {
         "irazasyed/telegram-bot-sdk": "^1.0",
-        "imdbphp/imdbphp": "v3.1.1",
-        "catfan/medoo": "v1.0"
+        "imdbphp/imdbphp": "v3.1.1"
     },
     "autoload": {
         "psr-4": {
-            "Asuka\\Commands\\": "commands/",
-            "Asuka\\Models\\": "models/"
+            "Asuka\\Commands\\": "commands/"
         }
     }
 }
