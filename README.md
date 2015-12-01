@@ -11,7 +11,7 @@ Install [Composer](https://getcomposer.org/)
 git clone https://github.com/TheReverend403/AsukaTG
 cd AsukaTG
 composer install
-cp config.php.dist config.php # And edit config.php. Get a key from @BotFather if you need one.
+cp config.ini.dist config.ini # And edit config.ini. Get a key from @BotFather if you need one.
 ````
 
 Set up a webserver in accordance with https://core.telegram.org/bots/api#setwebhook so that the URL you set in config.php is a publicly accessible (but hide it in a folder only you know about.)
