@@ -43,14 +43,3 @@ class HelpCommand extends Command
         $this->replyWithMessage($response, true, $this->getUpdate()->getMessage()->getMessageId(), null);
     }
 }
-
-class StartCommand extends Command
-{
-    protected $name = "start";
-    protected $description = "Displays a list of bot commands.";
-
-    public function handle($arguments)
-    {
-        $this->triggerCommand('?');
-    }
-}
