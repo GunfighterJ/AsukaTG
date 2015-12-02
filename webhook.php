@@ -28,9 +28,9 @@ $api_key = $telegram_config['api_key'];
 $webhook_url = $telegram_config['webhook_url'];
 $async = $telegram_config['async_requests'];
 
-$commands = array_map(function($s){
-        return 'Asuka\\Commands\\' . str_replace('.php', '', basename($s));
-    }, glob('commands/*.php'));
+$commands = array_map(function ($s) {
+    return 'Asuka\\Commands\\' . str_replace('.php', '', basename($s));
+}, glob('commands/*.php'));
 
 $telegram = new Api($api_key, $async);
 
