@@ -26,7 +26,11 @@ $telegram_config = $config['telegram'];
 
 $api_key = $telegram_config['api_key'];
 $webhook_url = $telegram_config['webhook_url'];
-$async = $telegram_config['async_requests'];;
+$async = $telegram_config['async_requests'];
+
+$commands = array_map(function($s){
+        return 'Asuka\\Commands\\' . str_replace('.php', '', basename($s));
+    }, glob('commands/*.php'));
 
 $telegram = new Api($api_key, $async);
 
@@ -36,12 +40,5 @@ if (array_key_exists('setwebhook', $_GET)) {
     return;
 }
 
-$telegram->addCommands([
-    Asuka\Commands\HelpCommand::class,
-    Asuka\Commands\StartCommand::class,
-    Asuka\Commands\EchoCommand::class,
-    Asuka\Commands\GoogleCommand::class,
-    Asuka\Commands\ImdbCommand::class,
-    Asuka\Commands\BotsCommand::class
-]);
+$telegram->addCommands($commands);
 $telegram->commandsHandler(true);
