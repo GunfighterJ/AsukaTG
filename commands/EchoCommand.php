@@ -28,7 +28,7 @@ class EchoCommand extends Command
     public function handle($arguments)
     {
         if (empty($arguments)) {
-            $this->replyWithMessage('Arguments cannot be empty!');
+            $this->reply('Arguments cannot be empty!');
 
             return;
         }
