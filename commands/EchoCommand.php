@@ -22,20 +22,22 @@ use Telegram\Bot\Commands\Command;
 
 class EchoCommand extends Command
 {
-	protected $name = "echo";
-	protected $description = "Returns whatever input you send.";
+    protected $name = "echo";
+    protected $description = "Returns whatever input you send.";
 
     public function handle($arguments)
     {
         if (empty($arguments)) {
             $this->replyWithMessage('Arguments cannot be empty!');
+
             return;
         }
 
         $this->reply($arguments);
     }
 
-    private function reply($response) {
+    private function reply($response)
+    {
         $this->replyWithMessage($response, true, $this->getUpdate()->getMessage()->getMessageId(), null);
     }
 }

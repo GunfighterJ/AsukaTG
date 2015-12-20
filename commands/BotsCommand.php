@@ -30,7 +30,8 @@ class BotsCommand extends Command
         $this->reply('Reporting in! [PHP]');
     }
 
-    private function reply($response) {
+    private function reply($response)
+    {
         $this->replyWithMessage($response, true, $this->getUpdate()->getMessage()->getMessageId(), null);
     }
 }

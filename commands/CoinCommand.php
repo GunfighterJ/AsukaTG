@@ -18,25 +18,16 @@
 
 namespace Asuka\Commands;
 
-use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
-class HelpCommand extends Command
+class CoinCommand extends Command
 {
-    protected $name = "?";
-    protected $description = "Displays a list of bot commands.";
+    protected $name = "coin";
+    protected $description = "Flip a coin";
 
     public function handle($arguments)
     {
-        $this->replyWithChatAction(Actions::TYPING);
-        $commands = $this->getTelegram()->getCommands();
-
-        $response = '';
-        foreach ($commands as $name => $command) {
-            $response .= sprintf('/%s - %s' . PHP_EOL, $name, $command->getDescription());
-        }
-
-        $this->reply($response);
+        $this->reply(rand(0, 1) ? 'Heads' : 'Tails');
     }
 
     private function reply($response)

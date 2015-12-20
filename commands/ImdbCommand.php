@@ -18,9 +18,9 @@
 
 namespace Asuka\Commands;
 
+use Imdb\TitleSearch;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
-use Imdb\TitleSearch;
 
 class ImdbCommand extends Command
 {
@@ -31,6 +31,7 @@ class ImdbCommand extends Command
     {
         if (empty($arguments)) {
             $this->reply('Search terms cannot be empty!');
+
             return;
         }
 
@@ -41,6 +42,7 @@ class ImdbCommand extends Command
         $result = $results[0];
         if (!$result) {
             $this->reply('No results found!');
+
             return;
         }
 
@@ -52,7 +54,8 @@ class ImdbCommand extends Command
         $this->reply($response);
     }
 
-    private function reply($response) {
+    private function reply($response)
+    {
         $this->replyWithMessage($response, true, $this->getUpdate()->getMessage()->getMessageId(), null);
     }
 }
