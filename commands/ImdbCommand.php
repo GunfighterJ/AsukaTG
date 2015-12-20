@@ -50,7 +50,7 @@ class ImdbCommand extends Command
         $response .= sprintf("Title: %s" . PHP_EOL, $result->title());
         $response .= sprintf("Year: %s" . PHP_EOL, $result->year());
         $response .= sprintf("Rating: %s/10" . PHP_EOL, $result->rating());
-        $response .= $result->plotoutline(true);
+        $response .= trim($result->plotoutline(true));
         $this->reply($response);
     }
 
