@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "769f13468752d459d1538d960ae01915",
-    "content-hash": "3e3469cef8b78caf9abb070fa98c3afa",
+    "hash": "8bdcf8a02ec32b5b0f99b70de9bb5c82",
+    "content-hash": "4d3220b6467d68ec1051313c47855fdf",
     "packages": [
         {
             "name": "danielstjules/stringy",
@@ -399,16 +399,16 @@
         },
         {
             "name": "imdbphp/imdbphp",
-            "version": "v3.1.1",
+            "version": "v3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tboothman/imdbphp.git",
-                "reference": "6d6f75ae6f232ff9e2e5ff1fb97e0abaf6b2c1f7"
+                "reference": "21fc989da53101a81c963ce78cecb4ce03bdaaf8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tboothman/imdbphp/zipball/6d6f75ae6f232ff9e2e5ff1fb97e0abaf6b2c1f7",
-                "reference": "6d6f75ae6f232ff9e2e5ff1fb97e0abaf6b2c1f7",
+                "url": "https://api.github.com/repos/tboothman/imdbphp/zipball/21fc989da53101a81c963ce78cecb4ce03bdaaf8",
+                "reference": "21fc989da53101a81c963ce78cecb4ce03bdaaf8",
                 "shasum": ""
             },
             "require": {
@@ -429,7 +429,7 @@
                 "GPL-2.0"
             ],
             "description": "Library for retrieving film and tv information from IMDb",
-            "time": "2015-11-28 21:48:30"
+            "time": "2015-12-12 00:29:55"
         },
         {
             "name": "irazasyed/telegram-bot-sdk",
