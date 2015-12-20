@@ -23,7 +23,7 @@ use Telegram\Bot\Commands\Command;
 class CoinCommand extends Command
 {
     protected $name = "coin";
-    protected $description = "Flip a coin";
+    protected $description = "Flip a coin.";
 
     public function handle($arguments)
     {
