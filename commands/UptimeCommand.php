@@ -30,8 +30,10 @@ class UptimeCommand extends Command
     {
         $system = new System();
         $uptime = $system->getUptime();
-        $this->reply(sprintf('%s days, %s hours, %s minutes, %s seconds',
-            $uptime->d, $uptime->h, $uptime->m, $uptime->s));
+        $response = sprintf('Uptime for %s:' . PHP_EOL, gethostname());
+        $response .= sprintf('%s days, %s hours, %s minutes, %s seconds',
+            $uptime->d, $uptime->h, $uptime->i, $uptime->s);
+        $this->reply($response);
     }
 
     private function reply($response)
