@@ -56,7 +56,7 @@ class RollCommand extends Command
 
         $response = '';
         for ($i = 0; $i < $diceCount; $i++) {
-            $response .= sprintf('%s, ', rand(1, $diceType));
+            $response .= sprintf('%s, ', mt_rand(1, $diceType));
         }
 
         $this->reply(rtrim($response, ', '));
