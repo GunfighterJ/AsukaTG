@@ -18,8 +18,6 @@ Set up a webserver in accordance with https://core.telegram.org/bots/api#setwebh
 
 eg. https://example.com/2447b56339fa202b9e8df1c3d73e6129fd7364aca92cb21fcd44db70da6045c5/webhook.php
 
-Browse to your webhook URL and add ?setwebhook to the URL to set your webhook endpoint with the Telegram bot API.
+Run the setwebhook script in the root of this repo like so:
 
-eg. https://example.com/2447b56339fa202b9e8df1c3d73e6129fd7364aca92cb21fcd44db70da6045c5/webhook.php?setwebhook
-
-You should see something like `object(Telegram\Bot\Objects\Message)#42 (1) { ["items":protected]=> array(0) { } }` if your webhook set successfully.
+    ./setwebhook

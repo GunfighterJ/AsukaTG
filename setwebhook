@@ -18,18 +18,13 @@
 
 require 'vendor/autoload.php';
 
-use Asuka\Commands;
 use Telegram\Bot\Api;
 
 $config = parse_ini_file('config.ini', true);
 $telegramConfig = $config['telegram'];
 $apiKey = $telegramConfig['api_key'];
-$async = $telegramConfig['async_requests'];
+$webhookUrl = $telegramConfig['webhook_url'];
 
-$commands = array_map(function ($s) {
-    return 'Asuka\\Commands\\' . str_replace('.php', '', basename($s));
-}, glob('commands/*.php'));
-
-$telegram = new Api($apiKey, $async);
-$telegram->addCommands($commands);
-$telegram->commandsHandler(true);
+$telegram = new Api($apiKey);
+$telegram->setWebhook($webhookUrl);
+echo "Webhook set to $webhookUrl";
