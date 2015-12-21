@@ -23,7 +23,7 @@ use Telegram\Bot\Commands\Command;
 class RollCommand extends Command
 {
     protected $name = "roll";
-    protected $description = "Roll some dice.";
+    protected $description = "Rolls some dice.";
 
     public function handle($arguments)
     {

@@ -24,15 +24,18 @@ use Uptime\System;
 class UptimeCommand extends Command
 {
     protected $name = "uptime";
-    protected $description = "Display the current system uptime.";
+    protected $description = "Displays the current system uptime.";
 
     public function handle($arguments)
     {
         $system = new System();
         $uptime = $system->getUptime();
         $response = sprintf('Uptime for %s:' . PHP_EOL, gethostname());
-        $response .= sprintf('%s days, %s hours, %s minutes, %s seconds',
-            $uptime->d, $uptime->h, $uptime->i, $uptime->s);
+        $response .= sprintf('%s, %s, %s, %s',
+            sprintf(ngettext('%d day', '%d days', $uptime->d), $uptime->d),
+            sprintf(ngettext('%d hour', '%d hours', $uptime->h), $uptime->h),
+            sprintf(ngettext('%d minute', '%d minutes', $uptime->i), $uptime->i),
+            sprintf(ngettext('%d second', '%d seconds', $uptime->s), $uptime->s));
         $this->reply($response);
     }
 
