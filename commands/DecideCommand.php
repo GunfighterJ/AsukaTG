@@ -81,7 +81,8 @@ class DecideCommand extends Command
         }
 
         $choices = array_map('trim', explode($choiceDelimiter, $arguments));
-        if (count(array_filter($choices)) < 2) {
+        $choices = array_filter($choices);
+        if (count($choices) < 2) {
             $this->reply($singleChoiceResponse);
 
             return;
