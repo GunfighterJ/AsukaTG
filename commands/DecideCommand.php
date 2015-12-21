@@ -37,10 +37,11 @@ class DecideCommand extends Command
 
     public function handle($arguments)
     {
+        $badArgsResponse = 'Please supply some choices.' . PHP_EOL;
+        $badArgsResponse .= 'Example: /decide Cookies | Cake';
+
         if (empty($arguments)) {
-            $response = 'Please supply some choices.' . PHP_EOL;
-            $response .= 'Example: /decide Cookies | Cake';
-            $this->reply($response);
+            $this->reply($badArgsResponse);
 
             return;
         }
@@ -64,9 +65,7 @@ class DecideCommand extends Command
         }
 
         if (empty(trim(str_replace($delim, '', $arguments)))) {
-            $response = 'Please supply some choices.' . PHP_EOL;
-            $response .= 'Example: /decide Cookies | Cake';
-            $this->reply($response);
+            $this->reply($badArgsResponse);
 
             return;
         }
