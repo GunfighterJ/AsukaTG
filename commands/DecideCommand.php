@@ -59,10 +59,10 @@ class DecideCommand extends Command
         }
 
         $result = mt_rand(self::RESULT_NO, self::RESULT_YES);
-        $yesNoResponse = $this->resultMap[$result];
+        $singleChoiceResponse = $this->resultMap[$result];
 
         if (is_null($delim)) {
-            $this->reply($yesNoResponse);
+            $this->reply($singleChoiceResponse);
 
             return;
         }
@@ -75,7 +75,7 @@ class DecideCommand extends Command
 
         $choices = array_map('trim', explode($delim, $arguments));
         if (count(array_filter($choices)) < 2) {
-            $this->reply($yesNoResponse);
+            $this->reply($singleChoiceResponse);
 
             return;
         }
