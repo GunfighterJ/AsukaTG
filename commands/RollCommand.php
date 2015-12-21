@@ -58,6 +58,7 @@ class RollCommand extends Command
             $response = ">$diceCount dice" . PHP_EOL;
             $response .= "Don't be silly.";
             $this->reply($response);
+            return;
         }
 
         if ($diceType > 120) {
@@ -65,6 +66,7 @@ class RollCommand extends Command
             $response .= "Let's be realistic." . PHP_EOL;
             $response .= "https://en.wikipedia.org/wiki/Dice#Standard_variations";
             $this->reply($response);
+            return;
         }
 
         $response = '';
