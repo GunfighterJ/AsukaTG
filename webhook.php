@@ -22,20 +22,20 @@ use Asuka\Commands;
 use Telegram\Bot\Api;
 
 $config = parse_ini_file('config.ini', true);
-$telegram_config = $config['telegram'];
+$telegramConfig = $config['telegram'];
 
-$api_key = $telegram_config['api_key'];
-$webhook_url = $telegram_config['webhook_url'];
-$async = $telegram_config['async_requests'];
+$apiKey = $telegramConfig['api_key'];
+$webhookUrl = $telegramConfig['webhook_url'];
+$async = $telegramConfig['async_requests'];
 
 $commands = array_map(function ($s) {
     return 'Asuka\\Commands\\' . str_replace('.php', '', basename($s));
 }, glob('commands/*.php'));
 
-$telegram = new Api($api_key, $async);
+$telegram = new Api($apiKey, $async);
 
 if (array_key_exists('setwebhook', $_GET)) {
-    $response = $telegram->setWebhook($webhook_url);
+    $response = $telegram->setWebhook($webhookUrl);
     var_dump($response);
 
     return;
