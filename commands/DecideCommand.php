@@ -50,8 +50,8 @@ class DecideCommand extends Command
         }
 
         $delim = null;
-        if (str_contains($arguments, 'or')) {
-            $delim = 'or';
+        if (str_contains($arguments, ' or ')) {
+            $delim = ' or ';
         } elseif (str_contains($arguments, '|')) {
             $delim = '|';
         } elseif (str_contains($arguments, ',')) {
