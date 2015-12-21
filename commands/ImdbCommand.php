@@ -30,7 +30,9 @@ class ImdbCommand extends Command
     public function handle($arguments)
     {
         if (empty($arguments)) {
-            $this->reply('Search terms cannot be empty!');
+            $badArgsResponse = 'Please supply some search terms.' . PHP_EOL;
+            $badArgsResponse .= 'Example: /imdb Hitchhikers Guide to the Galaxy';
+            $this->reply($badArgsResponse);
 
             return;
         }

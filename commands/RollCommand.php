@@ -28,19 +28,19 @@ class RollCommand extends Command
     public function handle($arguments)
     {
         // A default response for when the user is an idiot.
-        $response = 'Please specify the amount and type of dice to roll.' . PHP_EOL;
-        $response .= 'Command must be formatted as /roll <1-128>d<1-120>' . PHP_EOL;
-        $response .= 'Example: /roll 3d6';
+        $badArgsResponse = 'Please specify the amount and type of dice to roll.' . PHP_EOL;
+        $badArgsResponse .= 'Command must be formatted as /roll <1-128>d<1-120>' . PHP_EOL;
+        $badArgsResponse .= 'Example: /roll 3d6';
 
         if (empty($arguments)) {
-            $this->reply($response);
+            $this->reply($badArgsResponse);
 
             return;
         }
 
         $diceParam = explode('d', strtolower($arguments));
         if (count($diceParam) != 2) {
-            $this->reply($response);
+            $this->reply($badArgsResponse);
 
             return;
         }
@@ -55,9 +55,9 @@ class RollCommand extends Command
         }
 
         if ($diceType < 1 || $diceType > 120) {
-            $response = 'Die type must be between 1 and 120 (inclusive).' . PHP_EOL;
-            $response .= "https://en.wikipedia.org/wiki/Dice#Standard_variations";
-            $this->reply($response);
+            $badArgsResponse = 'Die type must be between 1 and 120 (inclusive).' . PHP_EOL;
+            $badArgsResponse .= "https://en.wikipedia.org/wiki/Dice#Standard_variations";
+            $this->reply($badArgsResponse);
 
             return;
         }
