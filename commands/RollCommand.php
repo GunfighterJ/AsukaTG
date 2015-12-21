@@ -47,12 +47,6 @@ class RollCommand extends Command
         $diceCount = intval($diceParam[0]);
         $diceType = intval($diceParam[1]);
 
-        if (!$diceCount || !$diceType) {
-            $this->reply($response);
-
-            return;
-        }
-
         if ($diceCount < 1 || $diceCount > 128) {
             $this->reply("Amount of dice must be between 1 and 128 (inclusive).");
 
