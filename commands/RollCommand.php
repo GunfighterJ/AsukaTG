@@ -29,6 +29,7 @@ class RollCommand extends Command
     {
         // A default response for when the user is an idiot.
         $response = 'Please specify the amount and type of dice to roll.' . PHP_EOL;
+        $response .= 'Your command must be formatted as /roll <1-128>d<1-120>';
         $response .= 'Example: /roll 3d6';
 
         if (empty($arguments)) {
