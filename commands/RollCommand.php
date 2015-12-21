@@ -54,7 +54,7 @@ class RollCommand extends Command
         }
 
         if ($diceType < 1 || $diceType > 120) {
-            $response = 'Die type must be between 1 and 120 (inclusive).';
+            $response = 'Die type must be between 1 and 120 (inclusive).' . PHP_EOL;
             $response .= "https://en.wikipedia.org/wiki/Dice#Standard_variations";
             $this->reply($response);
 
