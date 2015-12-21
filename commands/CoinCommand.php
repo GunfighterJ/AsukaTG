@@ -27,7 +27,7 @@ class CoinCommand extends Command
 
     public function handle($arguments)
     {
-        $this->reply(rand(0, 1) ? 'Heads' : 'Tails');
+        $this->reply(mt_rand(0, 1) ? 'Heads' : 'Tails');
     }
 
     private function reply($response)
