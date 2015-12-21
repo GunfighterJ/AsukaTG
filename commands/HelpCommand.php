@@ -36,11 +36,12 @@ class HelpCommand extends Command
             $response .= sprintf('/%s - %s' . PHP_EOL, $name, $command->getDescription());
         }
 
+        $response .= PHP_EOL . 'My source code can be found at https://github.com/TheReverend403/AsukaTG';
         $this->reply($response);
     }
 
     private function reply($response)
     {
-        $this->replyWithMessage($response, true, $this->getUpdate()->getMessage()->getMessageId(), null);
+        $this->replyWithMessage($response, false, $this->getUpdate()->getMessage()->getMessageId(), null);
     }
 }
