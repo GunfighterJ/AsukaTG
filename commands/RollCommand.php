@@ -54,6 +54,19 @@ class RollCommand extends Command
             return;
         }
 
+        if ($diceCount > 128) {
+            $response = ">$diceCount dice" . PHP_EOL;
+            $response .= "Don't be silly.";
+            $this->reply($response);
+        }
+
+        if ($diceType > 120) {
+            $response = ">$diceType sided die" . PHP_EOL;
+            $response .= "Let's be realistic." . PHP_EOL;
+            $response .= "https://en.wikipedia.org/wiki/Dice#Standard_variations";
+            $this->reply($response);
+        }
+
         $response = '';
         for ($i = 0; $i < $diceCount; $i++) {
             $response .= sprintf('%s, ', mt_rand(1, $diceType));
