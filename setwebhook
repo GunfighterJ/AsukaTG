@@ -29,6 +29,6 @@ if (php_sapi_name() == 'cli') {
 
     $telegram = new Api($apiKey);
     $telegram->setWebhook($webhookUrl);
-    echo "Webhook set to $webhookUrl";
+    echo "Webhook set to $webhookUrl" . PHP_EOL;
 }
 
