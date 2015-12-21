@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 /*
  * This file is part of AsukaTG.
@@ -20,11 +21,14 @@ require 'vendor/autoload.php';
 
 use Telegram\Bot\Api;
 
-$config = parse_ini_file('config.ini', true);
-$telegramConfig = $config['telegram'];
-$apiKey = $telegramConfig['api_key'];
-$webhookUrl = $telegramConfig['webhook_url'];
+if (php_sapi_name() == 'cli') {
+    $config = parse_ini_file('config.ini', true);
+    $telegramConfig = $config['telegram'];
+    $apiKey = $telegramConfig['api_key'];
+    $webhookUrl = $telegramConfig['webhook_url'];
 
-$telegram = new Api($apiKey);
-$telegram->setWebhook($webhookUrl);
-echo "Webhook set to $webhookUrl";
+    $telegram = new Api($apiKey);
+    $telegram->setWebhook($webhookUrl);
+    echo "Webhook set to $webhookUrl";
+}
+
