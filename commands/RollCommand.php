@@ -38,7 +38,6 @@ class RollCommand extends Command
         }
 
         $diceParam = explode('d', strtolower($arguments));
-
         if (count($diceParam) != 2) {
             $this->reply($response);
 
@@ -54,18 +53,17 @@ class RollCommand extends Command
             return;
         }
 
-        if ($diceCount > 128) {
-            $response = ">$diceCount dice" . PHP_EOL;
-            $response .= "Don't be silly.";
-            $this->reply($response);
+        if ($diceCount < 1 || $diceCount > 128) {
+            $this->reply("Amount of dice must be between 1 and 128 (inclusive).");
+
             return;
         }
 
-        if ($diceType > 120) {
-            $response = ">$diceType sided die" . PHP_EOL;
-            $response .= "Let's be realistic." . PHP_EOL;
+        if ($diceType < 1 || $diceType > 120) {
+            $response = 'Die type must be between 1 and 120 (inclusive).';
             $response .= "https://en.wikipedia.org/wiki/Dice#Standard_variations";
             $this->reply($response);
+
             return;
         }
 
