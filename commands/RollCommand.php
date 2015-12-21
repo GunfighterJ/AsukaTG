@@ -39,7 +39,7 @@ class RollCommand extends Command
 
         $diceParam = explode('d', strtolower($arguments));
 
-        if (!count($diceParam) == 2) {
+        if (count($diceParam) != 2) {
             $this->reply($response);
 
             return;
