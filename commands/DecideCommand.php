@@ -23,16 +23,20 @@ use Telegram\Bot\Commands\Command;
 class DecideCommand extends Command
 {
     const RESULT_NO = 0;
-    const RESULT_MAYBE = 1;
-    const RESULT_YES = 2;
+    const RESULT_PROBABLY_NOT = 1;
+    const RESULT_MAYBE = 2;
+    const RESULT_PROBABLY = 3;
+    const RESULT_YES = 4;
 
     protected $name = "decide";
     protected $description = "Decides between a set of choices.";
 
     protected $resultMap = [
-        self::RESULT_NO    => 'No.',
-        self::RESULT_MAYBE => 'Maybe.',
-        self::RESULT_YES   => 'Yes.'
+        self::RESULT_NO           => 'No.',
+        self::RESULT_PROBABLY_NOT => 'Probably not.',
+        self::RESULT_MAYBE        => 'Maybe.',
+        self::RESULT_PROBABLY     => 'Probably.',
+        self::RESULT_YES          => 'Yes.'
     ];
 
     public function handle($arguments)

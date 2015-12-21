@@ -42,7 +42,7 @@ class ImdbCommand extends Command
         $results = $search->search($arguments, [TitleSearch::MOVIE, TitleSearch::TV_SERIES]);
 
         $result = $results[0];
-        if (!$result) {
+        if (is_null($result)) {
             $this->reply('No results found!');
 
             return;
