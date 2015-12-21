@@ -28,6 +28,10 @@ class DecideCommand extends Command
     const RESULT_PROBABLY = 3;
     const RESULT_YES = 4;
 
+    protected $choiceDelimiters = [
+        ' or ', '|', ','
+    ];
+
     protected $name = "decide";
     protected $description = "Decides between a set of choices.";
 
@@ -53,31 +57,30 @@ class DecideCommand extends Command
             return;
         }
 
-        $delim = null;
-        if (str_contains($arguments, ' or ')) {
-            $delim = ' or ';
-        } elseif (str_contains($arguments, '|')) {
-            $delim = '|';
-        } elseif (str_contains($arguments, ',')) {
-            $delim = ',';
+        $choiceDelimiter = null;
+        foreach ($this->choiceDelimiters as $delimiter) {
+            if (str_contains($arguments, $delimiter)) {
+                $choiceDelimiter = $delimiter;
+                break;
+            }
         }
 
         $result = mt_rand(self::RESULT_NO, self::RESULT_YES);
         $singleChoiceResponse = $this->resultMap[$result];
 
-        if (is_null($delim)) {
+        if (is_null($choiceDelimiter)) {
             $this->reply($singleChoiceResponse);
 
             return;
         }
 
-        if (empty(trim(str_replace($delim, '', $arguments)))) {
+        if (empty(trim(str_replace($choiceDelimiter, '', $arguments)))) {
             $this->reply($badArgsResponse);
 
             return;
         }
 
-        $choices = array_map('trim', explode($delim, $arguments));
+        $choices = array_map('trim', explode($choiceDelimiter, $arguments));
         if (count(array_filter($choices)) < 2) {
             $this->reply($singleChoiceResponse);
 
