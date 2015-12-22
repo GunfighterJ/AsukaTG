@@ -49,6 +49,8 @@ class DecideCommand extends Command
             return;
         }
 
+        // Look for any delimiter from $choiceDelimiters and use that as the delimiter for the rest of string,
+        // kind of like sed.
         $choiceDelimiter = null;
         foreach ($this->choiceDelimiters as $delimiter) {
             if (str_contains($arguments, $delimiter)) {
@@ -59,18 +61,23 @@ class DecideCommand extends Command
 
         $singleChoiceResponse = $this->singleChoiceResults[array_rand($this->singleChoiceResults)];
 
+        // No delimiters found in string, assume it's a single choice message.
         if (is_null($choiceDelimiter)) {
             $this->reply($singleChoiceResponse);
 
             return;
         }
 
+        // Remove the delimiters from the string and then check if it's empty.
+        // This should indicate whether or not the string is purely comprised of delimiters and nothing else.
         if (empty(trim(str_replace($choiceDelimiter, '', $arguments)))) {
             $this->reply($badArgsResponse);
 
             return;
         }
 
+        // Run trim() on all choices and then remove any empty elements from the resulting array.
+        // Handles input like "| choice1 || choice2" correctly.
         $choices = array_filter(array_map('trim', explode($choiceDelimiter, $arguments)));
         if (count($choices) < 2) {
             $this->reply($singleChoiceResponse);

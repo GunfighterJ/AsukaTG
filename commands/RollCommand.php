@@ -25,6 +25,9 @@ class RollCommand extends Command
     protected $name = "roll";
     protected $description = "Rolls some dice.";
 
+    const DICE_MAX_AMOUNT = 128;
+    const DICE_MAX_FACES = 120;
+
     public function handle($arguments)
     {
         // A default response for when the user is an idiot.
@@ -39,6 +42,7 @@ class RollCommand extends Command
             return;
         }
 
+        // {{ Parse XdY where X is the amount of dice and Y is the type.
         $diceParam = explode('d', strtolower($arguments));
         if (count($diceParam) != 2) {
             $this->reply($badArgsResponse);
@@ -48,14 +52,15 @@ class RollCommand extends Command
 
         $diceCount = intval($diceParam[0]);
         $diceType = intval($diceParam[1]);
+        // }}
 
-        if ($diceCount < 1 || $diceCount > 128) {
+        if ($diceCount < 1 || $diceCount > self::DICE_MAX_AMOUNT) {
             $this->reply("Amount of dice must be between 1 and 128 (inclusive).");
 
             return;
         }
 
-        if ($diceType < 1 || $diceType > 120) {
+        if ($diceType < 1 || $diceType > self::DICE_MAX_FACES) {
             $badArgsResponse = 'Die type must be between 1 and 120 (inclusive).' . PHP_EOL;
             $badArgsResponse .= "https://en.wikipedia.org/wiki/Dice#Standard_variations";
             $this->reply($badArgsResponse);
@@ -63,6 +68,7 @@ class RollCommand extends Command
             return;
         }
 
+        // Loop over $diceCount and generate a random number between 1 and $diceType for each iteration
         $response = '';
         for ($i = 0; $i < $diceCount; $i++) {
             $response .= sprintf('%s, ', mt_rand(1, $diceType));

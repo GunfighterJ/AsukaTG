@@ -38,7 +38,6 @@ class ImdbCommand extends Command
             return;
         }
 
-        $this->replyWithChatAction(Actions::TYPING);
         $search = new TitleSearch();
         $results = $search->search($arguments, [TitleSearch::MOVIE, TitleSearch::TV_SERIES]);
 
