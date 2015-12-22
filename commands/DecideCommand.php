@@ -22,12 +22,6 @@ use Telegram\Bot\Commands\Command;
 
 class DecideCommand extends Command
 {
-    const RESULT_NO = 0;
-    const RESULT_PROBABLY_NOT = 1;
-    const RESULT_MAYBE = 2;
-    const RESULT_PROBABLY = 3;
-    const RESULT_YES = 4;
-
     protected $choiceDelimiters = [
         ' or ', '|', ',', '/', '\\'
     ];
@@ -35,12 +29,9 @@ class DecideCommand extends Command
     protected $name = "decide";
     protected $description = "Decides between a set of choices.";
 
-    protected $resultMap = [
-        self::RESULT_NO           => 'No.',
-        self::RESULT_PROBABLY_NOT => 'Probably not.',
-        self::RESULT_MAYBE        => 'Maybe.',
-        self::RESULT_PROBABLY     => 'Probably.',
-        self::RESULT_YES          => 'Yes.'
+    protected $singleChoiceResults = [
+        'No.', 'Probably not.', 'Maybe.',
+        'Probably.', 'Undecided, ask me again later.', 'Yes.'
     ];
 
     public function handle($arguments)
@@ -66,8 +57,7 @@ class DecideCommand extends Command
             }
         }
 
-        $result = mt_rand(self::RESULT_NO, self::RESULT_YES);
-        $singleChoiceResponse = $this->resultMap[$result];
+        $singleChoiceResponse = $this->singleChoiceResults[array_rand($this->singleChoiceResults)];
 
         if (is_null($choiceDelimiter)) {
             $this->reply($singleChoiceResponse);
