@@ -22,12 +22,12 @@ use Telegram\Bot\Commands\Command;
 
 class DecideCommand extends Command
 {
+    protected $name = "decide";
+    protected $description = "Decides between a set of choices.";
+
     protected $choiceDelimiters = [
         ' or ', '|', ',', '/', '\\'
     ];
-
-    protected $name = "decide";
-    protected $description = "Decides between a set of choices.";
 
     protected $singleChoiceResults = [
         'No.', 'Probably not.', 'Maybe.',
