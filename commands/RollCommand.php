@@ -68,9 +68,9 @@ class RollCommand extends Command
             return;
         }
 
-        // Loop over $diceCount and generate a random number between 1 and $diceType for each iteration
+        // Create an array of $diceCount $diceType-sided dice.
         $diceArray = [];
-        for ($i = 0; $i < $diceCount; $i++) {
+        while (count($diceArray) < $diceCount) {
             array_push($diceArray, mt_rand(1, $diceType));
         }
 
