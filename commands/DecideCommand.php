@@ -29,7 +29,7 @@ class DecideCommand extends Command
     const RESULT_YES = 4;
 
     protected $choiceDelimiters = [
-        ' or ', '|', ','
+        ' or ', '|', ',', '/', '\\'
     ];
 
     protected $name = "decide";
@@ -46,6 +46,7 @@ class DecideCommand extends Command
     public function handle($arguments)
     {
         $badArgsResponse = 'Please supply at least 1 choice.' . PHP_EOL;
+        $badArgsResponse .= PHP_EOL;
         $badArgsResponse .= 'Example: /decide Eat cookies?' . PHP_EOL;
         $badArgsResponse .= 'Example: /decide Cookies | Cake' . PHP_EOL;
         $badArgsResponse .= 'Example: /decide Cookies or Cake' . PHP_EOL;

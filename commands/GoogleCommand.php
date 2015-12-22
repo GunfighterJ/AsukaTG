@@ -30,6 +30,7 @@ class GoogleCommand extends Command
     {
         if (empty($arguments)) {
             $badArgsResponse = 'Please supply some search terms.' . PHP_EOL;
+            $badArgsResponse .= PHP_EOL;
             $badArgsResponse .= 'Example: /g What happens if you Google Google?';
             $this->reply($badArgsResponse);
 

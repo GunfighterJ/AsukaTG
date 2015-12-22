@@ -31,6 +31,7 @@ class ImdbCommand extends Command
     {
         if (empty($arguments)) {
             $badArgsResponse = 'Please supply some search terms.' . PHP_EOL;
+            $badArgsResponse .= PHP_EOL;
             $badArgsResponse .= 'Example: /imdb Hitchhikers Guide to the Galaxy';
             $this->reply($badArgsResponse);
 
