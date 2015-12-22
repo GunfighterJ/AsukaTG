@@ -69,12 +69,13 @@ class RollCommand extends Command
         }
 
         // Loop over $diceCount and generate a random number between 1 and $diceType for each iteration
-        $response = '';
+        $diceArray = [];
         for ($i = 0; $i < $diceCount; $i++) {
-            $response .= sprintf('%s, ', mt_rand(1, $diceType));
+            array_push($diceArray, mt_rand(1, $diceType));
         }
 
-        $this->reply(rtrim($response, ', '));
+        $response = sprintf('[%s] = %d', implode(', ', $diceArray), array_sum($diceArray));
+        $this->reply($response);
     }
 
     private function reply($response)
