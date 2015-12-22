@@ -42,7 +42,7 @@ class RollCommand extends Command
             return;
         }
 
-        // {{ Parse XdY where X is the amount of dice and Y is the type.
+        // {{{ Parse XdY where X is the amount of dice and Y is the type.
         $diceParam = explode('d', strtolower($arguments));
         if (count($diceParam) != 2) {
             $this->reply($badArgsResponse);
@@ -52,7 +52,7 @@ class RollCommand extends Command
 
         $diceCount = intval($diceParam[0]);
         $diceType = intval($diceParam[1]);
-        // }}
+        // }}}
 
         if ($diceCount < 1 || $diceCount > self::DICE_MAX_AMOUNT) {
             $this->reply("Amount of dice must be between 1 and 128 (inclusive).");
