@@ -60,8 +60,8 @@ class RollCommand extends Command
             return;
         }
 
-        if ($diceType < 1 || $diceType > self::DICE_MAX_FACES) {
-            $this->reply(sprintf('Die type must be between 1 and %s (inclusive).' . PHP_EOL, self::DICE_MAX_FACES));
+        if ($diceType < 4 || $diceType > self::DICE_MAX_FACES) {
+            $this->reply(sprintf('Die type must be between 4 and %s (inclusive).' . PHP_EOL, self::DICE_MAX_FACES));
 
             return;
         }
