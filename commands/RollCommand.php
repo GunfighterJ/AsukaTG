@@ -23,7 +23,8 @@ use Telegram\Bot\Commands\Command;
 class RollCommand extends Command
 {
     const DICE_MAX_AMOUNT = 128;
-    const DICE_MAX_FACES = 120;
+    const DIE_MIN_FACES = 4;
+    const DIE_MAX_FACES = 120;
     protected $name = "roll";
     protected $description = "Rolls some dice.";
 
@@ -60,8 +61,8 @@ class RollCommand extends Command
             return;
         }
 
-        if ($diceType < 4 || $diceType > self::DICE_MAX_FACES) {
-            $this->reply(sprintf('Die type must be between 4 and %s (inclusive).' . PHP_EOL, self::DICE_MAX_FACES));
+        if ($diceType < self::DIE_MIN_FACES || $diceType > self::DIE_MAX_FACES) {
+            $this->reply(sprintf('Die type must be between %s and %s (inclusive).' . PHP_EOL, self::DIE_MIN_FACES, self::DIE_MAX_FACES));
 
             return;
         }
