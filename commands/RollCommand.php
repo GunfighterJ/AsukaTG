@@ -22,19 +22,19 @@ use Telegram\Bot\Commands\Command;
 
 class RollCommand extends Command
 {
-    protected $name = "roll";
-    protected $description = "Rolls some dice.";
-
     const DICE_MAX_AMOUNT = 128;
     const DICE_MAX_FACES = 120;
+    protected $name = "roll";
+    protected $description = "Rolls some dice.";
 
     public function handle($arguments)
     {
         // A default response for when the user is an idiot.
-        $badArgsResponse = 'Please specify the amount and type of dice to roll.' . PHP_EOL;
-        $badArgsResponse .= 'Command must be formatted as /roll <1-128>d<1-120>' . PHP_EOL;
-        $badArgsResponse .= PHP_EOL;
-        $badArgsResponse .= 'Example: /roll 3d6';
+        $badArgsResponse = implode(PHP_EOL, [
+            'Please specify the amount and type of dice to roll.',
+            'Command must be formatted as /roll <1-128>d<1-120>',
+            'Example: /roll 3d6'
+        ]);
 
         if (empty($arguments)) {
             $this->reply($badArgsResponse);
@@ -55,15 +55,13 @@ class RollCommand extends Command
         // }}}
 
         if ($diceCount < 1 || $diceCount > self::DICE_MAX_AMOUNT) {
-            $this->reply("Amount of dice must be between 1 and 128 (inclusive).");
+            $this->reply(sprintf("Amount of dice must be between 1 and %s (inclusive).", self::DICE_MAX_AMOUNT));
 
             return;
         }
 
         if ($diceType < 1 || $diceType > self::DICE_MAX_FACES) {
-            $badArgsResponse = 'Die type must be between 1 and 120 (inclusive).' . PHP_EOL;
-            $badArgsResponse .= "https://en.wikipedia.org/wiki/Dice#Standard_variations";
-            $this->reply($badArgsResponse);
+            $this->reply(sprintf('Die type must be between 1 and %s (inclusive).' . PHP_EOL, self::DICE_MAX_FACES));
 
             return;
         }

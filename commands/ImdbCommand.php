@@ -30,9 +30,10 @@ class ImdbCommand extends Command
     public function handle($arguments)
     {
         if (empty($arguments)) {
-            $badArgsResponse = 'Please supply some search terms.' . PHP_EOL;
-            $badArgsResponse .= PHP_EOL;
-            $badArgsResponse .= 'Example: /imdb Hitchhikers Guide to the Galaxy';
+            $badArgsResponse = implode(PHP_EOL, [
+                'Please supply some search terms.',
+                'Example: /imdb Hitchhikers Guide to the Galaxy'
+            ]);
             $this->reply($badArgsResponse);
 
             return;
@@ -48,11 +49,14 @@ class ImdbCommand extends Command
             return;
         }
 
-        $response = sprintf("URL: %s" . PHP_EOL, $result->main_url());
-        $response .= sprintf("Title: %s" . PHP_EOL, $result->title());
-        $response .= sprintf("Year: %s" . PHP_EOL, $result->year());
-        $response .= sprintf("Rating: %s/10" . PHP_EOL, $result->rating());
-        $response .= PHP_EOL . trim($result->plotoutline(true));
+        $response = implode(PHP_EOL, [
+            sprintf("URL: %s", $result->main_url()),
+            sprintf("Title: %s", $result->title()),
+            sprintf("Year: %s", $result->year()),
+            sprintf("Rating: %s/10", $result->rating()),
+            PHP_EOL . trim($result->plotoutline(true))
+        ]);
+
         $this->reply($response);
     }
 

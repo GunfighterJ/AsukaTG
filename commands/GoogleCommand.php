@@ -29,9 +29,10 @@ class GoogleCommand extends Command
     public function handle($arguments)
     {
         if (empty($arguments)) {
-            $badArgsResponse = 'Please supply some search terms.' . PHP_EOL;
-            $badArgsResponse .= PHP_EOL;
-            $badArgsResponse .= 'Example: /g What happens if you Google Google?';
+            $badArgsResponse = implode(PHP_EOL, [
+                'Please supply some search terms.',
+                'Example: /g What happens if you Google Google?'
+            ]);
             $this->reply($badArgsResponse);
 
             return;

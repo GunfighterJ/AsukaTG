@@ -36,12 +36,13 @@ class DecideCommand extends Command
 
     public function handle($arguments)
     {
-        $badArgsResponse = 'Please supply at least 1 choice.' . PHP_EOL;
-        $badArgsResponse .= PHP_EOL;
-        $badArgsResponse .= 'Example: /decide Eat cookies?' . PHP_EOL;
-        $badArgsResponse .= 'Example: /decide Cookies | Cake' . PHP_EOL;
-        $badArgsResponse .= 'Example: /decide Cookies or Cake' . PHP_EOL;
-        $badArgsResponse .= 'Example: /decide Cookies, Cake, Pie';
+        $badArgsResponse = implode(PHP_EOL, [
+            'Please supply at least 1 choice.',
+            'Example: /decide Eat cookies?',
+            'Example: /decide Cookies | Cake',
+            'Example: /decide Cookies or Cake',
+            'Example: /decide Cookies, Cake, Pie'
+        ]);
 
         if (empty($arguments)) {
             $this->reply($badArgsResponse);
