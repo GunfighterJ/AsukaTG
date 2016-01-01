@@ -38,6 +38,8 @@ class GoogleCommand extends Command
             return;
         }
 
+        $this->replyWithChatAction(['action' => Actions::TYPING]);
+
         $query = urlencode($arguments);
         $url = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=" . $query;
         $body = file_get_contents($url);

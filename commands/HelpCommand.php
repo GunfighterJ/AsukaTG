@@ -28,9 +28,7 @@ class HelpCommand extends Command
 
     public function handle($arguments)
     {
-        $this->replyWithChatAction(Actions::TYPING);
         $commands = $this->getTelegram()->getCommands();
-
         $response = '';
         foreach ($commands as $name => $command) {
             $response .= sprintf('/%s - %s' . PHP_EOL, $name, $command->getDescription());
