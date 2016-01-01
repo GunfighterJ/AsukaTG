@@ -42,7 +42,6 @@ class HelpCommand extends Command
     {
         $this->replyWithMessage([
             'text' => $response,
-            'disable_web_page_preview' => true,
             'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId()
         ]);
     }
