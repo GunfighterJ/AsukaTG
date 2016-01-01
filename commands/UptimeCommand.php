@@ -44,6 +44,10 @@ class UptimeCommand extends Command
 
     private function reply($response)
     {
-        $this->replyWithMessage($response, true, $this->getUpdate()->getMessage()->getMessageId(), null);
+        $this->replyWithMessage([
+            'text' => $response,
+            'disable_web_page_preview' => true,
+            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId()
+        ]);
     }
 }

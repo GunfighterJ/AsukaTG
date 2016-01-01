@@ -1,6 +1,6 @@
 {
   "require": {
-    "irazasyed/telegram-bot-sdk": "^1.0",
+    "irazasyed/telegram-bot-sdk": "^2.0",
     "imdbphp/imdbphp": "^v3.0.0",
     "uptime/uptime": "0.1.0"
   },
