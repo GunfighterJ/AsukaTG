@@ -32,7 +32,7 @@ function printHelp()
         implode(', ', $flags['del']) . ' - Remove the webhook URL.',
         implode(', ', $flags['help']) . ' - Show this help message.',
     ]);
-    echo $response;
+    echo $response . PHP_EOL;
 
     return;
 }
@@ -73,10 +73,15 @@ if (php_sapi_name() == 'cli') {
         printHelp();
     }
 
+    $validArg = false;
     foreach ($flags as $flag) {
-        if (!in_array($argv[1], $flag)) {
-            printHelp();
+        if (in_array($argv[1], $flag)) {
+            $validArg = true;
         }
+    }
+
+    if (!$validArg) {
+        printHelp();
     }
 
     if (in_array($argv[1], $flags['set'])) {
@@ -87,7 +92,7 @@ if (php_sapi_name() == 'cli') {
 
     if (in_array($argv[1], $flags['del'])) {
         $telegram->removeWebhook();
-        echo "Webhook removed.";
+        echo "Webhook removed." . PHP_EOL;
     }
 
     return;
