@@ -27,6 +27,9 @@ function printHelp()
     global $argv;
 
     $response = sprintf('Usage: php %s [options]' . PHP_EOL, $argv[0]);
+    $response .= PHP_EOL;
+
+    $response .= 'Options: ' . PHP_EOL;
     $response .= implode(PHP_EOL, [
         implode(', ', $flags['set']) . ' - Set the webhook URL.',
         implode(', ', $flags['del']) . ' - Remove the webhook URL.',
