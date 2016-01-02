@@ -30,11 +30,12 @@ function printHelp()
     $response .= PHP_EOL;
 
     $response .= 'Options: ' . PHP_EOL;
-    $response .= implode(PHP_EOL, [
-        implode(', ', $flags['set']) . ' - Set the webhook URL.',
-        implode(', ', $flags['del']) . ' - Remove the webhook URL.',
-        implode(', ', $flags['help']) . ' - Show this help message.',
-    ]);
+
+    foreach ($flags as $flagArray) {
+        foreach ($flagArray['flags'] as $flag) {
+            $response .= sprintf('%s : %s' . PHP_EOL, implode(', ', $flagArray['flags']), $flag['description']);
+        }
+    }
     echo $response . PHP_EOL;
 
     exit;
@@ -62,13 +63,22 @@ if (php_sapi_name() == 'cli') {
 
     $flags = [
         'set'  => [
-            '-s', '--set'
+            'flags' => [
+                '-s', '--set'
+            ],
+            'description' => 'Set the webhook URL.'
         ],
         'del'  => [
-            '-d', '--delete', '--del'
+            'flags' => [
+                '-d', '--delete', '--del'
+            ],
+            'description' => 'Remove the webhook URL.'
         ],
-        'help' => [
-            '-h', '--help'
+        'help'  => [
+            'flags' => [
+                '-h', '--help'
+            ],
+            'description' => 'Show this help message.'
         ],
     ];
 
@@ -77,9 +87,11 @@ if (php_sapi_name() == 'cli') {
     }
 
     $validArg = false;
-    foreach ($flags as $flag) {
-        if (in_array($argv[1], $flag)) {
-            $validArg = true;
+    foreach ($flags as $flagArray) {
+        foreach ($flagArray['flags'] as $flag) {
+            if (in_array($argv[1], $flag)) {
+                $validArg = true;
+            }
         }
     }
 
