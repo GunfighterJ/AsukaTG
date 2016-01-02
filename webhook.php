@@ -52,7 +52,7 @@ if (php_sapi_name() == 'cli') {
         ],
     ];
 
-    if ($argc < 2 || in_array($argv[1], $flags['help'])) {
+    if ($argc == 1 || in_array($argv[1], $flags['help'])) {
         $response = sprintf('Usage: php %s [options]' . PHP_EOL, $argv[0]);
         $response .= implode(PHP_EOL, [
             implode(', ', $flags['set']) . ' - Set the webhook URL.',
