@@ -61,19 +61,19 @@ if (php_sapi_name() == 'cli') {
 
     $flags = [
         'set'  => [
-            'flags' => [
+            'flags'       => [
                 '-s', '--set'
             ],
             'description' => 'Set the webhook URL.'
         ],
         'del'  => [
-            'flags' => [
+            'flags'       => [
                 '-d', '--delete', '--del'
             ],
             'description' => 'Remove the webhook URL.'
         ],
-        'help'  => [
-            'flags' => [
+        'help' => [
+            'flags'       => [
                 '-h', '--help'
             ],
             'description' => 'Show this help message.'
