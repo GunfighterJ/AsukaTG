@@ -88,10 +88,8 @@ if (php_sapi_name() == 'cli') {
 
     $validArg = false;
     foreach ($flags as $flagArray) {
-        foreach ($flagArray['flags'] as $flag) {
-            if (in_array($argv[1], $flag)) {
-                $validArg = true;
-            }
+        if (in_array($argv[1], $flagArray['flags'])) {
+            $validArg = true;
         }
     }
 
