@@ -34,7 +34,7 @@ function printHelp()
     ]);
     echo $response . PHP_EOL;
 
-    return;
+    exit;
 }
 
 // If the config isn't set up, just let Telegram think we're all good so it doesn't keep retrying updates.
