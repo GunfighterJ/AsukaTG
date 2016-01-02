@@ -25,11 +25,19 @@ $config = parse_ini_file('config.ini', true);
 $telegramConfig = $config['telegram'];
 $apiKey = $telegramConfig['api_key'];
 $async = $telegramConfig['async_requests'];
-
-$commands = array_map(function ($s) {
-    return 'Asuka\\Commands\\' . str_replace('.php', '', basename($s));
-}, glob('commands/*.php'));
-
 $telegram = new Api($apiKey, $async);
-$telegram->addCommands($commands);
+
+$telegram->addCommands([
+    Commands\HelpCommand::class,
+    Commands\StartCommand::class,
+    Commands\BotsCommand::class,
+    Commands\RollCommand::class,
+    Commands\CoinCommand::class,
+    Commands\UptimeCommand::class,
+    Commands\ImdbCommand::class,
+    Commands\GoogleCommand::class,
+    Commands\DecideCommand::class,
+    Commands\EchoCommand::class
+]);
+
 $telegram->commandsHandler(true);

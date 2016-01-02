@@ -18,7 +18,6 @@
 
 namespace Asuka\Commands;
 
-use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
 class HelpCommand extends Command
@@ -41,8 +40,19 @@ class HelpCommand extends Command
     private function reply($response)
     {
         $this->replyWithMessage([
-            'text' => $response,
+            'text'                => $response,
             'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId()
         ]);
+    }
+}
+
+class StartCommand extends Command
+{
+    protected $name = "start";
+    protected $description = "Displays a list of bot commands.";
+
+    public function handle($arguments)
+    {
+        $this->triggerCommand('?');
     }
 }

@@ -92,9 +92,9 @@ class DecideCommand extends Command
     private function reply($response)
     {
         $this->replyWithMessage([
-            'text' => $response,
+            'text'                     => $response,
             'disable_web_page_preview' => true,
-            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId()
+            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId()
         ]);
     }
 }

@@ -33,7 +33,7 @@ class CoinCommand extends Command
     private function reply($response)
     {
         $this->replyWithMessage([
-            'text' => $response,
+            'text'                => $response,
             'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId()
         ]);
     }
