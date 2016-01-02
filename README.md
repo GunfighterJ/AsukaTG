@@ -21,3 +21,5 @@ eg. https://example.com/2447b56339fa202b9e8df1c3d73e6129fd7364aca92cb21fcd44db70
 Run the webhook script in the root of this repo like so:
 
     php webhook.php --set
+
+For other CLI arguments, see `php webhook.php --help`
