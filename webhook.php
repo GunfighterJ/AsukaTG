@@ -33,7 +33,7 @@ function printHelp()
 
     foreach ($flags as $flagArray) {
         foreach ($flagArray['flags'] as $flag) {
-            $response .= sprintf('%s : %s' . PHP_EOL, implode(', ', $flagArray['flags']), $flag['description']);
+            $response .= sprintf('%s : %s' . PHP_EOL, implode(', ', $flagArray['flags']), $flagArray['description']);
         }
     }
     echo $response . PHP_EOL;
