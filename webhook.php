@@ -45,23 +45,33 @@ if (php_sapi_name() == 'cli') {
             '-s', '--set'
         ],
         'del'  => [
-            '-d', '--delete'
+            '-d', '--delete', '--del'
         ],
         'help' => [
             '-h', '--help'
         ],
     ];
 
-    if ($argc == 1 || in_array($argv[1], $flags['help'])) {
+    function printHelp() {
         $response = sprintf('Usage: php %s [options]' . PHP_EOL, $argv[0]);
         $response .= implode(PHP_EOL, [
-            implode(', ', $flags['set']) . ' - Set the webhook URL.',
-            implode(', ', $flags['del']) . ' - Remove the webhook URL.',
-            implode(', ', $flags['help']) . ' - Show this help message.',
+            implode(', ', $this->flags['set']) . ' - Set the webhook URL.',
+            implode(', ', $this->flags['del']) . ' - Remove the webhook URL.',
+            implode(', ', $this->flags['help']) . ' - Show this help message.',
         ]);
         echo $response;
 
         return;
+    }
+
+    if ($argc == 1 || in_array($argv[1], $flags['help'])) {
+        printHelp();
+    }
+
+    foreach ($flags as $flag) {
+        if (!in_array($argv[1], $flag)) {
+            printHelp();
+        }
     }
 
     if (in_array($argv[1], $flags['set'])) {
