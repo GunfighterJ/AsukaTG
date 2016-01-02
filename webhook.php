@@ -21,10 +21,20 @@ require 'vendor/autoload.php';
 use Asuka\Commands;
 use Telegram\Bot\Api;
 
+// If the config isn't set up, just let Telegram think we're all good so it doesn't keep retrying updates.
+if (!file_exists('config.ini')) {
+    http_response_code(200);
+    return;
+}
+
+// Convert config.ini to an object
 $config = parse_ini_file('config.ini', true);
-$telegramConfig = $config['telegram'];
-$apiKey = $telegramConfig['api_key'];
-$async = $telegramConfig['async_requests'];
+$config = json_encode($config);
+$config = json_decode($config);
+
+$apiKey = $config->telegram->api_key;
+$async = $config->telegram->async_requests;
+
 $telegram = new Api($apiKey, $async);
 
 $telegram->addCommands([
