@@ -24,6 +24,7 @@ use Telegram\Bot\Api;
 // If the config isn't set up, just let Telegram think we're all good so it doesn't keep retrying updates.
 if (!file_exists('config.ini')) {
     http_response_code(200);
+    sprintf('Config not found, please copy config.ini.dist to config.ini in %s', realpath(__DIR__));
     return;
 }
 
@@ -36,6 +37,16 @@ $apiKey = $config->telegram->api_key;
 $async = $config->telegram->async_requests;
 
 $telegram = new Api($apiKey, $async);
+
+// php webhook.php --set
+if (php_sapi_name() == 'cli') {
+    if (array_has($argv, '--set')) {
+        $webhookUrl = $config->telegram->webhook_url;
+        $telegram->setWebhook($webhookUrl);
+        sprintf("Webhook set to %s" . PHP_EOL, $webhookUrl);
+    }
+    return;
+}
 
 $telegram->addCommands([
     Commands\HelpCommand::class,

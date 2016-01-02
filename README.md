@@ -18,6 +18,6 @@ Set up a webserver in accordance with https://core.telegram.org/bots/api#setwebh
 
 eg. https://example.com/2447b56339fa202b9e8df1c3d73e6129fd7364aca92cb21fcd44db70da6045c5/webhook.php
 
-Run the setwebhook script in the root of this repo like so:
+Run the webhook script in the root of this repo like so:
 
-    ./setwebhook
+    php webhook.php --set
