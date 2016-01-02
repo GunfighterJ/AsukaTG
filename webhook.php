@@ -53,7 +53,7 @@ if (php_sapi_name() == 'cli') {
     ];
 
     function printHelp() {
-        $response = sprintf('Usage: php %s [options]' . PHP_EOL, $argv[0]);
+        $response = sprintf('Usage: php %s [options]' . PHP_EOL, $this->argv[0]);
         $response .= implode(PHP_EOL, [
             implode(', ', $this->flags['set']) . ' - Set the webhook URL.',
             implode(', ', $this->flags['del']) . ' - Remove the webhook URL.',
