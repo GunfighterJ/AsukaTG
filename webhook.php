@@ -42,7 +42,7 @@ $telegram = new Api($apiKey, $async);
 if (php_sapi_name() == 'cli') {
     if (array_search('--set', $argv)) {
         $webhookUrl = $config->telegram->webhook_url;
-        $telegram->setWebhook($webhookUrl);
+        $telegram->setWebhook(['url' => $webhookUrl]);
         echo sprintf("Webhook set to %s" . PHP_EOL, $webhookUrl);
     }
     return;
