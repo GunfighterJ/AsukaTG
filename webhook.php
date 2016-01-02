@@ -21,6 +21,22 @@ require 'vendor/autoload.php';
 use Asuka\Commands;
 use Telegram\Bot\Api;
 
+function printHelp()
+{
+    global $flags;
+    global $argv;
+
+    $response = sprintf('Usage: php %s [options]' . PHP_EOL, $argv[0]);
+    $response .= implode(PHP_EOL, [
+        implode(', ', $flags['set']) . ' - Set the webhook URL.',
+        implode(', ', $flags['del']) . ' - Remove the webhook URL.',
+        implode(', ', $flags['help']) . ' - Show this help message.',
+    ]);
+    echo $response;
+
+    return;
+}
+
 // If the config isn't set up, just let Telegram think we're all good so it doesn't keep retrying updates.
 if (!file_exists('config.ini')) {
     http_response_code(200);
@@ -40,6 +56,7 @@ $async = $config->telegram->async_requests;
 $telegram = new Api($apiKey, $async);
 
 if (php_sapi_name() == 'cli') {
+
     $flags = [
         'set'  => [
             '-s', '--set'
@@ -51,18 +68,6 @@ if (php_sapi_name() == 'cli') {
             '-h', '--help'
         ],
     ];
-
-    function printHelp() {
-        $response = sprintf('Usage: php %s [options]' . PHP_EOL, $this->argv[0]);
-        $response .= implode(PHP_EOL, [
-            implode(', ', $this->flags['set']) . ' - Set the webhook URL.',
-            implode(', ', $this->flags['del']) . ' - Remove the webhook URL.',
-            implode(', ', $this->flags['help']) . ' - Show this help message.',
-        ]);
-        echo $response;
-
-        return;
-    }
 
     if ($argc == 1 || in_array($argv[1], $flags['help'])) {
         printHelp();
