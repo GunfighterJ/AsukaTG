@@ -25,6 +25,7 @@ use Telegram\Bot\Api;
 if (!file_exists('config.ini')) {
     http_response_code(200);
     echo sprintf('Config not found, please copy config.ini.dist to config.ini in %s', realpath(__DIR__));
+
     return;
 }
 
@@ -38,13 +39,39 @@ $async = $config->telegram->async_requests;
 
 $telegram = new Api($apiKey, $async);
 
-// php webhook.php --set
 if (php_sapi_name() == 'cli') {
-    if (array_search('--set', $argv)) {
+    $flags = [
+        'set'  => [
+            '-s', '--set'
+        ],
+        'del'  => [
+            '-d', '--delete'
+        ],
+        'help' => [
+            '-h', '--help'
+        ],
+    ];
+
+    if ($argc < 2 || in_array($argv[1], $flags['help'])) {
+        $response = sprintf('Usage: php %s [options]' . PHP_EOL, $argv[0]);
+        $response .= implode(PHP_EOL, [
+            implode(', ', $flags['set']) . ' - Set the webhook URL.',
+            implode(', ', $flags['del']) . ' - Remove the webhook URL.',
+            implode(', ', $flags['help']) . ' - Show this help message.',
+        ]);
+    }
+
+    if (in_array($argv[1], $flags['set'])) {
         $webhookUrl = $config->telegram->webhook_url;
         $telegram->setWebhook(['url' => $webhookUrl]);
         echo sprintf("Webhook set to %s" . PHP_EOL, $webhookUrl);
     }
+
+    if (in_array($argv[1], $flags['del'])) {
+        $telegram->removeWebhook();
+        echo "Webhook removed.";
+    }
+
     return;
 }
 
