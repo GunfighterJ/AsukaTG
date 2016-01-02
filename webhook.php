@@ -59,6 +59,9 @@ if (php_sapi_name() == 'cli') {
             implode(', ', $flags['del']) . ' - Remove the webhook URL.',
             implode(', ', $flags['help']) . ' - Show this help message.',
         ]);
+        echo $response;
+
+        return;
     }
 
     if (in_array($argv[1], $flags['set'])) {
