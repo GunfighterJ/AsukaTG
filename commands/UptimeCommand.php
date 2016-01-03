@@ -31,8 +31,7 @@ class UptimeCommand extends Command
         $system = new System();
         $uptime = $system->getUptime();
 
-        $response = sprintf('Uptime for %s:' . PHP_EOL, gethostname());
-        $response .= implode(', ', [
+        $response = implode(', ', [
             sprintf(ngettext('%d day', '%d days', $uptime->d), $uptime->d),
             sprintf(ngettext('%d hour', '%d hours', $uptime->h), $uptime->h),
             sprintf(ngettext('%d minute', '%d minutes', $uptime->i), $uptime->i),
