@@ -53,10 +53,9 @@ class ImdbCommand extends Command
             return;
         }
 
-        $cast = [];
-        foreach ($result->cast() as $castMember) {
-            array_push($cast, $castMember['name']);
-        }
+        $cast = array_map(function($castMember) {
+            return $castMember['name'];
+        }, $result->cast());
 
         $response = implode(PHP_EOL, [
             sprintf("URL: %s", $result->main_url()),
