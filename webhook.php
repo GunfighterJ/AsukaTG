@@ -26,7 +26,7 @@ function printHelp()
     global $flags;
     global $argv;
 
-    $response = sprintf('Usage: php %s [options]' . PHP_EOL, $argv[0]);
+    $response = sprintf('Usage: php %s [option]' . PHP_EOL, $argv[0]);
     $response .= PHP_EOL;
 
     $response .= 'Options: ' . PHP_EOL;
