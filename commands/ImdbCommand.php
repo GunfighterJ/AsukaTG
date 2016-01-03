@@ -55,7 +55,7 @@ class ImdbCommand extends Command
             return;
         }
 
-        $json = file_get_contents(sprintf("http://www.omdbapi.com/?i=%s&r=json&type=movie", $searchResults['Search'][0]['imdbID']));
+        $json = file_get_contents(sprintf("http://www.omdbapi.com/?i=%s&r=json&type=movie&plot=full", $searchResults['Search'][0]['imdbID']));
         $result = json_decode($json, true);
 
         $response = implode(PHP_EOL, [
