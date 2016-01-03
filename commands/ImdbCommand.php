@@ -51,12 +51,17 @@ class ImdbCommand extends Command
             return;
         }
 
+        $cast = [];
+        foreach ($result->cast() as $castMember) {
+            array_push($cast, $castMember['name']);
+        }
+
         $response = implode(PHP_EOL, [
             sprintf("URL: %s", $result->main_url()),
             sprintf("Title: %s", $result->title()),
             sprintf("Year: %s", $result->year()),
             sprintf("Rating: %s/10", $result->rating()),
-            sprintf("Top 5 Cast: %s", implode(', ', array_slice($result->cast(), 0, 5))),
+            sprintf("Cast: %s and %s more...", implode(', ', array_slice($cast, 0, 5, true)), count(array_slice($cast, 5))),
             PHP_EOL . strip_tags(trim($result->plotoutline(true)))
         ]);
 
