@@ -27,6 +27,8 @@ class ImdbCommand extends Command
     protected $name = "imdb";
     protected $description = "Returns the first IMDb result for a set of search terms.";
 
+    const CAST_MAX_COUNT = 6;
+
     public function handle($arguments)
     {
         if (empty($arguments)) {
@@ -61,7 +63,7 @@ class ImdbCommand extends Command
             sprintf("Title: %s", $result->title()),
             sprintf("Year: %s", $result->year()),
             sprintf("Rating: %s/10", $result->rating()),
-            sprintf("Cast: %s and %s more...", implode(', ', array_slice($cast, 0, 5, true)), count(array_slice($cast, 5))),
+            sprintf("Cast: %s and %s more...", implode(', ', array_slice($cast, 0, self::CAST_MAX_COUNT, true)), count(array_slice($cast, self::CAST_MAX_COUNT + 1))),
             PHP_EOL . strip_tags(trim($result->plotoutline(true)))
         ]);
 
