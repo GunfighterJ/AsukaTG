@@ -56,6 +56,7 @@ class ImdbCommand extends Command
             sprintf("Title: %s", $result->title()),
             sprintf("Year: %s", $result->year()),
             sprintf("Rating: %s/10", $result->rating()),
+            sprintf("Top 5 Cast: %s", implode(', ', array_slice($result->cast(), 0, 5))),
             PHP_EOL . strip_tags(trim($result->plotoutline(true)))
         ]);
 
