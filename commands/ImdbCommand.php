@@ -68,7 +68,7 @@ class ImdbCommand extends Command
             sprintf("Rating: %s", $result['Rated']),
             sprintf("Stars: %s", $result['Actors']),
             sprintf("Director: %s", $result['Director']),
-            PHP_EOL . strip_tags(trim($result['Plot']))
+            PHP_EOL . trim($result['Plot'])
         ]);
 
         $this->reply($response);
