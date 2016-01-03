@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "956d6ec7b6aad17af5acb915f6e4cd75",
-    "content-hash": "7b019b557a8de2ccd99d332d24dba584",
+    "hash": "57a7af615fb5545a390d6f992402bdce",
+    "content-hash": "68399f942af48d27454b02c4b8439fe2",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -342,40 +342,6 @@
             "description": "The Illuminate Support package.",
             "homepage": "http://laravel.com",
             "time": "2015-12-29 14:47:47"
-        },
-        {
-            "name": "imdbphp/imdbphp",
-            "version": "v3.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tboothman/imdbphp.git",
-                "reference": "21fc989da53101a81c963ce78cecb4ce03bdaaf8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/tboothman/imdbphp/zipball/21fc989da53101a81c963ce78cecb4ce03bdaaf8",
-                "reference": "21fc989da53101a81c963ce78cecb4ce03bdaaf8",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">5.3"
-            },
-            "require-dev": {
-                "mockery/mockery": "~0.9",
-                "phpunit/phpunit": "~3.7"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0"
-            ],
-            "description": "Library for retrieving film and tv information from IMDb",
-            "time": "2015-12-12 00:29:55"
         },
         {
             "name": "irazasyed/telegram-bot-sdk",

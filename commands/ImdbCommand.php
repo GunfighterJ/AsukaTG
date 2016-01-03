@@ -18,7 +18,6 @@
 
 namespace Asuka\Commands;
 
-use Imdb\TitleSearch;
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
@@ -26,8 +25,6 @@ class ImdbCommand extends Command
 {
     protected $name = "imdb";
     protected $description = "Returns the first IMDb result for a set of search terms.";
-
-    const CAST_MAX_COUNT = 6;
 
     public function handle($arguments)
     {
@@ -43,27 +40,35 @@ class ImdbCommand extends Command
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        $search = new TitleSearch();
-        $results = $search->search($arguments, [TitleSearch::MOVIE, TitleSearch::TV_SERIES]);
+        $searchJson = file_get_contents(sprintf("http://www.omdbapi.com/?s=%s&r=json&type=movie", urlencode($arguments)));
+        $searchResults = json_decode($searchJson, true);
 
-        $result = $results[0];
-        if (is_null($result)) {
+        if (is_null($searchResults)) {
             $this->reply('No results found!');
 
             return;
         }
 
-        $cast = array_map(function($castMember) {
-            return $castMember['name'];
-        }, $result->cast());
+        if ($searchResults['Error']) {
+            $this->reply($searchResults['Error']);
+
+            return;
+        }
+
+        $json = file_get_contents(sprintf("http://www.omdbapi.com/?i=%s&r=json&type=movie", $searchResults['Search'][0]['imdbID']));
+        $result = json_decode($json, true);
 
         $response = implode(PHP_EOL, [
-            sprintf("URL: %s", $result->main_url()),
-            sprintf("Title: %s", $result->title()),
-            sprintf("Year: %s", $result->year()),
-            sprintf("Rating: %s/10", $result->rating()),
-            sprintf("Cast: %s and %s more...", implode(', ', array_slice($cast, 0, self::CAST_MAX_COUNT, true)), count(array_slice($cast, self::CAST_MAX_COUNT + 1))),
-            PHP_EOL . strip_tags(trim($result->plotoutline(true)))
+            sprintf("URL: http://www.imdb.com/title/%s", $result['imdbID']),
+            sprintf("Title: %s", $result['Title']),
+            sprintf("Year: %s", $result['Year']),
+            sprintf("Genre: %s", $result['Genre']),
+            sprintf("IMDb Score: %s/10", $result['imdbRating']),
+            sprintf("Runtime: %s", $result['Runtime']),
+            sprintf("Rating: %s", $result['Rated']),
+            sprintf("Stars: %s", $result['Actors']),
+            sprintf("Director: %s", $result['Director']),
+            PHP_EOL . strip_tags(trim($result['Plot']))
         ]);
 
         $this->reply($response);
