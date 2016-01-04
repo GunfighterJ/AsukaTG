@@ -22,10 +22,9 @@ use Telegram\Bot\Commands\Command;
 
 class JoehotQuoteCommand extends Command
 {
+    const QUOTE_DB_SOURCE_URL = 'https://git.yawk.at/?p=jhq-server.git;a=blob_plain;f=joehot.qt.txt;h=92a89c73f1aa7cf2120524111ef1e10262b70026;hb=HEAD';
     protected $name = "jq";
     protected $description = "Returns a random joehot classic.";
-
-    const QUOTE_DB_SOURCE_URL = 'https://git.yawk.at/?p=jhq-server.git;a=blob_plain;f=joehot.qt.txt;h=92a89c73f1aa7cf2120524111ef1e10262b70026;hb=HEAD';
 
     public function handle($arguments)
     {
@@ -59,14 +58,14 @@ class JoehotQuoteCommand extends Command
         }
 
         $quoteParts['text'] = trim($quote);
-        
+
         $response = sprintf('*%s*' . PHP_EOL, $quoteParts['text']);
         $response .= sprintf('_-- %s_' . PHP_EOL . PHP_EOL, $quoteParts['citation']);
 
         // Check for source and ensure it isn't just '^+'
-        if ($quoteParts['source'] && !empty(trim(str_replace('^', '', $quoteParts['source'])){
+        if ($quoteParts['source'] && !empty(trim(str_replace('^', '', $quoteParts['source'])))) {
             $response .= sprintf('Source: %s', $quoteParts['source']);
-    }
+        }
 
         $this->reply($response);
     }
