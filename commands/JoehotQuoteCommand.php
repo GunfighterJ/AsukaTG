@@ -18,6 +18,7 @@
 
 namespace Asuka\Commands;
 
+use PDO;
 use Telegram\Bot\Commands\Command;
 
 class JoehotQuoteCommand extends Command
@@ -25,46 +26,26 @@ class JoehotQuoteCommand extends Command
     protected $name = "jq";
     protected $description = "Returns a random joehot classic.";
 
-    const QUOTE_DB_SOURCE_URL = 'https://git.yawk.at/?p=jhq-server.git;a=blob_plain;f=joehot.qt.txt;h=92a89c73f1aa7cf2120524111ef1e10262b70026;hb=HEAD';
-
     public function handle($arguments)
     {
         $dataPath = realpath(__DIR__) . '/../data/';
-        $quoteDatabase = $dataPath . 'joehot.qt.txt';
+        $quoteDatabase = $dataPath . 'joehot.db';
 
         if (!file_exists($quoteDatabase)) {
-            mkdir($dataPath);
-            file_put_contents($quoteDatabase, file_get_contents(self::QUOTE_DB_SOURCE_URL));
+            $this->reply("Quote database doesn't exist.");
+            return;
         }
 
-        $lines = file($quoteDatabase);
-        $quote = $lines[array_rand($lines)];
+        $db = new PDO('sqlite:' . $quoteDatabase);
+        $result = $db->query('SELECT citation, source, quote FROM quotes WHERE id >= random() % (SELECT max(id) FROM quotes) LIMIT 1');
+        $quote = $result->fetch(PDO::FETCH_ASSOC);
 
-        $quoteParts = [
-            'citation' => 'joehot200',
-            'text'     => null,
-            'source'   => null,
-        ];
-
-        // Parse the quote DB according to the rules defined at https://git.yawk.at/?p=jhq-server.git;a=blob;f=README.md;h=a0894ebf6cd5bd94488bb61c0bf3d5ec54821e61;hb=HEAD
-        if (preg_match('/^(.*)::/', $quote, $matches)) {
-            $quoteParts['citation'] = trim(rtrim($matches[0], '::'));
-            $quote = preg_replace('/^.*::/', '', $quote);
-        }
-
-        if (preg_match('/#(.*)$/', $quote, $matches)) {
-            $quoteParts['source'] = trim(ltrim($matches[0], '#'));
-            $quote = preg_replace('/#.*$/', '', $quote);
-        }
-
-        $quoteParts['text'] = trim($quote);
-
-        $response = sprintf('*%s*' . PHP_EOL, $quoteParts['text']);
-        $response .= sprintf('_-- %s_', $quoteParts['citation']);
+        $response = sprintf('*%s*' . PHP_EOL, $quote['quote']);
+        $response .= sprintf('_-- %s_', $quote['citation']);
 
         // Check for source and ensure it isn't just '^+'
-        if ($quoteParts['source'] && !empty(trim(str_replace('^', '', $quoteParts['source'])))) {
-            $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quoteParts['source']);
+        if ($quote['source']) {
+            $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote['source']);
         }
 
         $this->reply($response);
