@@ -38,13 +38,13 @@ class JoehotQuoteCommand extends Command
         }
 
         $db = new PDO('sqlite:' . $quoteDatabase);
+        // Random quote
         $result = $db->query('SELECT citation, source, quote FROM quotes WHERE id >= random() % (SELECT max(id) FROM quotes) LIMIT 1');
         $quote = $result->fetch(PDO::FETCH_ASSOC);
 
         $response = sprintf('*%s*' . PHP_EOL, $quote['quote']);
         $response .= sprintf('_-- %s_', $quote['citation']);
 
-        // Check for source and ensure it isn't just '^+'
         if ($quote['source']) {
             $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote['source']);
         }
