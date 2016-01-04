@@ -72,6 +72,8 @@ class QuoteCommand extends Command
             } else {
                 $this->reply('No such quote!');
             }
+        } elseif ($db->errorInfo()) {
+            $this->reply(implode(PHP_EOL, $db->errorInfo()));
         }
     }
 
