@@ -5,7 +5,10 @@ A Telegram webhook bot written in PHP.
 
 # Installation
 
-Install [Composer](https://getcomposer.org/)
+Requirements:
+
+* [Composer](https://getcomposer.org/)
+* PDO sqlite
 
 ````bash
 git clone https://github.com/TheReverend403/AsukaTG
@@ -23,3 +26,5 @@ Run the webhook script in the root of this repo like so:
     php webhook.php --set
 
 For other CLI arguments, see `php webhook.php --help`
+
+Optionally, if you want to make use of the joehot quote database, run `php scripts/update_joehot_quotes.php`.
