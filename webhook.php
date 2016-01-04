@@ -119,7 +119,8 @@ $telegram->addCommands([
     Commands\ImdbCommand::class,
     Commands\GoogleCommand::class,
     Commands\DecideCommand::class,
-    Commands\EchoCommand::class
+    Commands\EchoCommand::class,
+    Commands\JoehotQuoteCommand::class
 ]);
 
 $telegram->commandsHandler(true);
