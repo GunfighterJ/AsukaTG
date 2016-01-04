@@ -38,35 +38,40 @@ class QuoteCommand extends Command
         }
 
         $db = new PDO('sqlite:' . $quoteDatabase);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $result = null;
-        
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+
         if ($arguments) {
             $arguments = explode(' ', $arguments);
             $quoteId = intval(trim(trim($arguments[0], '#')));
 
-            $sth = $db->prepare('SELECT * FROM quotes WHERE id = :id LIMIT 1');
-            $sth->bindValue(':id', $quoteId, PDO::PARAM_INT);
-            $result = $sth->execute();
-        } else {
-            // Random quote
-            $result = $db->query('SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1');
-        }
+            if (!$quoteId) {
+                $this->reply('Please supply a numeric quote ID.');
 
-        $quote = $result->fetch(PDO::FETCH_OBJ);
-        if (isset($quote->id)) {
-            $response = sprintf('Quote #%d:' . PHP_EOL, $quote->id);
-
-            $response .= sprintf('*%s*' . PHP_EOL, $quote->quote);
-            $response .= sprintf('_-- %s_', $quote->citation);
-
-            if (isset($quote->source)) {
-                $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
+                return;
             }
 
-            $this->reply($response);
+            $sth = $db->prepare('SELECT * FROM quotes WHERE id = :id LIMIT 1');
+            $sth->bindValue(':id', $quoteId, PDO::PARAM_INT);
         } else {
-            $this->reply('No such quote!');
+            // Random quote
+            $sth = $db->prepare('SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1');
+        }
+
+        if ($sth->execute()) {
+            $quote = $sth->fetch(PDO::FETCH_OBJ);
+            if (isset($quote->id)) {
+                $response = sprintf('Quote #%d:' . PHP_EOL, $quote->id);
+                $response .= sprintf('*%s*' . PHP_EOL, $quote->quote);
+                $response .= sprintf('_-- %s_', $quote->citation);
+
+                if (isset($quote->source)) {
+                    $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
+                }
+
+                $this->reply($response);
+            } else {
+                $this->reply('No such quote!');
+            }
         }
     }
 
