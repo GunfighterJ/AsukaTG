@@ -7,7 +7,6 @@ $quoteDatabase = $dataPath . 'joehot.db';
 $db = new PDO('sqlite:' . $quoteDatabase);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $db->exec("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT, citation TEXT NOT NULL DEFAULT 'joehot200', source TEXT DEFAULT NULL, quote TEXT NOT NULL)");
-$sth = $db->prepare('INSERT INTO quotes (citation, source, quote) VALUES (:citation, :source, :quote)');
 
 $lines = explode("\n", file_get_contents(QUOTE_DB_SOURCE_URL));
 $lines = array_filter($lines, function($line) {
@@ -40,6 +39,7 @@ foreach ($lines as $quote) {
     $existing->execute();
     $result = $existing->fetch(PDO::FETCH_OBJ);
 
+    $sth = $db->prepare('INSERT INTO quotes (citation, source, quote) VALUES (:citation, :source, :quote)');
     if (!isset($result->id)) {
         $sth->bindValue(':citation', array_key_exists('citation', $quoteParts) ? $quoteParts['citation'] : 'joehot200');
         $sth->bindValue(':source', array_key_exists('source', $quoteParts) ? $quoteParts['source'] : null);
