@@ -25,11 +25,11 @@ class JoehotQuoteCommand extends Command
     protected $name = "jq";
     protected $description = "Returns a random joehot classic.";
 
-    const QUOTE_DB_SOURCE_URL = 'https://git.yawk.at/?p=jhq-server.git;a=blob;f=joehot.qt.txt;h=92a89c73f1aa7cf2120524111ef1e10262b70026;hb=HEAD';
+    const QUOTE_DB_SOURCE_URL = 'https://git.yawk.at/?p=jhq-server.git;a=blob_plain;f=joehot.qt.txt;h=92a89c73f1aa7cf2120524111ef1e10262b70026;hb=HEAD';
 
     public function handle($arguments)
     {
-        $dataPath = realpath(__DIR__) . '/data/';
+        $dataPath = realpath(__DIR__) . '/../data/';
         $quoteDatabase = $dataPath . 'joehot.qt.txt';
 
         if (!file_exists($quoteDatabase)) {
@@ -42,29 +42,30 @@ class JoehotQuoteCommand extends Command
 
         $quoteParts = [
             'citation' => null,
-            'text' => null,
-            'source' => null,
+            'text'     => null,
+            'source'   => null,
         ];
 
-        if (preg_match('^.*::', $quote)) {
-            $quoteParts['citation'] = str_split('::')[0];
+        $matches = [];
+        if (preg_match('/^(.*)::/', $quote, $matches)) {
+            $quoteParts['citation'] = trim(rtrim($matches[0], '::'));
+            $quote = preg_replace('/^.*::/', '', $quote);
         }
 
-        if (preg_match('\w+#.*$', $quote)) {
-            $quoteParts['source'] = array_slice(str_split('#'), 1);
+        if (preg_match('/#(.*)$/', $quote, $matches)) {
+            $quoteParts['source'] = trim(ltrim($matches[0], '#'));
+            $quote = preg_replace('/#.*$/', '', $quote);
         }
 
-        $quote = str_replace($quoteParts['citation'], '', $quote);
-        $quote = str_replace($quoteParts['source'], '', $quote);
-        $quoteParts['text'] = $quote;
+        $quoteParts['text'] = trim($quote);
 
-        $response = $quoteParts['text'] . PHP_EOL;
+        $response = sprintf('*%s*' . PHP_EOL, $quoteParts['text']);
 
         if ($quoteParts['citation']) {
-            $response .= sprintf('--%s' . PHP_EOL . PHP_EOL, $quoteParts['citation']);
+            $response .= sprintf('_-- %s_' . PHP_EOL . PHP_EOL, $quoteParts['citation']);
         }
 
-        if ($quoteParts['citation']) {
+        if ($quoteParts['source']) {
             $response .= sprintf('Source: %s', $quoteParts['source']);
         }
 
@@ -76,6 +77,7 @@ class JoehotQuoteCommand extends Command
         $this->replyWithMessage([
             'text'                     => $response,
             'disable_web_page_preview' => true,
+            'parse_mode'               => 'Markdown',
             'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId()
         ]);
     }
