@@ -38,7 +38,9 @@ class QuoteCommand extends Command
         }
 
         $db = new PDO('sqlite:' . $quoteDatabase);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $result = null;
+        
         if ($arguments) {
             $arguments = explode(' ', $arguments);
             $quoteId = intval(trim(trim($arguments[0], '#')));
