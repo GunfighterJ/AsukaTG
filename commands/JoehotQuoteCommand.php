@@ -39,7 +39,7 @@ class JoehotQuoteCommand extends Command
 
         $db = new PDO('sqlite:' . $quoteDatabase);
         // Random quote
-        $result = $db->query('SELECT citation, source, quote FROM quotes ORDER BY RAND() LIMIT 1');
+        $result = $db->query('SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1');
         $quote = $result->fetch(PDO::FETCH_OBJ);
 
         $response = sprintf('*%s*' . PHP_EOL, $quote->quote);
