@@ -46,6 +46,7 @@ class JoehotQuoteCommand extends Command
             'source'   => null,
         ];
 
+        // Parse the quote DB according to the rules defined at https://git.yawk.at/?p=jhq-server.git;a=blob;f=README.md;h=a0894ebf6cd5bd94488bb61c0bf3d5ec54821e61;hb=HEAD
         $matches = [];
         if (preg_match('/^(.*)::/', $quote, $matches)) {
             $quoteParts['citation'] = trim(rtrim($matches[0], '::'));
@@ -58,13 +59,14 @@ class JoehotQuoteCommand extends Command
         }
 
         $quoteParts['text'] = trim($quote);
-
+        
         $response = sprintf('*%s*' . PHP_EOL, $quoteParts['text']);
         $response .= sprintf('_-- %s_' . PHP_EOL . PHP_EOL, $quoteParts['citation']);
 
-        if ($quoteParts['source']) {
+        // Check for source and ensure it isn't just '^+'
+        if ($quoteParts['source'] && !empty(trim(str_replace('^', '', $quoteParts['source'])){
             $response .= sprintf('Source: %s', $quoteParts['source']);
-        }
+    }
 
         $this->reply($response);
     }
