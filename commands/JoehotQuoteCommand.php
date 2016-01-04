@@ -42,7 +42,10 @@ class JoehotQuoteCommand extends Command
         $result = $db->query('SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1');
         $quote = $result->fetch(PDO::FETCH_OBJ);
 
-        $response = sprintf('*%s*' . PHP_EOL, $quote->quote);
+        $response = sprintf('Quote #%d' . PHP_EOL, $quote->id);
+        $response .= '------------' . PHP_EOL . PHP_EOL;
+
+        $response .= sprintf('*%s*' . PHP_EOL, $quote->quote);
         $response .= sprintf('_-- %s_', $quote->citation);
 
         if (isset($quote->source)) {
