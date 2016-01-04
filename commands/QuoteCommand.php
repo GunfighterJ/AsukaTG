@@ -21,10 +21,10 @@ namespace Asuka\Commands;
 use PDO;
 use Telegram\Bot\Commands\Command;
 
-class JoehotQuoteCommand extends Command
+class QuoteCommand extends Command
 {
-    protected $name = "jq";
-    protected $description = "Returns a random joehot classic.";
+    protected $name = "q";
+    protected $description = "Returns a random quote.";
 
     public function handle($arguments)
     {
@@ -38,21 +38,34 @@ class JoehotQuoteCommand extends Command
         }
 
         $db = new PDO('sqlite:' . $quoteDatabase);
-        // Random quote
-        $result = $db->query('SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1');
-        $quote = $result->fetch(PDO::FETCH_OBJ);
+        $result = null;
+        if ($arguments) {
+            $arguments = explode(' ', $arguments);
+            $quoteId = intval(trim(trim($arguments[0], '#')));
 
-        $response = sprintf('Quote #%d' . PHP_EOL, $quote->id);
-        $response .= '------------------------' . PHP_EOL;
-
-        $response .= sprintf('*%s*' . PHP_EOL, $quote->quote);
-        $response .= sprintf('_-- %s_', $quote->citation);
-
-        if (isset($quote->source)) {
-            $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
+            $sth = $db->prepare('SELECT * FROM quotes WHERE id = :id LIMIT 1');
+            $sth->bindValue(':id', $quoteId, PDO::PARAM_INT);
+            $result = $sth->execute();
+        } else {
+            // Random quote
+            $result = $db->query('SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1');
         }
 
-        $this->reply($response);
+        $quote = $result->fetch(PDO::FETCH_OBJ);
+        if (isset($quote->id)) {
+            $response = sprintf('Quote #%d:' . PHP_EOL, $quote->id);
+
+            $response .= sprintf('*%s*' . PHP_EOL, $quote->quote);
+            $response .= sprintf('_-- %s_', $quote->citation);
+
+            if (isset($quote->source)) {
+                $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
+            }
+
+            $this->reply($response);
+        } else {
+            $this->reply('No such quote!');
+        }
     }
 
     private function reply($response)
