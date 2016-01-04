@@ -43,7 +43,7 @@ class JoehotQuoteCommand extends Command
         $quote = $result->fetch(PDO::FETCH_OBJ);
 
         $response = sprintf('Quote #%d' . PHP_EOL, $quote->id);
-        $response .= '------------' . PHP_EOL . PHP_EOL;
+        $response .= '------------' . PHP_EOL;
 
         $response .= sprintf('*%s*' . PHP_EOL, $quote->quote);
         $response .= sprintf('_-- %s_', $quote->citation);
