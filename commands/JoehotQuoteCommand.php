@@ -33,6 +33,7 @@ class JoehotQuoteCommand extends Command
 
         if (!file_exists($quoteDatabase)) {
             $this->reply("Quote database doesn't exist.");
+
             return;
         }
 
