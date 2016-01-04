@@ -41,7 +41,7 @@ class JoehotQuoteCommand extends Command
         $quote = $lines[array_rand($lines)];
 
         $quoteParts = [
-            'citation' => null,
+            'citation' => 'joehot200',
             'text'     => null,
             'source'   => null,
         ];
@@ -60,10 +60,7 @@ class JoehotQuoteCommand extends Command
         $quoteParts['text'] = trim($quote);
 
         $response = sprintf('*%s*' . PHP_EOL, $quoteParts['text']);
-
-        if ($quoteParts['citation']) {
-            $response .= sprintf('_-- %s_' . PHP_EOL . PHP_EOL, $quoteParts['citation']);
-        }
+        $response .= sprintf('_-- %s_' . PHP_EOL . PHP_EOL, $quoteParts['citation']);
 
         if ($quoteParts['source']) {
             $response .= sprintf('Source: %s', $quoteParts['source']);
