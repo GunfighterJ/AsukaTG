@@ -47,7 +47,6 @@ class JoehotQuoteCommand extends Command
         ];
 
         // Parse the quote DB according to the rules defined at https://git.yawk.at/?p=jhq-server.git;a=blob;f=README.md;h=a0894ebf6cd5bd94488bb61c0bf3d5ec54821e61;hb=HEAD
-        $matches = [];
         if (preg_match('/^(.*)::/', $quote, $matches)) {
             $quoteParts['citation'] = trim(rtrim($matches[0], '::'));
             $quote = preg_replace('/^.*::/', '', $quote);
