@@ -5,11 +5,10 @@ const QUOTE_DB_SOURCE_URL = 'https://git.yawk.at/?p=jhq-server.git;a=blob_plain;
 $dataPath = realpath(__DIR__) . '/../data/';
 $quoteDatabase = $dataPath . 'joehot.db';
 $db = new PDO('sqlite:' . $quoteDatabase);
-$db->exec("CREATE TABLE IF NOT EXISTS quotes (id INT PRIMARY KEY, citation TEXT DEFAULT 'joehot200', source TEXT DEFAULT NULL, quote TEXT NOT NULL)");
+$db->exec("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT, citation TEXT NOT NULL DEFAULT 'joehot200', source TEXT DEFAULT NULL, quote TEXT NOT NULL)");
+$sth = $db->prepare('INSERT INTO quotes (citation, source, quote) VALUES (?, ?, ?)');
 
 $lines = explode("\n", file_get_contents(QUOTE_DB_SOURCE_URL));
-
-$sth = $db->prepare('INSERT INTO quotes (citation, source, quote) VALUES (?, ?, ?)');
 foreach ($lines as $quote) {
     $quoteParts = [];
 
