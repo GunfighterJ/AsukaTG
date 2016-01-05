@@ -46,8 +46,8 @@ class QuoteCommand extends BaseCommand
                 return;
             }
 
-
-            if ($this->getTelegram()->getMe()->getId() && $this->getTelegram()->getMe()->getId() == $quoteSource->getFrom()->getId()) {
+            $this->getTelegram()->setAsyncRequest(false);
+            if ($this->getTelegram()->getMe()->getId() == $quoteSource->getFrom()->getId()) {
                 $this->reply('You cannot quote me >:)');
 
                 return;
