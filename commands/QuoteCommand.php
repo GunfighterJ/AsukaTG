@@ -30,7 +30,7 @@ class QuoteCommand extends Command
     public function handle($arguments)
     {
         $dataPath      = realpath(__DIR__) . '/../data/';
-        $quoteDatabase = $dataPath . 'quotes.db';
+        $quoteDatabase = $dataPath . 'asuka.db';
 
         if (!file_exists($quoteDatabase)) {
             $this->reply("Quote database doesn't exist.");
