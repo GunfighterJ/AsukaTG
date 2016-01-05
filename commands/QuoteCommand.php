@@ -29,7 +29,7 @@ class QuoteCommand extends Command
 
     public function handle($arguments)
     {
-        $dataPath      = realpath(__DIR__) . '/../data/';
+        $dataPath = realpath(__DIR__) . '/../data/';
         $quoteDatabase = $dataPath . 'asuka.db';
 
         if (!file_exists($quoteDatabase)) {
@@ -56,16 +56,19 @@ class QuoteCommand extends Command
             $sth->bindValue(':content', $quoteSource->getText(), PDO::PARAM_STR);
 
             if ($sth->execute()) {
-                $this->reply(sprintf('Quote saved as #%s', $db->lastInsertId()));
+                $this->reply(sprintf('Quote saved as #%s', $db->lastInsertId()), [
+                    'reply_to_message_id' => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId(),
+                ]);
             } elseif ($db->errorInfo()) {
                 $this->reply(implode(PHP_EOL, $db->errorInfo()));
             }
+
             return;
         }
 
         if ($arguments) {
             $arguments = explode(' ', $arguments);
-            $quoteId   = intval(trim(trim($arguments[0], '#')));
+            $quoteId = intval(trim(trim($arguments[0], '#')));
 
             if (!$quoteId) {
                 $this->reply('Please supply a numeric quote ID.');
@@ -84,12 +87,13 @@ class QuoteCommand extends Command
             $quote = $sth->fetch(PDO::FETCH_OBJ);
             if (isset($quote->id)) {
                 $response = sprintf('Quote #%d added at %s' . PHP_EOL . PHP_EOL, $quote->id, date('r', strtotime($quote->created)));
-
                 $response .= sprintf('*%s*' . PHP_EOL, $this->escapeMarkdown($quote->content));
                 $response .= sprintf('_-- %s_', $this->escapeMarkdown($quote->citation));
-
                 $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
-                $this->replyWithMarkdown($response);
+
+                $this->reply($response, [
+                    'parse_mode' => 'Markdown',
+                ]);
             } else {
                 $this->reply('No such quote!');
             }
@@ -98,26 +102,19 @@ class QuoteCommand extends Command
         }
     }
 
-    private function replyWithMarkdown($response)
+    private function reply($response, $params = [])
     {
-        $this->replyWithMessage([
+        $params = array_merge([
             'text'                     => $response,
             'disable_web_page_preview' => true,
-            'parse_mode'               => 'Markdown',
             'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId(),
-        ]);
+        ], $params);
+
+        $this->replyWithMessage($params);
     }
 
-    private function reply($response)
+    private function escapeMarkdown($string)
     {
-        $this->replyWithMessage([
-            'text'                     => $response,
-            'disable_web_page_preview' => true,
-            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId(),
-        ]);
-    }
-
-    private function escapeMarkdown($string) {
         return preg_replace('/([*_])/i', '\\\\$1', $string);
     }
 }
