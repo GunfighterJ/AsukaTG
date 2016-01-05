@@ -51,10 +51,10 @@ class QuoteCommand extends BaseCommand
             $sth = $db->prepare('INSERT INTO quotes (citation, content, message_id, message_user_id, addedby_user_id, message_timestamp) VALUES (:citation, :content, :message_id, :message_user_id, :addedby_user_id, :message_timestamp)');
             $sth->bindValue(':citation', $quoteUser, PDO::PARAM_STR);
             $sth->bindValue(':content', $quoteSource->getText(), PDO::PARAM_STR);
-            $sth->bindValue(':message_timestamp', $quoteSource->getDate(), PDO::PARAM_INT);
             $sth->bindValue(':message_id', $quoteSource->getMessageId(), PDO::PARAM_INT);
-            $sth->bindValue(':user_id', $quoteSource->getFrom()->getId(), PDO::PARAM_INT);
+            $sth->bindValue(':message_user_id', $quoteSource->getFrom()->getId(), PDO::PARAM_INT);
             $sth->bindValue(':addedby_user_id', $this->getUpdate()->getMessage()->getFrom()->getId(), PDO::PARAM_INT);
+            $sth->bindValue(':message_timestamp', $quoteSource->getDate(), PDO::PARAM_INT);
 
             if ($sth->execute()) {
                 $this->reply(sprintf('Quote saved as #%s', $db->lastInsertId()), [
