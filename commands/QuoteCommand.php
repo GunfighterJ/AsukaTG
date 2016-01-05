@@ -61,7 +61,10 @@ class QuoteCommand extends Command
         if ($sth->execute()) {
             $quote = $sth->fetch(PDO::FETCH_OBJ);
             if (isset($quote->id)) {
-                $response = sprintf('Quote #%d:' . PHP_EOL . PHP_EOL, $quote->id);
+                $response = sprintf('Quote #%d created at %s' . PHP_EOL . PHP_EOL, $quote->id, date('r', strtotime($quote->created_at)));
+
+                $quote->quote = str_replace('*', '\*', $quote->quote);
+                $quote->quote = str_replace('_', '\_', $quote->quote);
                 $response .= sprintf('*%s*' . PHP_EOL, $quote->quote);
                 $response .= sprintf('_-- %s_', $quote->citation);
                 $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
