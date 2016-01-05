@@ -14,8 +14,8 @@ class BaseCommand extends Command
     {
         $this->dataPath      = realpath(__DIR__) . '/../data';
         $this->databasePath  = $this->dataPath . '/asuka.db';
-        $this->getUserSth    = $this->getDatabase()->prepare('SELECT * FROM users WHERE user_id = :user_id LIMIT 1');
-        $this->createUserSth = $this->getDatabase()->prepare('INSERT INTO users (user_id, first_name, last_name, username) VALUES (:user_id, :first_name, :last_name, :username)');
+        $this->getUserStmnt    = $this->getDatabase()->prepare('SELECT * FROM users WHERE user_id = :user_id LIMIT 1');
+        $this->createUserStmnt = $this->getDatabase()->prepare('INSERT INTO users (user_id, first_name, last_name, username) VALUES (:user_id, :first_name, :last_name, :username)');
     }
 
     /**
@@ -57,16 +57,16 @@ class BaseCommand extends Command
 
     protected function createOrUpdateUser(User $user)
     {
-        $this->getUserSth->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
-        if ($this->getUserSth->execute()) {
-            $dbUser = $this->getUserSth->fetch(PDO::FETCH_OBJ);
+        $this->getUserStmnt->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
+        if ($this->getUserStmnt->execute()) {
+            $dbUser = $this->getUserStmnt->fetch(PDO::FETCH_OBJ);
             if (!isset($dbUser->id)) {
-                $this->createUserSth->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
-                $this->createUserSth->bindValue(':first_name', $user->getFirstName(), PDO::PARAM_STR);
-                $this->createUserSth->bindValue(':last_name', $user->getLastName() ? $user->getLastName() : null, PDO::PARAM_STR);
-                $this->createUserSth->bindValue(':username', $user->getUsername() ? $user->getUsername() : null, PDO::PARAM_STR);
-                if (!$this->createUserSth->execute()) {
-                    $this->reply($this->createUserSth->errorInfo()[2]);
+                $this->createUserStmnt->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
+                $this->createUserStmnt->bindValue(':first_name', $user->getFirstName(), PDO::PARAM_STR);
+                $this->createUserStmnt->bindValue(':last_name', $user->getLastName() ? $user->getLastName() : null, PDO::PARAM_STR);
+                $this->createUserStmnt->bindValue(':username', $user->getUsername() ? $user->getUsername() : null, PDO::PARAM_STR);
+                if (!$this->createUserStmnt->execute()) {
+                    $this->reply($this->createUserStmnt->errorInfo()[2]);
                     return false;
                 }
             }
@@ -76,9 +76,9 @@ class BaseCommand extends Command
 
     protected function getUser($userId)
     {
-        $this->getUserSth->bindValue('user_id', $userId);
-        $this->getUserSth->execute();
-        $user = $this->getUserSth->fetch(PDO::FETCH_OBJ);
+        $this->getUserStmnt->bindValue('user_id', $userId);
+        $this->getUserStmnt->execute();
+        $user = $this->getUserStmnt->fetch(PDO::FETCH_OBJ);
 
         if (!$userId) {
             return null;
