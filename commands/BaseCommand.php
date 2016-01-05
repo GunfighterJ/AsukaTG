@@ -21,6 +21,9 @@ class BaseCommand extends Command
      */
     public function handle($arguments)
     {
+        if (!$this->createOrUpdateUser($this->getUpdate()->getMessage()->getFrom())) {
+            return;
+        };
         parent::handle($arguments);
     }
 
@@ -56,10 +59,6 @@ class BaseCommand extends Command
 
             $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
-
-        if (!$this->createOrUpdateUser($this->getUpdate()->getMessage()->getFrom())) {
-            return null;
-        };
         return $this->database;
     }
 
