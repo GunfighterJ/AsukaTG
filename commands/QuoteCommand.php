@@ -43,6 +43,10 @@ class QuoteCommand extends BaseCommand
         // Detect a reply and add it as a quote
         $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();
         if ($quoteSource) {
+            if ($quoteSource->getFrom()->getId() == $this->getTelegram()->getMe()->getId()) {
+                $this->reply('Don\'t be silly, why would you quote a bot?');
+                return;
+            }
             $quoteUser = implode(' ', [$quoteSource->getFrom()->getFirstName(), $quoteSource->getFrom()->getLastName()]);
             if (!empty($quoteSource->getFrom()->getUsername())) {
                 $quoteUser .= sprintf(' (@%s)', $quoteSource->getFrom()->getUsername());
