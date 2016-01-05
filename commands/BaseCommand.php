@@ -29,26 +29,20 @@ class BaseCommand extends Command
         $createUserStmnt = $this->getDatabase()->prepare('INSERT OR IGNORE INTO users (user_id, first_name, last_name, username) VALUES (:user_id, :first_name, :last_name, :username)');
         $updateUserStmnt = $this->getDatabase()->prepare('UPDATE users SET first_name=:first_name, last_name=:last_name, username=:username WHERE user_id=:user_id');
 
-        $createUserStmnt->bindParam(':user_id', $userId, PDO::PARAM_INT);
-        $createUserStmnt->bindParam(':first_name', $firstName, PDO::PARAM_STR);
-        $createUserStmnt->bindParam(':last_name', $lastName, PDO::PARAM_STR);
-        $createUserStmnt->bindParam(':username', $username, PDO::PARAM_STR);
-
-        $updateUserStmnt->bindParam(':user_id', $userId, PDO::PARAM_INT);
-        $updateUserStmnt->bindParam(':first_name', $firstName, PDO::PARAM_STR);
-        $updateUserStmnt->bindParam(':last_name', $lastName, PDO::PARAM_STR);
-        $updateUserStmnt->bindParam(':username', $username, PDO::PARAM_STR);
-
         $userId = $user->getId();
         $firstName = $user->getFirstName();
+        $lastName = $user->getLastName() ? $user->getLastName() : null;
+        $username = $user->getUsername() ? $user->getUsername() : null;
 
-        if ($user->getLastName()) {
-            $lastName = $user->getLastName();
-        }
+        $createUserStmnt->bindValue(':user_id', $userId, PDO::PARAM_INT);
+        $createUserStmnt->bindValue(':first_name', $firstName, PDO::PARAM_STR);
+        $createUserStmnt->bindValue(':last_name', $lastName, PDO::PARAM_STR);
+        $createUserStmnt->bindValue(':username', $username, PDO::PARAM_STR);
 
-        if ($user->getUsername()) {
-            $username = $user->getUsername();
-        }
+        $updateUserStmnt->bindValue(':user_id', $userId, PDO::PARAM_INT);
+        $updateUserStmnt->bindValue(':first_name', $firstName, PDO::PARAM_STR);
+        $updateUserStmnt->bindValue(':last_name', $lastName, PDO::PARAM_STR);
+        $updateUserStmnt->bindValue(':username', $username, PDO::PARAM_STR);
 
         if (!$createUserStmnt->execute()) {
             $this->reply($createUserStmnt->errorInfo()[2]);
@@ -70,7 +64,6 @@ class BaseCommand extends Command
         if (!$this->database) {
             if (!file_exists($this->databasePath)) {
                 $this->reply('Bot database doesn\'t exist!');
-                error_log('Bot database does not exist');
                 return null;
             }
 
@@ -78,7 +71,6 @@ class BaseCommand extends Command
                 $this->database = new PDO('sqlite:' . $this->databasePath);
             } catch (\PDOException $exception) {
                 $this->reply($exception->getMessage());
-                error_log($exception);
                 return null;
             }
 
