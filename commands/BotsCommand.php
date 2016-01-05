@@ -22,8 +22,9 @@ use Telegram\Bot\Commands\Command;
 
 class BotsCommand extends Command
 {
-    protected $name = "bots";
-    protected $description = "Report in!";
+    protected $description = 'Report in!';
+
+    protected $name = 'bots';
 
     public function handle($arguments)
     {
@@ -33,8 +34,8 @@ class BotsCommand extends Command
     private function reply($response)
     {
         $this->replyWithMessage([
-            'text'                => $response,
-            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId()
+            'text' => $response,
+            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
         ]);
     }
 }

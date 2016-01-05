@@ -23,10 +23,14 @@ use Telegram\Bot\Commands\Command;
 class RollCommand extends Command
 {
     const DICE_MAX_AMOUNT = 128;
-    const DIE_MIN_FACES = 4;
+
     const DIE_MAX_FACES = 120;
-    protected $name = "roll";
-    protected $description = "Rolls some dice.";
+
+    const DIE_MIN_FACES = 4;
+
+    protected $description = 'Rolls some dice.';
+
+    protected $name = 'roll';
 
     public function handle($arguments)
     {
@@ -34,7 +38,7 @@ class RollCommand extends Command
         $badArgsResponse = implode(PHP_EOL, [
             'Please specify the amount and type of dice to roll.',
             'Command must be formatted as /roll <1-128>d<1-120>',
-            'Example: /roll 3d6'
+            'Example: /roll 3d6',
         ]);
 
         if (empty($arguments)) {
@@ -52,11 +56,11 @@ class RollCommand extends Command
         }
 
         $diceCount = intval($diceParam[0]);
-        $diceType = intval($diceParam[1]);
+        $diceType  = intval($diceParam[1]);
         // }}}
 
         if ($diceCount < 1 || $diceCount > self::DICE_MAX_AMOUNT) {
-            $this->reply(sprintf("Amount of dice must be between 1 and %s (inclusive).", self::DICE_MAX_AMOUNT));
+            $this->reply(sprintf('Amount of dice must be between 1 and %s (inclusive).', self::DICE_MAX_AMOUNT));
 
             return;
         }
@@ -81,7 +85,7 @@ class RollCommand extends Command
     {
         $this->replyWithMessage([
             'text'                => $response,
-            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId()
+            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
         ]);
     }
 }

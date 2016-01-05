@@ -53,34 +53,33 @@ $config = json_encode($config);
 $config = json_decode($config);
 
 $apiKey = $config->telegram->api_key;
-$async = $config->telegram->async_requests;
+$async  = $config->telegram->async_requests;
 
 $telegram = new Api($apiKey, $async);
 
 if (php_sapi_name() == 'cli') {
-
     $flags = [
         'set'  => [
             'flags'       => [
-                '-s', '--set'
+                '-s', '--set',
             ],
-            'description' => 'Set the webhook URL.'
+            'description' => 'Set the webhook URL.',
         ],
         'del'  => [
             'flags'       => [
-                '-d', '--delete', '--del'
+                '-d', '--delete', '--del',
             ],
-            'description' => 'Remove the webhook URL.'
+            'description' => 'Remove the webhook URL.',
         ],
         'help' => [
             'flags'       => [
-                '-h', '--help'
+                '-h', '--help',
             ],
-            'description' => 'Show this help message.'
+            'description' => 'Show this help message.',
         ],
     ];
 
-    if ($argc == 1 || in_array($argv[1], $flags['help'])) {
+    if (1 == $argc || in_array($argv[1], $flags['help'])) {
         printHelp();
     }
 
@@ -98,12 +97,12 @@ if (php_sapi_name() == 'cli') {
     if (in_array($argv[1], $flags['set'])) {
         $webhookUrl = $config->telegram->webhook_url;
         $telegram->setWebhook(['url' => $webhookUrl]);
-        echo sprintf("Webhook set to %s" . PHP_EOL, $webhookUrl);
+        echo sprintf('Webhook set to %s' . PHP_EOL, $webhookUrl);
     }
 
     if (in_array($argv[1], $flags['del'])) {
         $telegram->removeWebhook();
-        echo "Webhook removed." . PHP_EOL;
+        echo 'Webhook removed.' . PHP_EOL;
     }
 
     return;
@@ -120,7 +119,7 @@ $telegram->addCommands([
     Commands\GoogleCommand::class,
     Commands\DecideCommand::class,
     Commands\EchoCommand::class,
-    Commands\QuoteCommand::class
+    Commands\QuoteCommand::class,
 ]);
 
 $telegram->commandsHandler(true);

@@ -23,12 +23,13 @@ use Telegram\Bot\Commands\Command;
 
 class QuoteCommand extends Command
 {
-    protected $name = "q";
-    protected $description = "Returns a random quote.";
+    protected $description = 'Returns a random quote.';
+
+    protected $name = 'q';
 
     public function handle($arguments)
     {
-        $dataPath = realpath(__DIR__) . '/../data/';
+        $dataPath      = realpath(__DIR__) . '/../data/';
         $quoteDatabase = $dataPath . 'joehot.db';
 
         if (!file_exists($quoteDatabase)) {
@@ -42,7 +43,7 @@ class QuoteCommand extends Command
 
         if ($arguments) {
             $arguments = explode(' ', $arguments);
-            $quoteId = intval(trim(trim($arguments[0], '#')));
+            $quoteId   = intval(trim(trim($arguments[0], '#')));
 
             if (!$quoteId) {
                 $this->reply('Please supply a numeric quote ID.');
@@ -83,7 +84,7 @@ class QuoteCommand extends Command
             'text'                     => $response,
             'disable_web_page_preview' => true,
             'parse_mode'               => 'Markdown',
-            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId()
+            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId(),
         ]);
     }
 }

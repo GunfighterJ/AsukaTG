@@ -23,15 +23,16 @@ use Telegram\Bot\Commands\Command;
 
 class GoogleCommand extends Command
 {
-    protected $name = "g";
-    protected $description = "Returns the first Google result for a set of search terms.";
+    protected $description = 'Returns the first Google result for a set of search terms.';
+
+    protected $name = 'g';
 
     public function handle($arguments)
     {
         if (empty($arguments)) {
             $badArgsResponse = implode(PHP_EOL, [
                 'Please supply some search terms.',
-                'Example: /g What happens if you Google Google?'
+                'Example: /g What happens if you Google Google?',
             ]);
             $this->reply($badArgsResponse);
 
@@ -40,10 +41,10 @@ class GoogleCommand extends Command
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        $query = urlencode($arguments);
-        $url = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=" . $query;
-        $body = file_get_contents($url);
-        $json = json_decode($body);
+        $query    = urlencode($arguments);
+        $url      = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=' . $query;
+        $body     = file_get_contents($url);
+        $json     = json_decode($body);
         $response = $json->responseData->results[0]->unescapedUrl;
 
         if (is_null($response)) {
@@ -59,7 +60,7 @@ class GoogleCommand extends Command
     {
         $this->replyWithMessage([
             'text'                => $response,
-            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId()
+            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
         ]);
     }
 }

@@ -2,7 +2,7 @@
 
 const QUOTE_DB_SOURCE_URL = 'https://git.yawk.at/?p=jhq-server.git;a=blob_plain;f=joehot.qt.txt;hb=HEAD';
 
-$dataPath = realpath(__DIR__) . '/../data/';
+$dataPath      = realpath(__DIR__) . '/../data/';
 $quoteDatabase = $dataPath . 'joehot.db';
 
 $db = new PDO('sqlite:' . $quoteDatabase);
@@ -19,7 +19,7 @@ foreach ($lines as $quote) {
     // Parse the quote DB according to the rules defined at https://git.yawk.at/?p=jhq-server.git;a=blob;f=README.md;h=a0894ebf6cd5bd94488bb61c0bf3d5ec54821e61;hb=HEAD
     if (preg_match('/^(.*)::/', $quote, $matches)) {
         $quoteParts['citation'] = trim(rtrim($matches[0], '::'));
-        $quote = preg_replace('/^.*::/', '', $quote);
+        $quote                  = preg_replace('/^.*::/', '', $quote);
     }
 
     if (preg_match('/#(.*)$/', $quote, $matches)) {

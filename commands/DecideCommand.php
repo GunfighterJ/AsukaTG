@@ -22,16 +22,17 @@ use Telegram\Bot\Commands\Command;
 
 class DecideCommand extends Command
 {
-    protected $name = "decide";
-    protected $description = "Decides between a set of choices.";
-
     protected $choiceDelimiters = [
-        ' or ', '|', ',', '/', '\\'
+        ' or ', '|', ',', '/', '\\',
     ];
+
+    protected $description = 'Decides between a set of choices.';
+
+    protected $name = 'decide';
 
     protected $singleChoiceResults = [
         'No.', 'Probably not.', 'Maybe.',
-        'Probably.', 'Undecided, ask me again later.', 'Yes.'
+        'Probably.', 'Undecided, ask me again later.', 'Yes.',
     ];
 
     public function handle($arguments)
@@ -41,7 +42,7 @@ class DecideCommand extends Command
             'Example: /decide Eat cookies?',
             'Example: /decide Cookies | Cake',
             'Example: /decide Cookies or Cake',
-            'Example: /decide Cookies, Cake, Pie'
+            'Example: /decide Cookies, Cake, Pie',
         ]);
 
         if (empty($arguments)) {
@@ -92,9 +93,9 @@ class DecideCommand extends Command
     private function reply($response)
     {
         $this->replyWithMessage([
-            'text'                     => $response,
+            'text' => $response,
             'disable_web_page_preview' => true,
-            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId()
+            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
         ]);
     }
 }

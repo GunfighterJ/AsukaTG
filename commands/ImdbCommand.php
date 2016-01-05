@@ -23,15 +23,16 @@ use Telegram\Bot\Commands\Command;
 
 class ImdbCommand extends Command
 {
-    protected $name = "imdb";
-    protected $description = "Returns the first IMDb result for a set of search terms.";
+    protected $description = 'Returns the first IMDb result for a set of search terms.';
+
+    protected $name = 'imdb';
 
     public function handle($arguments)
     {
         if (empty($arguments)) {
             $badArgsResponse = implode(PHP_EOL, [
                 'Please supply some search terms.',
-                'Example: /imdb Hitchhikers Guide to the Galaxy'
+                'Example: /imdb Hitchhikers Guide to the Galaxy',
             ]);
             $this->reply($badArgsResponse);
 
@@ -40,7 +41,7 @@ class ImdbCommand extends Command
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        $searchJson = file_get_contents(sprintf("http://www.omdbapi.com/?s=%s&r=json&type=movie", urlencode($arguments)));
+        $searchJson    = file_get_contents(sprintf('http://www.omdbapi.com/?s=%s&r=json&type=movie', urlencode($arguments)));
         $searchResults = json_decode($searchJson, true);
 
         if (is_null($searchResults)) {
@@ -55,20 +56,20 @@ class ImdbCommand extends Command
             return;
         }
 
-        $json = file_get_contents(sprintf("http://www.omdbapi.com/?i=%s&r=json&type=movie&plot=full", $searchResults['Search'][0]['imdbID']));
+        $json   = file_get_contents(sprintf('http://www.omdbapi.com/?i=%s&r=json&type=movie&plot=full', $searchResults['Search'][0]['imdbID']));
         $result = json_decode($json, true);
 
         $response = implode(PHP_EOL, [
-            sprintf("URL: http://www.imdb.com/title/%s", $result['imdbID']),
-            sprintf("Title: %s", $result['Title']),
-            sprintf("Year: %s", $result['Year']),
-            sprintf("Genre: %s", $result['Genre']),
-            sprintf("IMDb Score: %s/10", $result['imdbRating']),
-            sprintf("Runtime: %s", $result['Runtime']),
-            sprintf("Rating: %s", $result['Rated']),
-            sprintf("Stars: %s", $result['Actors']),
-            sprintf("Director: %s", $result['Director']),
-            PHP_EOL . trim($result['Plot'])
+            sprintf('URL: http://www.imdb.com/title/%s', $result['imdbID']),
+            sprintf('Title: %s', $result['Title']),
+            sprintf('Year: %s', $result['Year']),
+            sprintf('Genre: %s', $result['Genre']),
+            sprintf('IMDb Score: %s/10', $result['imdbRating']),
+            sprintf('Runtime: %s', $result['Runtime']),
+            sprintf('Rating: %s', $result['Rated']),
+            sprintf('Stars: %s', $result['Actors']),
+            sprintf('Director: %s', $result['Director']),
+            PHP_EOL . trim($result['Plot']),
         ]);
 
         $this->reply($response);
@@ -79,7 +80,7 @@ class ImdbCommand extends Command
         $this->replyWithMessage([
             'text'                     => $response,
             'disable_web_page_preview' => true,
-            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId()
+            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId(),
         ]);
     }
 }

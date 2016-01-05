@@ -22,8 +22,9 @@ use Telegram\Bot\Commands\Command;
 
 class HelpCommand extends Command
 {
-    protected $name = "?";
-    protected $description = "Displays a list of bot commands.";
+    protected $description = 'Displays a list of bot commands.';
+
+    protected $name = '?';
 
     public function handle($arguments)
     {
@@ -41,15 +42,16 @@ class HelpCommand extends Command
     {
         $this->replyWithMessage([
             'text'                => $response,
-            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId()
+            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
         ]);
     }
 }
 
 class StartCommand extends Command
 {
-    protected $name = "start";
-    protected $description = "Displays a list of bot commands.";
+    protected $description = 'Displays a list of bot commands.';
+
+    protected $name = 'start';
 
     public function handle($arguments)
     {

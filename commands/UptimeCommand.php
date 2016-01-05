@@ -23,8 +23,9 @@ use Uptime\System;
 
 class UptimeCommand extends Command
 {
-    protected $name = "uptime";
-    protected $description = "Displays the current system uptime.";
+    protected $description = 'Displays the current system uptime.';
+
+    protected $name = 'uptime';
 
     public function handle($arguments)
     {
@@ -35,7 +36,7 @@ class UptimeCommand extends Command
             sprintf(ngettext('%d day', '%d days', $uptime->d), $uptime->d),
             sprintf(ngettext('%d hour', '%d hours', $uptime->h), $uptime->h),
             sprintf(ngettext('%d minute', '%d minutes', $uptime->i), $uptime->i),
-            sprintf(ngettext('%d second', '%d seconds', $uptime->s), $uptime->s)
+            sprintf(ngettext('%d second', '%d seconds', $uptime->s), $uptime->s),
         ]);
 
         $this->reply($response);
@@ -46,7 +47,7 @@ class UptimeCommand extends Command
         $this->replyWithMessage([
             'text'                     => $response,
             'disable_web_page_preview' => true,
-            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId()
+            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId(),
         ]);
     }
 }

@@ -22,8 +22,9 @@ use Telegram\Bot\Commands\Command;
 
 class CoinCommand extends Command
 {
-    protected $name = "coin";
-    protected $description = "Flip a coin.";
+    protected $description = 'Flip a coin.';
+
+    protected $name = 'coin';
 
     public function handle($arguments)
     {
@@ -33,8 +34,8 @@ class CoinCommand extends Command
     private function reply($response)
     {
         $this->replyWithMessage([
-            'text'                => $response,
-            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId()
+            'text' => $response,
+            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
         ]);
     }
 }

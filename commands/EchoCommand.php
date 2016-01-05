@@ -22,8 +22,9 @@ use Telegram\Bot\Commands\Command;
 
 class EchoCommand extends Command
 {
-    protected $name = "echo";
-    protected $description = "Returns whatever input you send.";
+    protected $description = 'Returns whatever input you send.';
+
+    protected $name = 'echo';
 
     public function handle($arguments)
     {
@@ -39,9 +40,9 @@ class EchoCommand extends Command
     private function reply($response)
     {
         $this->replyWithMessage([
-            'text'                     => $response,
+            'text' => $response,
             'disable_web_page_preview' => true,
-            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId()
+            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
         ]);
     }
 }
