@@ -27,9 +27,9 @@ class CreateUsersTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('users');
+        $table = $this->table('users', ['id' => false, 'primary_key' => ['user_id']]);
         $table
-            ->addColumn('user_id', 'integer', ['null' => false, 'default' => 0])
+            ->addColumn('user_id', 'integer')
             ->addColumn('first_name', 'text', ['null' => false])
             ->addColumn('last_name', 'text', ['default' => null])
             ->addColumn('username', 'text', ['default' => null])
