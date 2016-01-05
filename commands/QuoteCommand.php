@@ -48,12 +48,13 @@ class QuoteCommand extends BaseCommand
                 $quoteUser .= sprintf(' (@%s)', $quoteSource->getFrom()->getUsername());
             }
 
-            $sth = $db->prepare('INSERT INTO quotes (citation, content, message_id, message_user_id, addedby_user_id, message_timestamp) VALUES (:citation, :content, :message_id, :message_user_id, :addedby_user_id, :message_timestamp)');
+            $sth = $db->prepare('INSERT INTO quotes (citation, content, chat_id, message_id, user_id, addedby_id, message_timestamp) VALUES (:citation, :content, :chat_id, :message_id, :user_id, :addedby_id, :message_timestamp)');
             $sth->bindValue(':citation', $quoteUser, PDO::PARAM_STR);
             $sth->bindValue(':content', $quoteSource->getText(), PDO::PARAM_STR);
+            $sth->bindValue(':chat_id', $quoteSource->getChat()->getId(), PDO::PARAM_INT);
             $sth->bindValue(':message_id', $quoteSource->getMessageId(), PDO::PARAM_INT);
-            $sth->bindValue(':message_user_id', $quoteSource->getFrom()->getId(), PDO::PARAM_INT);
-            $sth->bindValue(':addedby_user_id', $this->getUpdate()->getMessage()->getFrom()->getId(), PDO::PARAM_INT);
+            $sth->bindValue(':user_id', $quoteSource->getFrom()->getId(), PDO::PARAM_INT);
+            $sth->bindValue(':addedby_id', $this->getUpdate()->getMessage()->getFrom()->getId(), PDO::PARAM_INT);
             $sth->bindValue(':message_timestamp', $quoteSource->getDate(), PDO::PARAM_INT);
 
             if ($sth->execute()) {
@@ -94,7 +95,7 @@ class QuoteCommand extends BaseCommand
         if ($sth->execute()) {
             $quote = $sth->fetch(PDO::FETCH_OBJ);
             if (isset($quote->id)) {
-                $response = sprintf('Quote #%d added at %s' . PHP_EOL . PHP_EOL, $quote->id, date('r', strtotime($quote->added_at)));
+                $response = sprintf('Quote #%d added at %s' . PHP_EOL . PHP_EOL, $quote->id, date('r', strtotime($quote->added_timestamp)));
                 $response .= sprintf('%s' . PHP_EOL, $this->escapeMarkdown($quote->content));
                 $response .= sprintf('-- %s', $this->escapeMarkdown($quote->citation));
                 $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
