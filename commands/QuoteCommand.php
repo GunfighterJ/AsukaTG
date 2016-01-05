@@ -29,19 +29,18 @@ class QuoteCommand extends BaseCommand
     public function handle($arguments)
     {
         $db = $this->getDatabase();
-        if (!$db) {
-            return;
-        }
-
-        if (!$this->createOrUpdateUser($this->getUpdate()->getMessage()->getFrom())) {
-            return;
-        };
 
         // Detect a reply and add it as a quote
         $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();
         if ($quoteSource) {
             if ($this->getUpdate()->getMessage()->getChat()->getType() != 'group') {
                 $this->reply('You can only add quotes in a group.');
+
+                return;
+            }
+
+            if ($this->getTelegram()->getMe()->getId() == $quoteSource->getFrom()->getId()) {
+                $this->reply('You can\'t quote me >:)');
 
                 return;
             }
