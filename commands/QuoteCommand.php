@@ -46,8 +46,10 @@ class QuoteCommand extends BaseCommand
             $messageType = $this->getTelegram()->detectMessageType($quoteSource);
             if ($messageType != 'text') {
                 $this->reply(sprintf('I cannot quote %s messages, please send me a text message.', $messageType));
+
                 return;
             }
+
             $quoteUser = implode(' ', [$quoteSource->getFrom()->getFirstName(), $quoteSource->getFrom()->getLastName()]);
             if (!empty($quoteSource->getFrom()->getUsername())) {
                 $quoteUser .= sprintf(' (@%s)', $quoteSource->getFrom()->getUsername());
@@ -66,8 +68,8 @@ class QuoteCommand extends BaseCommand
             } else {
                 if ($sth->errorCode() == 23000) {
                     $this->reply('I already have that quote.', [
-                            'reply_to_message_id' => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId()
-                        ]);
+                        'reply_to_message_id' => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId()
+                    ]);
 
                     return;
                 }
