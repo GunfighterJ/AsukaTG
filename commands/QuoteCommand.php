@@ -111,7 +111,7 @@ class QuoteCommand extends BaseCommand
         if ($getQuoteStmt->execute()) {
             $quote = $getQuoteStmt->fetch(PDO::FETCH_OBJ);
             if (isset($quote->id)) {
-                $response .= sprintf('%s' . PHP_EOL, $this->escapeMarkdown($quote->content));
+                $response = sprintf('%s' . PHP_EOL, $this->escapeMarkdown($quote->content));
 
                 $user = $this->getDBUser($quote->user_id);
 
