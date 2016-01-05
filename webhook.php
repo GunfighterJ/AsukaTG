@@ -53,9 +53,8 @@ $config = json_encode($config);
 $config = json_decode($config);
 
 $apiKey = $config->telegram->api_key;
-$async  = $config->telegram->async_requests;
 
-$telegram = new Api($apiKey, $async);
+$telegram = new Api($apiKey);
 
 if (php_sapi_name() == 'cli') {
     $flags = [
@@ -96,13 +95,13 @@ if (php_sapi_name() == 'cli') {
 
     if (in_array($argv[1], $flags['set'])) {
         $webhookUrl = $config->telegram->webhook_url;
-        $telegram->setWebhook(['url' => $webhookUrl]);
-        echo sprintf('Webhook set to %s' . PHP_EOL, $webhookUrl);
+        $response = $telegram->setWebhook(['url' => $webhookUrl]);
+        echo sprintf($response->getBody());
     }
 
     if (in_array($argv[1], $flags['del'])) {
-        $telegram->removeWebhook();
-        echo 'Webhook removed.' . PHP_EOL;
+        $response = $telegram->removeWebhook();
+        echo sprintf($response->getBody());
     }
 
     return;
