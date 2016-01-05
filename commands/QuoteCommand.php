@@ -65,27 +65,27 @@ class QuoteCommand extends BaseCommand
                 return;
             };
 
-            $createQuoteStmt = $db->prepare('INSERT INTO quotes (content, chat_id, message_id, user_id, addedby_id, message_timestamp) VALUES (:content, :chat_id, :message_id, :user_id, :addedby_id, :message_timestamp)');
-            $createQuoteStmt->bindValue(':content', $quoteSource->getText(), PDO::PARAM_STR);
-            $createQuoteStmt->bindValue(':chat_id', $quoteSource->getChat()->getId(), PDO::PARAM_INT);
-            $createQuoteStmt->bindValue(':message_id', $quoteSource->getMessageId(), PDO::PARAM_INT);
-            $createQuoteStmt->bindValue(':user_id', $quoteSource->getFrom()->getId(), PDO::PARAM_INT);
-            $createQuoteStmt->bindValue(':addedby_id', $this->getUpdate()->getMessage()->getFrom()->getId(), PDO::PARAM_INT);
-            $createQuoteStmt->bindValue(':message_timestamp', $quoteSource->getDate(), PDO::PARAM_INT);
+            $createQuoteStmnt = $db->prepare('INSERT INTO quotes (content, chat_id, message_id, user_id, addedby_id, message_timestamp) VALUES (:content, :chat_id, :message_id, :user_id, :addedby_id, :message_timestamp)');
+            $createQuoteStmnt->bindValue(':content', $quoteSource->getText(), PDO::PARAM_STR);
+            $createQuoteStmnt->bindValue(':chat_id', $quoteSource->getChat()->getId(), PDO::PARAM_INT);
+            $createQuoteStmnt->bindValue(':message_id', $quoteSource->getMessageId(), PDO::PARAM_INT);
+            $createQuoteStmnt->bindValue(':user_id', $quoteSource->getFrom()->getId(), PDO::PARAM_INT);
+            $createQuoteStmnt->bindValue(':addedby_id', $this->getUpdate()->getMessage()->getFrom()->getId(), PDO::PARAM_INT);
+            $createQuoteStmnt->bindValue(':message_timestamp', $quoteSource->getDate(), PDO::PARAM_INT);
 
-            if ($createQuoteStmt->execute()) {
+            if ($createQuoteStmnt->execute()) {
                 $this->reply(sprintf('Quote saved as #%s', $db->lastInsertId()), [
                     'reply_to_message_id' => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId(),
                 ]);
             } else {
-                if ($createQuoteStmt->errorCode() == 23000) {
+                if ($createQuoteStmnt->errorCode() == 23000) {
                     $this->reply('I already have that quote.', [
                         'reply_to_message_id' => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId(),
                     ]);
 
                     return;
                 }
-                $this->reply($createQuoteStmt->errorInfo()[2]);
+                $this->reply($createQuoteStmnt->errorInfo()[2]);
             }
 
             return;
@@ -101,15 +101,15 @@ class QuoteCommand extends BaseCommand
                 return;
             }
 
-            $getQuoteStmt = $db->prepare('SELECT * FROM quotes WHERE id = :id LIMIT 1');
-            $getQuoteStmt->bindValue(':id', $quoteId, PDO::PARAM_INT);
+            $getQuoteStmnt = $db->prepare('SELECT * FROM quotes WHERE id = :id LIMIT 1');
+            $getQuoteStmnt->bindValue(':id', $quoteId, PDO::PARAM_INT);
         } else {
             // Random quote
-            $getQuoteStmt = $db->prepare('SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1');
+            $getQuoteStmnt = $db->prepare('SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1');
         }
 
-        if ($getQuoteStmt->execute()) {
-            $quote = $getQuoteStmt->fetch(PDO::FETCH_OBJ);
+        if ($getQuoteStmnt->execute()) {
+            $quote = $getQuoteStmnt->fetch(PDO::FETCH_OBJ);
             if (isset($quote->id)) {
                 $response = sprintf('%s' . PHP_EOL, $this->escapeMarkdown($quote->content));
 
@@ -133,7 +133,7 @@ class QuoteCommand extends BaseCommand
                 $this->reply('No such quote!');
             }
         } else {
-            $this->reply($getQuoteStmt->errorInfo()[2]);
+            $this->reply($getQuoteStmnt->errorInfo()[2]);
         }
     }
 
