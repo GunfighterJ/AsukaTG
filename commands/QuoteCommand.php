@@ -121,7 +121,7 @@ class QuoteCommand extends BaseCommand
                 }
 
                 if ($user->username) {
-                    $citation .= sprintf(' (@%s)', $user->username);
+                    $citation .= sprintf(' (%s)', $user->username);
                 }
 
                 $response .= sprintf('-- %s, %s (#%s)', $this->escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
