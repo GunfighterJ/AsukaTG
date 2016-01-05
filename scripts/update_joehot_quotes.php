@@ -3,7 +3,7 @@
 const QUOTE_DB_SOURCE_URL = 'https://git.yawk.at/?p=jhq-server.git;a=blob_plain;f=joehot.qt.txt;hb=HEAD';
 
 $dataPath      = realpath(__DIR__) . '/../data/';
-$quoteDatabase = $dataPath . 'joehot.db';
+$quoteDatabase = $dataPath . 'quotes.db';
 
 $db = new PDO('sqlite:' . $quoteDatabase);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
