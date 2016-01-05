@@ -21,9 +21,6 @@ class BaseCommand extends Command
      */
     public function handle($arguments)
     {
-        if (!$this->createOrUpdateUser($this->getUpdate()->getMessage()->getFrom())) {
-            return;
-        };
         parent::handle($arguments);
     }
 

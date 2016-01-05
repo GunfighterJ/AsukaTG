@@ -33,6 +33,10 @@ class QuoteCommand extends BaseCommand
             return;
         }
 
+        if (!$this->createOrUpdateUser($this->getUpdate()->getMessage()->getFrom())) {
+            return;
+        };
+        
         // Detect a reply and add it as a quote
         $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();
         if ($quoteSource) {
