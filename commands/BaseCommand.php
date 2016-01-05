@@ -15,7 +15,7 @@ class BaseCommand extends Command
         $this->dataPath      = realpath(__DIR__) . '/../data';
         $this->databasePath  = $this->dataPath . '/asuka.db';
         $this->getUserStmnt    = $this->getDatabase()->prepare('SELECT * FROM users WHERE user_id = :user_id LIMIT 1');
-        $this->createUserStmnt = $this->getDatabase()->prepare('INSERT INTO users (user_id, first_name, last_name, username) VALUES (:user_id, :first_name, :last_name, :username)');
+        $this->createUserStmnt = $this->getDatabase()->prepare('INSERT INTO users (user_id, first_name, last_name, username) VALUES (:user_id, :first_name, :last_name, :username) ON DUPLICATE KEY UPDATE first_name=:first_name, last_name=:last_name, username=:username');
     }
 
     /**
@@ -49,7 +49,7 @@ class BaseCommand extends Command
      */
     public function handle($arguments)
     {
-        if (!$this->createOrUpdateUser($this->getUpdate()->getMessage()->getFrom())) {
+        if (!$this->createOrUpdateUser(parent::getUpdate()->getMessage()->getFrom())) {
             return;
         };
         parent::handle($arguments);
@@ -57,19 +57,13 @@ class BaseCommand extends Command
 
     protected function createOrUpdateUser(User $user)
     {
-        $this->getUserStmnt->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
-        if ($this->getUserStmnt->execute()) {
-            $dbUser = $this->getUserStmnt->fetch(PDO::FETCH_OBJ);
-            if (!isset($dbUser->id)) {
-                $this->createUserStmnt->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
-                $this->createUserStmnt->bindValue(':first_name', $user->getFirstName(), PDO::PARAM_STR);
-                $this->createUserStmnt->bindValue(':last_name', $user->getLastName() ? $user->getLastName() : null, PDO::PARAM_STR);
-                $this->createUserStmnt->bindValue(':username', $user->getUsername() ? $user->getUsername() : null, PDO::PARAM_STR);
-                if (!$this->createUserStmnt->execute()) {
-                    $this->reply($this->createUserStmnt->errorInfo()[2]);
-                    return false;
-                }
-            }
+        $this->createUserStmnt->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
+        $this->createUserStmnt->bindValue(':first_name', $user->getFirstName(), PDO::PARAM_STR);
+        $this->createUserStmnt->bindValue(':last_name', $user->getLastName() ? $user->getLastName() : null, PDO::PARAM_STR);
+        $this->createUserStmnt->bindValue(':username', $user->getUsername() ? $user->getUsername() : null, PDO::PARAM_STR);
+        if (!$this->createUserStmnt->execute()) {
+            $this->reply($this->createUserStmnt->errorInfo()[2]);
+            return false;
         }
         return true;
     }
