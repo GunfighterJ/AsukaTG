@@ -56,7 +56,7 @@ class QuoteCommand extends Command
             $sth->bindValue(':content', $quoteSource->getText(), PDO::PARAM_STR);
 
             if ($sth->execute()) {
-                $this->replyToAdd(sprintf('Quote saved as #%s', $db->lastInsertId()));
+                $this->reply(sprintf('Quote saved as #%s', $db->lastInsertId()));
             } elseif ($db->errorInfo()) {
                 $this->reply(implode(PHP_EOL, $db->errorInfo()));
             }
@@ -87,9 +87,9 @@ class QuoteCommand extends Command
 
                 $response .= sprintf('*%s*' . PHP_EOL, $this->escapeMarkdown($quote->content));
                 $response .= sprintf('_-- %s_', $this->escapeMarkdown($quote->citation));
-                $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
 
-                $this->reply($response);
+                $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
+                $this->replyWithMarkdown($response);
             } else {
                 $this->reply('No such quote!');
             }
@@ -98,7 +98,7 @@ class QuoteCommand extends Command
         }
     }
 
-    private function reply($response)
+    private function replyWithMarkdown($response)
     {
         $this->replyWithMessage([
             'text'                     => $response,
@@ -108,7 +108,7 @@ class QuoteCommand extends Command
         ]);
     }
 
-    private function replyToAdd($response)
+    private function reply($response)
     {
         $this->replyWithMessage([
             'text'                     => $response,
