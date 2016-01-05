@@ -19,6 +19,7 @@
 namespace Asuka\Commands;
 
 use PDO;
+use Telegram\Bot\Objects\User;
 
 class QuoteCommand extends BaseCommand
 {
@@ -32,6 +33,8 @@ class QuoteCommand extends BaseCommand
         if (!$db) {
             return;
         }
+
+        $getUserSth = $db->prepare('SELECT * FROM users WHERE user_id = :user_id LIMIT 1');
 
         // Detect a reply and add it as a quote
         $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();
@@ -48,17 +51,33 @@ class QuoteCommand extends BaseCommand
                 return;
             }
 
-            $quoteUser = $quoteSource->getFrom()->getFirstName();
-            if ($quoteSource->getFrom()->getLastName()) {
-                $quoteUser .= sprintf(' %s', $quoteSource->getFrom()->getLastName());
+            $quoteUser = $quoteSource->getFrom();
+            $eventUsers = [$quoteUser, $this->getUpdate()->getMessage()->getFrom()];
+
+            $createUserSth = $db->prepare('INSERT INTO users (user_id, first_name, last_name, username) VALUES (:user_id, :first_name, :last_name, :username)');
+
+            foreach ($eventUsers as $user) {
+                $getUserSth->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
+                if ($getUserSth->execute()) {
+                    $dbUser = $getUserSth->fetch(PDO::FETCH_OBJ);
+                    if (!isset($dbUser->id)) {
+                        $createUserSth->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
+                        $createUserSth->bindValue(':first_name', $user->getFirstName(), PDO::PARAM_STR);
+                        $createUserSth->bindValue(':last_name', $user->getFirstName() ? $user->getFirstName() : null, PDO::PARAM_STR);
+                        $createUserSth->bindValue(':username', $user->getUsername() ? $user->getUsername() : null, PDO::PARAM_STR);
+
+                        if (!$createUserSth->execute()) {
+                            $this->reply($createUserSth->errorInfo()[2]);
+                            return;
+                        }
+                    }
+                } else {
+                    $this->reply($getUserSth->errorInfo()[2]);
+                    return;
+                }
             }
 
-            if (!empty($quoteSource->getFrom()->getUsername())) {
-                $quoteUser .= sprintf(' (@%s)', $quoteSource->getFrom()->getUsername());
-            }
-
-            $sth = $db->prepare('INSERT INTO quotes (citation, content, chat_id, message_id, user_id, addedby_id, message_timestamp) VALUES (:citation, :content, :chat_id, :message_id, :user_id, :addedby_id, :message_timestamp)');
-            $sth->bindValue(':citation', $quoteUser, PDO::PARAM_STR);
+            $sth = $db->prepare('INSERT INTO quotes (content, chat_id, message_id, user_id, addedby_id, message_timestamp) VALUES (:content, :chat_id, :message_id, :user_id, :addedby_id, :message_timestamp)');
             $sth->bindValue(':content', $quoteSource->getText(), PDO::PARAM_STR);
             $sth->bindValue(':chat_id', $quoteSource->getChat()->getId(), PDO::PARAM_INT);
             $sth->bindValue(':message_id', $quoteSource->getMessageId(), PDO::PARAM_INT);
@@ -106,7 +125,20 @@ class QuoteCommand extends BaseCommand
             if (isset($quote->id)) {
                 $response = sprintf('Quote #%d added at %s' . PHP_EOL . PHP_EOL, $quote->id, date('r', strtotime($quote->added_timestamp)));
                 $response .= sprintf('%s' . PHP_EOL, $this->escapeMarkdown($quote->content));
-                $response .= sprintf('-- %s, %s', $this->escapeMarkdown($quote->citation), date('r', $quote->message_timestamp));
+
+                $getUserSth->bindValue('user_id', $quote->user_id);
+                $user = $getUserSth->fetch(PDO::FETCH_OBJ);
+
+                $citation = $user->first_name;
+                if ($user->last_name) {
+                    $citation .= sprintf(' %s', $user->last_name);
+                }
+
+                if ($user->username) {
+                    $citation .= sprintf(' (@%s)', $user->username);
+                }
+
+                $response .= sprintf('-- %s, %s', $this->escapeMarkdown($citation), date('r', $quote->message_timestamp));
                 $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
 
                 $this->reply($response, [

@@ -39,6 +39,7 @@ class CreateQuotesTable extends AbstractMigration
             ->addColumn('message_timestamp', 'integer', ['null' => false, 'default' => 0])
             ->addColumn('added_timestamp', 'timestamp', ['null' => false, 'default' => 'CURRENT_TIMESTAMP'])
             ->addIndex(['content', 'message_id'], ['unique' => true])
+            ->addForeignKey(['user_id'], 'users', ['user_id'])
             ->create();
     }
 }
