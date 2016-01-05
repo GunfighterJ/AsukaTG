@@ -36,6 +36,11 @@ class QuoteCommand extends BaseCommand
         // Detect a reply and add it as a quote
         $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();
         if ($quoteSource) {
+            if (!$this->getUpdate()->getMessage()->getChat()->getType() == 'group') {
+                $this->reply('You can only add quotes in a group.');
+                return;
+            }
+
             $messageType = $this->getTelegram()->detectMessageType($quoteSource);
             if ($messageType != 'text') {
                 $this->reply(sprintf('I cannot quote %s messages, please send me a text message.', $messageType));
