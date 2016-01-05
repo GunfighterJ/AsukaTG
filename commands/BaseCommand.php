@@ -29,7 +29,7 @@ class BaseCommand extends Command
 
     protected function createOrUpdateUser(User $user)
     {
-        $createUserStmnt = $this->getDatabase()->prepare('INSERT INTO users (user_id, first_name, last_name, username) VALUES (:user_id, :first_name, :last_name, :username) ON DUPLICATE KEY UPDATE first_name=:first_name, last_name=:last_name, username=:username');
+        $createUserStmnt = $this->getDatabase()->prepare('INSERT OR IGNORE INTO users (user_id, first_name, last_name, username) VALUES (:user_id, :first_name, :last_name, :username)');
         $createUserStmnt->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
         $createUserStmnt->bindValue(':first_name', $user->getFirstName(), PDO::PARAM_STR);
         $createUserStmnt->bindValue(':last_name', $user->getLastName() ? $user->getLastName() : null, PDO::PARAM_STR);
