@@ -26,17 +26,37 @@ class BaseCommand extends Command
 
     protected function createOrUpdateUser(User $user)
     {
-        $createUserStmnt = $this->getDatabase()->prepare('
-                INSERT OR IGNORE INTO users (user_id, first_name, last_name, username) VALUES (:user_id, :first_name, :last_name, :username);
-                UPDATE users SET first_name=:first_name, last_name=:last_name, username=:username WHERE user_id=:user_id;
-        ');
-        $createUserStmnt->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
-        $createUserStmnt->bindValue(':first_name', $user->getFirstName(), PDO::PARAM_STR);
-        $createUserStmnt->bindValue(':last_name', $user->getLastName() ? $user->getLastName() : null, PDO::PARAM_STR);
-        $createUserStmnt->bindValue(':username', $user->getUsername() ? $user->getUsername() : null, PDO::PARAM_STR);
+        $createUserStmnt = $this->getDatabase()->prepare('INSERT OR IGNORE INTO users (user_id, first_name, last_name, username) VALUES (:user_id, :first_name, :last_name, :username)');
+        $updateUserStmnt = $this->getDatabase()->prepare('UPDATE users SET first_name=:first_name, last_name=:last_name, username=:username WHERE user_id=:user_id');
+
+        $createUserStmnt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        $createUserStmnt->bindParam(':first_name', $firstName, PDO::PARAM_STR);
+        $createUserStmnt->bindParam(':last_name', $lastName, PDO::PARAM_STR);
+        $createUserStmnt->bindParam(':username', $username, PDO::PARAM_STR);
+
+        $updateUserStmnt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        $updateUserStmnt->bindParam(':first_name', $firstName, PDO::PARAM_STR);
+        $updateUserStmnt->bindParam(':last_name', $lastName, PDO::PARAM_STR);
+        $updateUserStmnt->bindParam(':username', $username, PDO::PARAM_STR);
+
+        $userId = $user->getId();
+        $firstName = $user->getFirstName();
+
+        if ($user->getLastName()) {
+            $lastName = $user->getLastName();
+        }
+
+        if ($user->getUsername()) {
+            $username = $user->getUsername();
+        }
 
         if (!$createUserStmnt->execute()) {
             $this->reply($createUserStmnt->errorInfo()[2]);
+            return false;
+        }
+
+        if (!$updateUserStmnt->execute()) {
+            $this->reply($updateUserStmnt->errorInfo()[2]);
             return false;
         }
         return true;
