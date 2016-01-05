@@ -36,7 +36,7 @@ class QuoteCommand extends BaseCommand
         // Detect a reply and add it as a quote
         $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();
         if ($quoteSource) {
-            if (!$this->getUpdate()->getMessage()->getChat()->getType() == 'group') {
+            if ($this->getUpdate()->getMessage()->getChat()->getType() != 'group') {
                 $this->reply('You can only add quotes in a group.');
                 return;
             }
