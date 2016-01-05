@@ -37,7 +37,7 @@ class CreateQuotesTable extends AbstractMigration
             ->addColumn('addedby_user_id', 'integer', ['null' => false, 'default' => 0])
             ->addColumn('message_timestamp', 'integer', ['null' => false, 'default' => 0])
             ->addColumn('added_at', 'timestamp', ['null' => false, 'default' => 'CURRENT_TIMESTAMP'])
-            ->addIndex(['content', 'telegram_message_id'], ['unique' => true])
+            ->addIndex(['content', 'message_id'], ['unique' => true])
             ->create();
     }
 }
