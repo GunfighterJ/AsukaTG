@@ -19,7 +19,6 @@
 namespace Asuka\Commands;
 
 use FluentLiteral;
-use PDO;
 
 class QuoteCommand extends BaseCommand
 {
@@ -66,11 +65,11 @@ class QuoteCommand extends BaseCommand
             };
 
             $values = [
-                'content' => $quoteSource->getText(),
-                'chat_id' => $quoteSource->getChat()->getId(),
-                'message_id' => $quoteSource->getChat()->getId(),
-                'user_id' => $quoteSource->getFrom()->getId(),
-                'addedby_id' => $this->getUpdate()->getMessage()->getFrom()->getId(),
+                'content'           => $quoteSource->getText(),
+                'chat_id'           => $quoteSource->getChat()->getId(),
+                'message_id'        => $quoteSource->getChat()->getId(),
+                'user_id'           => $quoteSource->getFrom()->getId(),
+                'addedby_id'        => $this->getUpdate()->getMessage()->getFrom()->getId(),
                 'message_timestamp' => $quoteSource->getDate()
             ];
 
@@ -111,7 +110,7 @@ class QuoteCommand extends BaseCommand
 
         if ($getQuoteStmnt->execute()) {
             $quote = $getQuoteStmnt->fetch();
-            if (isset($quote->id)) {
+            if ($quote) {
                 $response = sprintf('%s' . PHP_EOL, $this->escapeMarkdown($quote->content));
                 $user = $this->getDBUser($quote->user_id);
 

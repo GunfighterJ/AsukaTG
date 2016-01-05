@@ -33,14 +33,15 @@ class BaseCommand extends Command
         $username = $user->getUsername() ? $user->getUsername() : null;
 
         $values = [
-            'user_id' => $userId,
+            'user_id'    => $userId,
             'first_name' => $firstName,
-            'last_name' => $lastName,
-            'username' => $username
+            'last_name'  => $lastName,
+            'username'   => $username
         ];
 
         $this->getDatabase()->insertInto('users')->values($values)->ignore()->execute();
         $this->getDatabase()->update('users')->set($values)->execute();
+
         return true;
     }
 
@@ -52,6 +53,7 @@ class BaseCommand extends Command
         if (!$this->database) {
             if (!file_exists($this->databasePath)) {
                 $this->reply('Bot database doesn\'t exist!');
+
                 return null;
             }
 
@@ -60,6 +62,7 @@ class BaseCommand extends Command
                 $this->database->getPdo()->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             } catch (\PDOException $exception) {
                 $this->reply($exception->getMessage());
+
                 return null;
             }
         }
