@@ -28,11 +28,16 @@ class CreateQuotesTable extends AbstractMigration
     public function change()
     {
         $table = $this->table('quotes');
-        $table->addColumn('citation', 'text', ['null' => false])
-            ->addColumn('source', 'text', ['null' => false, 'default' => 'Telegram'])
+        $table
             ->addColumn('content', 'text', ['null' => false])
-            ->addColumn('created', 'timestamp', ['null' => false, 'default' => 'CURRENT_TIMESTAMP'])
-            ->addIndex(['content'], ['unique' => true])
+            ->addColumn('citation', 'text', ['null' => false])
+            ->addColumn('source', 'text', ['null' => false, 'default' => 'Telegram'])
+            ->addColumn('message_id', 'integer', ['null' => false, 'default' => 0])
+            ->addColumn('message_user_id', 'integer', ['null' => false, 'default' => 0])
+            ->addColumn('addedby_user_id', 'integer', ['null' => false, 'default' => 0])
+            ->addColumn('message_timestamp', 'integer', ['null' => false, 'default' => 0])
+            ->addColumn('added_at', 'timestamp', ['null' => false, 'default' => 'CURRENT_TIMESTAMP'])
+            ->addIndex(['content', 'telegram_message_id'], ['unique' => true])
             ->create();
     }
 }
