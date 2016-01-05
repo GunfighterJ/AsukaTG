@@ -38,7 +38,7 @@ class AddQuoteCommand extends Command
             return;
         }
 
-        $quoteSource = $this->update->getMessage()->getReplyToMessage();
+        $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();
         if (!$quoteSource) {
             $this->reply('Please give me a message to quote by replying to the message with the reply "/aq"');
             return;
@@ -57,7 +57,7 @@ class AddQuoteCommand extends Command
         $sth->bindValue(':quote', $quoteSource->getText(), PDO::PARAM_STR);
 
         if ($sth->execute()) {
-            $this->reply(sprintf('Quote saved as #%s!', $db->lastInsertId()));
+            $this->replyToAdd(sprintf('Quote saved as #%s!', $db->lastInsertId()));
         } elseif ($db->errorInfo()) {
             $this->reply(implode(PHP_EOL, $db->errorInfo()));
         }
@@ -70,6 +70,15 @@ class AddQuoteCommand extends Command
             'disable_web_page_preview' => true,
             'parse_mode'               => 'Markdown',
             'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId(),
+        ]);
+    }
+
+    private function replyToAdd($response)
+    {
+        $this->replyWithMessage([
+            'text'                     => $response,
+            'disable_web_page_preview' => true,
+            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId(),
         ]);
     }
 }
