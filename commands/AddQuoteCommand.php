@@ -39,7 +39,7 @@ class AddQuoteCommand extends Command
         }
 
         $quoteSource = $this->update->getMessage()->getReplyToMessage();
-        if (!$quoteDatabase) {
+        if (!$quoteSource) {
             $this->reply('Please give me a message to quote by replying to the message with the reply "/aq"');
             return;
         }
