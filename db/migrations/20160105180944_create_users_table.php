@@ -33,6 +33,7 @@ class CreateUsersTable extends AbstractMigration
             ->addColumn('first_name', 'text', ['null' => false])
             ->addColumn('last_name', 'text', ['default' => null])
             ->addColumn('username', 'text', ['default' => null])
+            ->addIndex(['user_id'], ['unique' => true])
             ->create();
     }
 }
