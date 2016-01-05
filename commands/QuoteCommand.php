@@ -85,10 +85,8 @@ class QuoteCommand extends Command
             if (isset($quote->id)) {
                 $response = sprintf('Quote #%d added at %s' . PHP_EOL . PHP_EOL, $quote->id, date('r', strtotime($quote->created)));
 
-                $quote->content = str_replace('*', '\\*', $quote->content);
-                $quote->content = str_replace('_', '\\_', $quote->content);
-                $response .= sprintf('*%s*' . PHP_EOL, $quote->content);
-                $response .= sprintf('_-- %s_', $quote->citation);
+                $response .= sprintf('*%s*' . PHP_EOL, $this->escapeMarkdown($quote->content));
+                $response .= sprintf('_-- %s_', $this->escapeMarkdown($quote->citation));
                 $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
 
                 $this->reply($response);
@@ -117,5 +115,9 @@ class QuoteCommand extends Command
             'disable_web_page_preview' => true,
             'reply_to_message_id'      => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId(),
         ]);
+    }
+
+    private function escapeMarkdown($string) {
+        return preg_replace('/([*_])/i', '\\\\$1', $string);
     }
 }
