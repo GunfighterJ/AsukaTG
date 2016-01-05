@@ -67,7 +67,7 @@ class QuoteCommand extends BaseCommand
             $values = [
                 'content'           => $quoteSource->getText(),
                 'chat_id'           => $quoteSource->getChat()->getId(),
-                'message_id'        => $quoteSource->getChat()->getId(),
+                'message_id'        => $quoteSource->getMessageId(),
                 'user_id'           => $quoteSource->getFrom()->getId(),
                 'addedby_id'        => $this->getUpdate()->getMessage()->getFrom()->getId(),
                 'message_timestamp' => $quoteSource->getDate()
