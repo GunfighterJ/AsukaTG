@@ -2,6 +2,7 @@
 
 namespace Asuka\commands;
 
+use FluentPDO;
 use PDO;
 use Telegram\Bot\Commands\Command;
 use Telegram\Bot\Objects\User;
@@ -26,38 +27,25 @@ class BaseCommand extends Command
 
     protected function createOrUpdateUser(User $user)
     {
-        $createUserStmnt = $this->getDatabase()->prepare('INSERT OR IGNORE INTO users (user_id, first_name, last_name, username) VALUES (:user_id, :first_name, :last_name, :username)');
-        $updateUserStmnt = $this->getDatabase()->prepare('UPDATE users SET first_name=:first_name, last_name=:last_name, username=:username WHERE user_id=:user_id');
-
         $userId = $user->getId();
         $firstName = $user->getFirstName();
         $lastName = $user->getLastName() ? $user->getLastName() : null;
         $username = $user->getUsername() ? $user->getUsername() : null;
 
-        $createUserStmnt->bindValue(':user_id', $userId, PDO::PARAM_INT);
-        $createUserStmnt->bindValue(':first_name', $firstName, PDO::PARAM_STR);
-        $createUserStmnt->bindValue(':last_name', $lastName, PDO::PARAM_STR);
-        $createUserStmnt->bindValue(':username', $username, PDO::PARAM_STR);
+        $values = [
+            'user_id' => $userId,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'username' => $username
+        ];
 
-        $updateUserStmnt->bindValue(':user_id', $userId, PDO::PARAM_INT);
-        $updateUserStmnt->bindValue(':first_name', $firstName, PDO::PARAM_STR);
-        $updateUserStmnt->bindValue(':last_name', $lastName, PDO::PARAM_STR);
-        $updateUserStmnt->bindValue(':username', $username, PDO::PARAM_STR);
-
-        if (!$createUserStmnt->execute()) {
-            $this->reply($createUserStmnt->errorInfo()[2]);
-            return false;
-        }
-
-        if (!$updateUserStmnt->execute()) {
-            $this->reply($updateUserStmnt->errorInfo()[2]);
-            return false;
-        }
+        $this->getDatabase()->insertInto('users')->values($values)->ignore()->execute();
+        $this->getDatabase()->update('users')->set($values)->execute();
         return true;
     }
 
     /**
-     * @return null|PDO
+     * @return null|FluentPDO
      */
     public function getDatabase()
     {
@@ -68,14 +56,14 @@ class BaseCommand extends Command
             }
 
             try {
-                $this->database = new PDO('sqlite:' . $this->databasePath);
+                $this->database = new FluentPDO(new PDO('sqlite:' . $this->databasePath));
+                $this->database->getPdo()->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             } catch (\PDOException $exception) {
                 $this->reply($exception->getMessage());
                 return null;
             }
-
-            $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
+
         return $this->database;
     }
 
@@ -95,15 +83,13 @@ class BaseCommand extends Command
 
     protected function getDBUser($userId)
     {
-        $getUserStmnt = $this->getDatabase()->prepare('SELECT * FROM users WHERE user_id = :user_id LIMIT 1');
-        $getUserStmnt->bindValue('user_id', $userId);
+        $getUserStmnt = $this->getDatabase()->from('users')->where('user_id', $userId)->limit(1);
         $getUserStmnt->execute();
-        $user = $getUserStmnt->fetch(PDO::FETCH_OBJ);
 
-        if (!$userId) {
+        if (!$getUserStmnt->execute()) {
             return null;
         }
 
-        return $user;
+        return $getUserStmnt->fetch();
     }
 }
