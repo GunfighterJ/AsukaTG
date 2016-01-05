@@ -46,6 +46,13 @@ class QuoteCommand extends BaseCommand
                 return;
             }
 
+
+            if ($this->getTelegram()->getMe()->getId() && $this->getTelegram()->getMe()->getId() == $quoteSource->getFrom()->getId()) {
+                $this->reply('You cannot quote me >:)');
+
+                return;
+            }
+
             $messageType = $this->getTelegram()->detectMessageType($quoteSource);
             if ('text' != $messageType) {
                 $this->reply(sprintf('I cannot quote %s messages, please send me a text message.', $messageType));
