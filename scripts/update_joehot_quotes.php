@@ -7,7 +7,7 @@ $quoteDatabase = $dataPath . 'quotes.db';
 
 $db = new PDO('sqlite:' . $quoteDatabase);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$db->exec("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT, citation TEXT NOT NULL DEFAULT 'joehot200', source TEXT DEFAULT NULL, quote TEXT NOT NULL)");
+$db->exec("CREATE TABLE IF NOT EXISTS quotes (id INTEGER PRIMARY KEY AUTOINCREMENT, citation TEXT NOT NULL, source TEXT DEFAULT NULL, quote TEXT NOT NULL)");
 $sth = $db->prepare('INSERT INTO quotes (citation, source, quote) VALUES (:citation, :source, :quote)');
 
 $lines = explode("\n", file_get_contents(QUOTE_DB_SOURCE_URL));

@@ -44,16 +44,15 @@ class AddQuoteCommand extends Command
             return;
         }
 
-        $quoteUser = $quoteSource->getFrom()->getUsername();
-        if (empty($quoteUser)) {
-            $quoteUser = implode(' ', [$quoteSource->getFrom()->getFirstName(), $quoteSource->getFrom()->getLastName()]);
+        $quoteUser = implode(' ', [$quoteSource->getFrom()->getFirstName(), $quoteSource->getFrom()->getLastName()]);
+        if (!empty($quoteSource->getFrom()->getUsername())) {
+            $quoteUser .= sprintf(' (%s)', $quoteSource->getFrom()->getUsername());
         }
 
         $db = new PDO('sqlite:' . $quoteDatabase);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-        $sth = $db->prepare('INSERT INTO quotes (citation, source, quote) VALUES (:citation, :source, :quote)');
+        $sth = $db->prepare('INSERT INTO quotes (citation, quote) VALUES (:citation, :quote)');
         $sth->bindValue(':citation', $quoteUser, PDO::PARAM_STR);
-        $sth->bindValue(':source', 'Telegram', PDO::PARAM_STR);
         $sth->bindValue(':quote', $quoteSource->getText(), PDO::PARAM_STR);
 
         if ($sth->execute()) {
