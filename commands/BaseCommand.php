@@ -40,6 +40,11 @@ class BaseCommand extends Command
 
     public function getDatabase() {
         if (!$this->database) {
+            if (!file_exists($this->databasePath)) {
+                $this->reply('Bot database doesn\'t exist!');
+                return null;
+            }
+
             try {
                 $this->database = new PDO('sqlite:' . $this->databasePath);
             } catch (\PDOException $exception) {
