@@ -53,9 +53,8 @@ $config = json_encode($config);
 $config = json_decode($config);
 
 $apiKey = $config->telegram->api_key;
-$async  = $config->telegram->async_requests;
 
-$telegram = new Api($apiKey, $async);
+$telegram = new Api($apiKey);
 
 if (php_sapi_name() == 'cli') {
     $flags = [
