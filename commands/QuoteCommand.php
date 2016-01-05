@@ -18,6 +18,8 @@
 
 namespace Asuka\Commands;
 
+use PDO;
+
 class QuoteCommand extends BaseCommand
 {
     protected $description = 'Returns a random quote or adds a new quote if a message is supplied as a reply.';
@@ -46,8 +48,6 @@ class QuoteCommand extends BaseCommand
                 $quoteUser .= sprintf(' (@%s)', $quoteSource->getFrom()->getUsername());
             }
 
-            $db = new PDO('sqlite:' . $quoteDatabase);
-            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
             $sth = $db->prepare('INSERT INTO quotes (citation, content) VALUES (:citation, :content)');
             $sth->bindValue(':citation', $quoteUser, PDO::PARAM_STR);
             $sth->bindValue(':content', $quoteSource->getText(), PDO::PARAM_STR);
