@@ -127,6 +127,7 @@ class QuoteCommand extends BaseCommand
                 $response .= sprintf('%s' . PHP_EOL, $this->escapeMarkdown($quote->content));
 
                 $getUserSth->bindValue('user_id', $quote->user_id);
+                $getUserSth->execute();
                 $user = $getUserSth->fetch(PDO::FETCH_OBJ);
 
                 $citation = $user->first_name;
