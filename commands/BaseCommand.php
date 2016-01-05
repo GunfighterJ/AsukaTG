@@ -99,4 +99,11 @@ class BaseCommand extends Command
 
         return $getUserStmnt->fetch();
     }
+
+
+    protected function escapeMarkdown($string)
+    {
+        return $string;
+        //return preg_replace('/([*_])/i', '\\\\$1', $string);
+    }
 }

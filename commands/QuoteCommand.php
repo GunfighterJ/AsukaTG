@@ -135,10 +135,4 @@ class QuoteCommand extends BaseCommand
             $this->reply($db->getPdo()->errorInfo()[2]);
         }
     }
-
-    private function escapeMarkdown($string)
-    {
-        return $string;
-        //return preg_replace('/([*_])/i', '\\\\$1', $string);
-    }
 }
