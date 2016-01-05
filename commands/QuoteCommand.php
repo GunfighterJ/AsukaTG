@@ -48,7 +48,7 @@ class QuoteCommand extends BaseCommand
                 $quoteUser .= sprintf(' (@%s)', $quoteSource->getFrom()->getUsername());
             }
 
-            $sth = $db->prepare('INSERT INTO quotes (citation, content, message_id, message_user_id, addedby_user_id) VALUES (:citation, :content, :message_id, :message_user_id, :addedby_user_id, :message_timestamp)');
+            $sth = $db->prepare('INSERT INTO quotes (citation, content, message_id, message_user_id, addedby_user_id, message_timestamp) VALUES (:citation, :content, :message_id, :message_user_id, :addedby_user_id, :message_timestamp)');
             $sth->bindValue(':citation', $quoteUser, PDO::PARAM_STR);
             $sth->bindValue(':content', $quoteSource->getText(), PDO::PARAM_STR);
             $sth->bindValue(':message_timestamp', $quoteSource->getDate(), PDO::PARAM_INT);
