@@ -21,9 +21,6 @@ class BaseCommand extends Command
      */
     public function handle($arguments)
     {
-        if (!$this->createOrUpdateUser($this->getUpdate()->getMessage()->getFrom())) {
-            return;
-        };
         parent::handle($arguments);
     }
 
@@ -66,12 +63,14 @@ class BaseCommand extends Command
     {
         if (!$this->database) {
             if (!file_exists($this->databasePath)) {
+                $this->reply('Bot database doesn\'t exist!');
                 return null;
             }
 
             try {
                 $this->database = new PDO('sqlite:' . $this->databasePath);
             } catch (\PDOException $exception) {
+                $this->reply($exception->getMessage());
                 return null;
             }
 
