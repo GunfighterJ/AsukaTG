@@ -48,7 +48,11 @@ class QuoteCommand extends BaseCommand
                 return;
             }
 
-            $quoteUser = implode(' ', [$quoteSource->getFrom()->getFirstName(), $quoteSource->getFrom()->getLastName()]);
+            $quoteUser = $quoteSource->getFrom()->getFirstName();
+            if ($quoteSource->getFrom()->getLastName()) {
+                $quoteUser .= sprintf(' %s', $quoteSource->getFrom()->getLastName());
+            }
+
             if (!empty($quoteSource->getFrom()->getUsername())) {
                 $quoteUser .= sprintf(' (@%s)', $quoteSource->getFrom()->getUsername());
             }
@@ -102,7 +106,7 @@ class QuoteCommand extends BaseCommand
             if (isset($quote->id)) {
                 $response = sprintf('Quote #%d added at %s' . PHP_EOL . PHP_EOL, $quote->id, date('r', strtotime($quote->added_timestamp)));
                 $response .= sprintf('%s' . PHP_EOL, $this->escapeMarkdown($quote->content));
-                $response .= sprintf('-- %s', $this->escapeMarkdown($quote->citation));
+                $response .= sprintf('-- %s, %s', $this->escapeMarkdown($quote->citation), date('r', $quote->message_timestamp));
                 $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
 
                 $this->reply($response, [
