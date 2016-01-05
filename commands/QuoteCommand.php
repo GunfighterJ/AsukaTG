@@ -111,7 +111,6 @@ class QuoteCommand extends BaseCommand
         if ($getQuoteStmt->execute()) {
             $quote = $getQuoteStmt->fetch(PDO::FETCH_OBJ);
             if (isset($quote->id)) {
-                $response = sprintf('Quote #%d' . PHP_EOL . PHP_EOL, $quote->id);
                 $response .= sprintf('%s' . PHP_EOL, $this->escapeMarkdown($quote->content));
 
                 $user = $this->getDBUser($quote->user_id);
@@ -125,7 +124,7 @@ class QuoteCommand extends BaseCommand
                     $citation .= sprintf(' (@%s)', $user->username);
                 }
 
-                $response .= sprintf('-- %s, %s', $this->escapeMarkdown($citation), date('r', $quote->message_timestamp));
+                $response .= sprintf('-- %s, %s (#%s)', $this->escapeMarkdown($citation), date('r', $quote->message_timestamp), $quote->id);
 
                 $this->reply($response, [
                     'disable_web_page_preview' => true,
