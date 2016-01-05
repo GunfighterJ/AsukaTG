@@ -38,6 +38,7 @@ class QuoteCommand extends BaseCommand
         if ($quoteSource) {
             if ($this->getUpdate()->getMessage()->getChat()->getType() != 'group') {
                 $this->reply('You can only add quotes in a group.');
+
                 return;
             }
 
@@ -81,7 +82,7 @@ class QuoteCommand extends BaseCommand
 
         if ($arguments) {
             $arguments = explode(' ', $arguments);
-            $quoteId   = intval(trim(trim($arguments[0], '#')));
+            $quoteId = intval(trim(trim($arguments[0], '#')));
 
             if (!$quoteId) {
                 $this->reply('Please supply a numeric quote ID.');
@@ -99,10 +100,10 @@ class QuoteCommand extends BaseCommand
         if ($getQuoteStmt->execute()) {
             $quote = $getQuoteStmt->fetch(PDO::FETCH_OBJ);
             if (isset($quote->id)) {
-                $response = sprintf('Quote #%d added at %s' . PHP_EOL . PHP_EOL, $quote->id, date('r', strtotime($quote->added_timestamp)));
+                $response = sprintf('Quote #%d' . PHP_EOL . PHP_EOL, $quote->id);
                 $response .= sprintf('%s' . PHP_EOL, $this->escapeMarkdown($quote->content));
 
-                $user = $this->getUser($quote->user_id);
+                $user = $this->getDBUser($quote->user_id);
 
                 $citation = $user->first_name;
                 if ($user->last_name) {

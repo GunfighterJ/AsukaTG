@@ -12,10 +12,29 @@ class BaseCommand extends Command
 
     public function __construct()
     {
-        $this->dataPath      = realpath(__DIR__) . '/../data';
-        $this->databasePath  = $this->dataPath . '/asuka.db';
-        $this->getUserStmnt    = $this->getDatabase()->prepare('SELECT * FROM users WHERE user_id = :user_id LIMIT 1');
-        $this->createUserStmnt = $this->getDatabase()->prepare('INSERT INTO users (user_id, first_name, last_name, username) VALUES (:user_id, :first_name, :last_name, :username) ON DUPLICATE KEY UPDATE first_name=:first_name, last_name=:last_name, username=:username');
+        $this->dataPath = realpath(__DIR__) . '/../data';
+        $this->databasePath = $this->dataPath . '/asuka.db';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function handle($arguments)
+    {
+        if (!$this->createOrUpdateUser($this->getUpdate()->getMessage()->getFrom())) {
+            return;
+        };
+        parent::handle($arguments);
+    }
+
+    protected function createOrUpdateUser(User $user)
+    {
+        $createUserStmnt = $this->getDatabase()->prepare('INSERT INTO users (user_id, first_name, last_name, username) VALUES (:user_id, :first_name, :last_name, :username) ON DUPLICATE KEY UPDATE first_name=:first_name, last_name=:last_name, username=:username');
+        $createUserStmnt->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
+        $createUserStmnt->bindValue(':first_name', $user->getFirstName(), PDO::PARAM_STR);
+        $createUserStmnt->bindValue(':last_name', $user->getLastName() ? $user->getLastName() : null, PDO::PARAM_STR);
+        $createUserStmnt->bindValue(':username', $user->getUsername() ? $user->getUsername() : null, PDO::PARAM_STR);
+        return $createUserStmnt->execute();
     }
 
     /**
@@ -38,47 +57,10 @@ class BaseCommand extends Command
                 return null;
             }
 
-            $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+            $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
 
         return $this->database;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function handle($arguments)
-    {
-        if (!$this->createOrUpdateUser(parent::getUpdate()->getMessage()->getFrom())) {
-            return;
-        };
-        parent::handle($arguments);
-    }
-
-    protected function createOrUpdateUser(User $user)
-    {
-        $this->createUserStmnt->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
-        $this->createUserStmnt->bindValue(':first_name', $user->getFirstName(), PDO::PARAM_STR);
-        $this->createUserStmnt->bindValue(':last_name', $user->getLastName() ? $user->getLastName() : null, PDO::PARAM_STR);
-        $this->createUserStmnt->bindValue(':username', $user->getUsername() ? $user->getUsername() : null, PDO::PARAM_STR);
-        if (!$this->createUserStmnt->execute()) {
-            $this->reply($this->createUserStmnt->errorInfo()[2]);
-            return false;
-        }
-        return true;
-    }
-
-    protected function getUser($userId)
-    {
-        $this->getUserStmnt->bindValue('user_id', $userId);
-        $this->getUserStmnt->execute();
-        $user = $this->getUserStmnt->fetch(PDO::FETCH_OBJ);
-
-        if (!$userId) {
-            return null;
-        }
-
-        return $user;
     }
 
     /**
@@ -93,5 +75,19 @@ class BaseCommand extends Command
         ], $params);
 
         $this->replyWithMessage($params);
+    }
+
+    protected function getDBUser($userId)
+    {
+        $getUserStmnt = $this->getDatabase()->prepare('SELECT * FROM users WHERE user_id = :user_id LIMIT 1');
+        $getUserStmnt->bindValue('user_id', $userId);
+        $getUserStmnt->execute();
+        $user = $getUserStmnt->fetch(PDO::FETCH_OBJ);
+
+        if (!$userId) {
+            return null;
+        }
+
+        return $user;
     }
 }
