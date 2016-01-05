@@ -51,9 +51,9 @@ class QuoteCommand extends Command
 
             $db = new PDO('sqlite:' . $quoteDatabase);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-            $sth = $db->prepare('INSERT INTO quotes (citation, quote) VALUES (:citation, :quote)');
+            $sth = $db->prepare('INSERT INTO quotes (citation, content) VALUES (:citation, :content)');
             $sth->bindValue(':citation', $quoteUser, PDO::PARAM_STR);
-            $sth->bindValue(':quote', $quoteSource->getText(), PDO::PARAM_STR);
+            $sth->bindValue(':content', $quoteSource->getText(), PDO::PARAM_STR);
 
             if ($sth->execute()) {
                 $this->replyToAdd(sprintf('Quote saved as #%s', $db->lastInsertId()));
@@ -85,9 +85,9 @@ class QuoteCommand extends Command
             if (isset($quote->id)) {
                 $response = sprintf('Quote #%d created at %s' . PHP_EOL . PHP_EOL, $quote->id, date('r', strtotime($quote->created_at)));
 
-                $quote->quote = str_replace('*', '\*', $quote->quote);
-                $quote->quote = str_replace('_', '\_', $quote->quote);
-                $response .= sprintf('*%s*' . PHP_EOL, $quote->quote);
+                $quote->quote = str_replace('*', '\*', $quote->content);
+                $quote->quote = str_replace('_', '\_', $quote->content);
+                $response .= sprintf('*%s*' . PHP_EOL, $quote->content);
                 $response .= sprintf('_-- %s_', $quote->citation);
                 $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
 

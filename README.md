@@ -26,5 +26,3 @@ Run the webhook script in the root of this repo like so:
     php webhook.php --set
 
 For other CLI arguments, see `php webhook.php --help`
-
-Optionally, if you want to make use of the quote database, run `php scripts/create_quotes_db.php`.

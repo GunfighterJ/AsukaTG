@@ -1,11 +1,20 @@
 {
   "require": {
     "irazasyed/telegram-bot-sdk": "^2.0",
-    "uptime/uptime": "0.1.0"
+    "uptime/uptime": "0.1.0",
+    "robmorgan/phinx": "^0.5.1"
   },
   "autoload": {
     "psr-4": {
       "Asuka\\Commands\\": "commands/"
     }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "php vendor/bin/phinx migrate"
+    ],
+    "post-update-cmd": [
+      "php vendor/bin/phinx migrate"
+    ]
   }
 }
