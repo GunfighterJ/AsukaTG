@@ -19,9 +19,8 @@
 namespace Asuka\Commands;
 
 use PDO;
-use Telegram\Bot\Commands\Command;
 
-class QuoteCommand extends Command
+class QuoteCommand extends BaseCommand
 {
     protected $description = 'Returns a random quote or adds a new quote if a message is supplied as a reply.';
 
@@ -93,6 +92,7 @@ class QuoteCommand extends Command
 
                 $this->reply($response, [
                     'parse_mode' => 'Markdown',
+                    'disable_web_page_preview' => true
                 ]);
             } else {
                 $this->reply('No such quote!');
@@ -100,17 +100,6 @@ class QuoteCommand extends Command
         } elseif ($db->errorInfo()) {
             $this->reply(implode(PHP_EOL, $db->errorInfo()));
         }
-    }
-
-    private function reply($response, $params = [])
-    {
-        $params = array_merge([
-            'text'                     => $response,
-            'disable_web_page_preview' => true,
-            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId(),
-        ], $params);
-
-        $this->replyWithMessage($params);
     }
 
     private function escapeMarkdown($string)

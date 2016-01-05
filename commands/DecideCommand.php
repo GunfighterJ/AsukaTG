@@ -18,9 +18,7 @@
 
 namespace Asuka\Commands;
 
-use Telegram\Bot\Commands\Command;
-
-class DecideCommand extends Command
+class DecideCommand extends BaseCommand
 {
     protected $choiceDelimiters = [
         ' or ', '|', ',', '/', '\\',
@@ -87,15 +85,6 @@ class DecideCommand extends Command
             return;
         }
 
-        $this->reply($choices[array_rand($choices)]);
-    }
-
-    private function reply($response)
-    {
-        $this->replyWithMessage([
-            'text' => $response,
-            'disable_web_page_preview' => true,
-            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
-        ]);
+        $this->reply($choices[array_rand($choices)], ['disable_web_page_preview' => true]);
     }
 }

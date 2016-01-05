@@ -18,9 +18,7 @@
 
 namespace Asuka\Commands;
 
-use Telegram\Bot\Commands\Command;
-
-class BotsCommand extends Command
+class BotsCommand extends BaseCommand
 {
     protected $description = 'Report in!';
 
@@ -29,13 +27,5 @@ class BotsCommand extends Command
     public function handle($arguments)
     {
         $this->reply('Reporting in! [PHP]');
-    }
-
-    private function reply($response)
-    {
-        $this->replyWithMessage([
-            'text' => $response,
-            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
-        ]);
     }
 }

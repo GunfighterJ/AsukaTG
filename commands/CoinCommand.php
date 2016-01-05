@@ -18,9 +18,7 @@
 
 namespace Asuka\Commands;
 
-use Telegram\Bot\Commands\Command;
-
-class CoinCommand extends Command
+class CoinCommand extends BaseCommand
 {
     protected $description = 'Flip a coin.';
 
@@ -29,13 +27,5 @@ class CoinCommand extends Command
     public function handle($arguments)
     {
         $this->reply(mt_rand(0, 1) ? 'Heads' : 'Tails');
-    }
-
-    private function reply($response)
-    {
-        $this->replyWithMessage([
-            'text' => $response,
-            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
-        ]);
     }
 }

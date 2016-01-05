@@ -18,10 +18,9 @@
 
 namespace Asuka\Commands;
 
-use Telegram\Bot\Commands\Command;
 use Uptime\System;
 
-class UptimeCommand extends Command
+class UptimeCommand extends BaseCommand
 {
     protected $description = 'Displays the current system uptime.';
 
@@ -39,15 +38,6 @@ class UptimeCommand extends Command
             sprintf(ngettext('%d second', '%d seconds', $uptime->s), $uptime->s),
         ]);
 
-        $this->reply($response);
-    }
-
-    private function reply($response)
-    {
-        $this->replyWithMessage([
-            'text'                     => $response,
-            'disable_web_page_preview' => true,
-            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId(),
-        ]);
+        $this->reply($response, ['disable_web_page_preview' => true]);
     }
 }

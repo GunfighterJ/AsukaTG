@@ -18,9 +18,7 @@
 
 namespace Asuka\Commands;
 
-use Telegram\Bot\Commands\Command;
-
-class HelpCommand extends Command
+class HelpCommand extends BaseCommand
 {
     protected $description = 'Displays a list of bot commands.';
 
@@ -37,17 +35,9 @@ class HelpCommand extends Command
         $response .= PHP_EOL . 'My source code can be found at https://github.com/TheReverend403/AsukaTG';
         $this->reply($response);
     }
-
-    private function reply($response)
-    {
-        $this->replyWithMessage([
-            'text'                => $response,
-            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
-        ]);
-    }
 }
 
-class StartCommand extends Command
+class StartCommand extends BaseCommand
 {
     protected $description = 'Displays a list of bot commands.';
 

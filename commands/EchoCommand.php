@@ -18,9 +18,7 @@
 
 namespace Asuka\Commands;
 
-use Telegram\Bot\Commands\Command;
-
-class EchoCommand extends Command
+class EchoCommand extends BaseCommand
 {
     protected $description = 'Returns whatever input you send.';
 
@@ -34,15 +32,6 @@ class EchoCommand extends Command
             return;
         }
 
-        $this->reply($arguments);
-    }
-
-    private function reply($response)
-    {
-        $this->replyWithMessage([
-            'text' => $response,
-            'disable_web_page_preview' => true,
-            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
-        ]);
+        $this->reply($arguments, ['disable_web_page_preview' => true]);
     }
 }

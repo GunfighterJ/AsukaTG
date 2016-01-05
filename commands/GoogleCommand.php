@@ -19,9 +19,8 @@
 namespace Asuka\Commands;
 
 use Telegram\Bot\Actions;
-use Telegram\Bot\Commands\Command;
 
-class GoogleCommand extends Command
+class GoogleCommand extends BaseCommand
 {
     protected $description = 'Returns the first Google result for a set of search terms.';
 
@@ -54,13 +53,5 @@ class GoogleCommand extends Command
         }
 
         $this->reply($response);
-    }
-
-    private function reply($response)
-    {
-        $this->replyWithMessage([
-            'text'                => $response,
-            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
-        ]);
     }
 }

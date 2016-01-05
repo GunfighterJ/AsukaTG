@@ -19,9 +19,8 @@
 namespace Asuka\Commands;
 
 use Telegram\Bot\Actions;
-use Telegram\Bot\Commands\Command;
 
-class ImdbCommand extends Command
+class ImdbCommand extends BaseCommand
 {
     protected $description = 'Returns the first IMDb result for a set of search terms.';
 
@@ -72,15 +71,6 @@ class ImdbCommand extends Command
             PHP_EOL . trim($result['Plot']),
         ]);
 
-        $this->reply($response);
-    }
-
-    private function reply($response)
-    {
-        $this->replyWithMessage([
-            'text'                     => $response,
-            'disable_web_page_preview' => true,
-            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId(),
-        ]);
+        $this->reply($response, ['disable_web_page_preview' => true]);
     }
 }

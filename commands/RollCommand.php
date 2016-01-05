@@ -18,9 +18,7 @@
 
 namespace Asuka\Commands;
 
-use Telegram\Bot\Commands\Command;
-
-class RollCommand extends Command
+class RollCommand extends BaseCommand
 {
     const DICE_MAX_AMOUNT = 128;
 
@@ -79,13 +77,5 @@ class RollCommand extends Command
 
         $response = sprintf('[%s] = %d', implode(', ', $diceArray), array_sum($diceArray));
         $this->reply($response);
-    }
-
-    private function reply($response)
-    {
-        $this->replyWithMessage([
-            'text'                => $response,
-            'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
-        ]);
     }
 }
