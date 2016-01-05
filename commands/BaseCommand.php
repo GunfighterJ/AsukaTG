@@ -21,10 +21,8 @@ class BaseCommand extends Command
      */
     public function handle($arguments)
     {
-        if (!$this->createOrUpdateUser($this->getUpdate()->getMessage()->getFrom())) {
-            return;
-        };
         parent::handle($arguments);
+        $this->createOrUpdateUser($this->getUpdate()->getMessage()->getFrom());
     }
 
     protected function createOrUpdateUser(User $user)
@@ -34,7 +32,12 @@ class BaseCommand extends Command
         $createUserStmnt->bindValue(':first_name', $user->getFirstName(), PDO::PARAM_STR);
         $createUserStmnt->bindValue(':last_name', $user->getLastName() ? $user->getLastName() : null, PDO::PARAM_STR);
         $createUserStmnt->bindValue(':username', $user->getUsername() ? $user->getUsername() : null, PDO::PARAM_STR);
-        return $createUserStmnt->execute();
+
+        if (!$createUserStmnt->execute()) {
+            $this->reply($createUserStmnt->errorInfo()[2]);
+            return false;
+        }
+        return true;
     }
 
     /**
