@@ -84,6 +84,10 @@ class BaseCommand extends Command
         $this->replyWithMessage($params);
     }
 
+    /**
+     * @param $userId ID of the user we want
+     * @return mixed|null
+     */
     protected function getDBUser($userId)
     {
         $getUserStmnt = $this->getDatabase()->from('users')->where('user_id', $userId)->limit(1);
