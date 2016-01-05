@@ -18,8 +18,6 @@
 
 namespace Asuka\Commands;
 
-use PDO;
-
 class QuoteCommand extends BaseCommand
 {
     protected $description = 'Returns a random quote or adds a new quote if a message is supplied as a reply.';
@@ -28,17 +26,10 @@ class QuoteCommand extends BaseCommand
 
     public function handle($arguments)
     {
-        $dataPath = realpath(__DIR__) . '/../data/';
-        $quoteDatabase = $dataPath . 'asuka.db';
-
-        if (!file_exists($quoteDatabase)) {
-            $this->reply("Quote database doesn't exist.");
-
+        $db = $this->getDatabase();
+        if (!$db) {
             return;
         }
-
-        $db = new PDO('sqlite:' . $quoteDatabase);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
         // Detect a reply and add it as a quote
         $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();

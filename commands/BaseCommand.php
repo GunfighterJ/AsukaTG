@@ -3,10 +3,18 @@
 
 namespace Asuka\commands;
 
+use PDO;
 use Telegram\Bot\Commands\Command;
 
 class BaseCommand extends Command
 {
+    private $database;
+
+    public function __construct()
+    {
+        $this->dataPath = realpath(__DIR__) . '/../data';
+        $this->databasePath = $this->dataPath . '/asuka.db';
+    }
 
     /**
      * {@inheritdoc}
@@ -28,5 +36,19 @@ class BaseCommand extends Command
         ], $params);
 
         $this->replyWithMessage($params);
+    }
+
+    public function getDatabase() {
+        if (!$this->database) {
+            try {
+                $this->database = new PDO('sqlite:' . $this->databasePath);
+            } catch (\PDOException $exception) {
+                $this->reply($exception->getMessage());
+                return null;
+            }
+
+            $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+        }
+        return $this->database;
     }
 }
