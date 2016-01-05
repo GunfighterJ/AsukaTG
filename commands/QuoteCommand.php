@@ -23,7 +23,7 @@ use Telegram\Bot\Commands\Command;
 
 class QuoteCommand extends Command
 {
-    protected $description = 'Returns a random quote.';
+    protected $description = 'Returns a random quote or adds a new quote if a message is supplied as a reply.';
 
     protected $name = 'q';
 
@@ -40,6 +40,28 @@ class QuoteCommand extends Command
 
         $db = new PDO('sqlite:' . $quoteDatabase);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+
+        // Detect a reply and add it as a quote
+        $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();
+        if ($quoteSource) {
+            $quoteUser = implode(' ', [$quoteSource->getFrom()->getFirstName(), $quoteSource->getFrom()->getLastName()]);
+            if (!empty($quoteSource->getFrom()->getUsername())) {
+                $quoteUser .= sprintf(' (@%s)', $quoteSource->getFrom()->getUsername());
+            }
+
+            $db = new PDO('sqlite:' . $quoteDatabase);
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+            $sth = $db->prepare('INSERT INTO quotes (citation, quote) VALUES (:citation, :quote)');
+            $sth->bindValue(':citation', $quoteUser, PDO::PARAM_STR);
+            $sth->bindValue(':quote', $quoteSource->getText(), PDO::PARAM_STR);
+
+            if ($sth->execute()) {
+                $this->replyToAdd(sprintf('Quote saved as #%s', $db->lastInsertId()));
+            } elseif ($db->errorInfo()) {
+                $this->reply(implode(PHP_EOL, $db->errorInfo()));
+            }
+            return;
+        }
 
         if ($arguments) {
             $arguments = explode(' ', $arguments);
@@ -85,6 +107,15 @@ class QuoteCommand extends Command
             'disable_web_page_preview' => true,
             'parse_mode'               => 'Markdown',
             'reply_to_message_id'      => $this->getUpdate()->getMessage()->getMessageId(),
+        ]);
+    }
+
+    private function replyToAdd($response)
+    {
+        $this->replyWithMessage([
+            'text'                     => $response,
+            'disable_web_page_preview' => true,
+            'reply_to_message_id'      => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId(),
         ]);
     }
 }

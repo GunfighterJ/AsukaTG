@@ -120,7 +120,6 @@ $telegram->addCommands([
     Commands\DecideCommand::class,
     Commands\EchoCommand::class,
     Commands\QuoteCommand::class,
-    Commands\AddQuoteCommand::class,
 ]);
 
 $telegram->commandsHandler(true);
