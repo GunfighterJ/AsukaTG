@@ -85,6 +85,8 @@ class QuoteCommand extends Command
             if (isset($quote->id)) {
                 $response = sprintf('Quote #%d added at %s' . PHP_EOL . PHP_EOL, $quote->id, date('r', strtotime($quote->created)));
 
+                $quote->content = str_replace('*', '\\*', $quote->content);
+                $quote->content = str_replace('_', '\\_', $quote->content);
                 $response .= sprintf('*%s*' . PHP_EOL, $quote->content);
                 $response .= sprintf('_-- %s_', $quote->citation);
                 $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
