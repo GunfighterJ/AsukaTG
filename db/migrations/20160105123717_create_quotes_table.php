@@ -30,8 +30,6 @@ class CreateQuotesTable extends AbstractMigration
         $table = $this->table('quotes');
         $table
             ->addColumn('content', 'text', ['null' => false])
-            ->addColumn('citation', 'text', ['null' => false])
-            ->addColumn('source', 'text', ['null' => false, 'default' => 'Telegram'])
             ->addColumn('chat_id', 'integer', ['null' => false, 'default' => 0])
             ->addColumn('message_id', 'integer', ['null' => false, 'default' => 0])
             ->addColumn('user_id', 'integer', ['null' => false, 'default' => 0])

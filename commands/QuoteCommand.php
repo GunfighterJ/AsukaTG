@@ -139,7 +139,6 @@ class QuoteCommand extends BaseCommand
                 }
 
                 $response .= sprintf('-- %s, %s', $this->escapeMarkdown($citation), date('r', $quote->message_timestamp));
-                $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
 
                 $this->reply($response, [
                     'disable_web_page_preview' => true
