@@ -93,13 +93,13 @@ if (php_sapi_name() == 'cli') {
         printHelp();
     }
 
-    if (in_array($argv[1], $flags['set'])) {
+    if (in_array($argv[1], $flags['set']['flags'])) {
         $webhookUrl = $config->telegram->webhook_url;
         $response = $telegram->setWebhook(['url' => $webhookUrl]);
         echo sprintf($response->getBody());
     }
 
-    if (in_array($argv[1], $flags['del'])) {
+    if (in_array($argv[1], $flags['del']['flags'])) {
         $response = $telegram->removeWebhook();
         echo sprintf($response->getBody());
     }
