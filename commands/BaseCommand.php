@@ -1,10 +1,10 @@
 <?php
 
-
 namespace Asuka\commands;
 
 use PDO;
 use Telegram\Bot\Commands\Command;
+use Telegram\Bot\Objects\User;
 
 class BaseCommand extends Command
 {
@@ -12,16 +12,10 @@ class BaseCommand extends Command
 
     public function __construct()
     {
-        $this->dataPath = realpath(__DIR__) . '/../data';
-        $this->databasePath = $this->dataPath . '/asuka.db';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function handle($arguments)
-    {
-        parent::handle($arguments);
+        $this->dataPath      = realpath(__DIR__) . '/../data';
+        $this->databasePath  = $this->dataPath . '/asuka.db';
+        $this->getUserSth    = $this->getDatabase()->prepare('SELECT * FROM users WHERE user_id = :user_id LIMIT 1');
+        $this->createUserSth = $this->getDatabase()->prepare('INSERT INTO users (user_id, first_name, last_name, username) VALUES (:user_id, :first_name, :last_name, :username)');
     }
 
     /**
@@ -48,6 +42,49 @@ class BaseCommand extends Command
         }
 
         return $this->database;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function handle($arguments)
+    {
+        if (!$this->createOrUpdateUser($this->getUpdate()->getMessage()->getFrom())) {
+            return;
+        };
+        parent::handle($arguments);
+    }
+
+    protected function createOrUpdateUser(User $user)
+    {
+        $this->getUserSth->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
+        if ($this->getUserSth->execute()) {
+            $dbUser = $this->getUserSth->fetch(PDO::FETCH_OBJ);
+            if (!isset($dbUser->id)) {
+                $this->createUserSth->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
+                $this->createUserSth->bindValue(':first_name', $user->getFirstName(), PDO::PARAM_STR);
+                $this->createUserSth->bindValue(':last_name', $user->getLastName() ? $user->getLastName() : null, PDO::PARAM_STR);
+                $this->createUserSth->bindValue(':username', $user->getUsername() ? $user->getUsername() : null, PDO::PARAM_STR);
+                if (!$this->createUserSth->execute()) {
+                    $this->reply($this->createUserSth->errorInfo()[2]);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    protected function getUser($userId)
+    {
+        $this->getUserSth->bindValue('user_id', $userId);
+        $this->getUserSth->execute();
+        $user = $this->getUserSth->fetch(PDO::FETCH_OBJ);
+
+        if (!$userId) {
+            return null;
+        }
+
+        return $user;
     }
 
     /**
