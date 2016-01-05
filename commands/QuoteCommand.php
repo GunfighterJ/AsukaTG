@@ -63,7 +63,7 @@ class QuoteCommand extends BaseCommand
                     if (!isset($dbUser->id)) {
                         $createUserSth->bindValue(':user_id', $user->getId(), PDO::PARAM_INT);
                         $createUserSth->bindValue(':first_name', $user->getFirstName(), PDO::PARAM_STR);
-                        $createUserSth->bindValue(':last_name', $user->getFirstName() ? $user->getFirstName() : null, PDO::PARAM_STR);
+                        $createUserSth->bindValue(':last_name', $user->getLastName() ? $user->getLastName() : null, PDO::PARAM_STR);
                         $createUserSth->bindValue(':username', $user->getUsername() ? $user->getUsername() : null, PDO::PARAM_STR);
 
                         if (!$createUserSth->execute()) {
