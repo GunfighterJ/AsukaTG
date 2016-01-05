@@ -43,10 +43,6 @@ class QuoteCommand extends BaseCommand
         // Detect a reply and add it as a quote
         $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();
         if ($quoteSource) {
-            if ($quoteSource->getFrom()->getId() === $this->getTelegram()->getMe()->getId()) {
-                $this->reply('Don\'t be silly, why would you quote a bot?');
-                return;
-            }
             $quoteUser = implode(' ', [$quoteSource->getFrom()->getFirstName(), $quoteSource->getFrom()->getLastName()]);
             if (!empty($quoteSource->getFrom()->getUsername())) {
                 $quoteUser .= sprintf(' (@%s)', $quoteSource->getFrom()->getUsername());
@@ -60,10 +56,17 @@ class QuoteCommand extends BaseCommand
 
             if ($sth->execute()) {
                 $this->reply(sprintf('Quote saved as #%s', $db->lastInsertId()), [
-                    'reply_to_message_id' => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId(),
+                    'reply_to_message_id' => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId()
                 ]);
-            } elseif ($db->errorInfo()) {
-                $this->reply(implode(PHP_EOL, $db->errorInfo()));
+            } else {
+                if ($sth->errorCode() == 23000) {
+                    $this->reply('I already have that quote.', [
+                            'reply_to_message_id' => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId()
+                        ]);
+
+                    return;
+                }
+                $this->reply($sth->errorInfo()[2]);
             }
 
             return;
@@ -90,24 +93,24 @@ class QuoteCommand extends BaseCommand
             $quote = $sth->fetch(PDO::FETCH_OBJ);
             if (isset($quote->id)) {
                 $response = sprintf('Quote #%d added at %s' . PHP_EOL . PHP_EOL, $quote->id, date('r', strtotime($quote->created)));
-                $response .= sprintf('*%s*' . PHP_EOL, $this->escapeMarkdown($quote->content));
-                $response .= sprintf('_-- %s_', $this->escapeMarkdown($quote->citation));
+                $response .= sprintf('%s' . PHP_EOL, $this->escapeMarkdown($quote->content));
+                $response .= sprintf('-- %s', $this->escapeMarkdown($quote->citation));
                 $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
 
                 $this->reply($response, [
-                    'parse_mode' => 'Markdown',
                     'disable_web_page_preview' => true
                 ]);
             } else {
                 $this->reply('No such quote!');
             }
-        } elseif ($db->errorInfo()) {
-            $this->reply(implode(PHP_EOL, $db->errorInfo()));
+        } else {
+            $this->reply($sth->errorInfo()[2]);
         }
     }
 
     private function escapeMarkdown($string)
     {
-        return preg_replace('/([*_])/i', '\\\\$1', $string);
+        return $string;
+        //return preg_replace('/([*_])/i', '\\\\$1', $string);
     }
 }
