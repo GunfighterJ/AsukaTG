@@ -27,4 +27,4 @@ Run the webhook script in the root of this repo like so:
 
 For other CLI arguments, see `php webhook.php --help`
 
-Optionally, if you want to make use of the joehot quote database, run `php scripts/update_joehot_quotes.php`.
+Optionally, if you want to make use of the quote database, run `php scripts/create_quotes_db.php`.

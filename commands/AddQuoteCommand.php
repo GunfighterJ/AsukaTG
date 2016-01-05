@@ -46,7 +46,7 @@ class AddQuoteCommand extends Command
 
         $quoteUser = implode(' ', [$quoteSource->getFrom()->getFirstName(), $quoteSource->getFrom()->getLastName()]);
         if (!empty($quoteSource->getFrom()->getUsername())) {
-            $quoteUser .= sprintf(' (%s)', $quoteSource->getFrom()->getUsername());
+            $quoteUser .= sprintf(' (@%s)', $quoteSource->getFrom()->getUsername());
         }
 
         $db = new PDO('sqlite:' . $quoteDatabase);
@@ -56,7 +56,7 @@ class AddQuoteCommand extends Command
         $sth->bindValue(':quote', $quoteSource->getText(), PDO::PARAM_STR);
 
         if ($sth->execute()) {
-            $this->replyToAdd(sprintf('Quote saved as #%s!', $db->lastInsertId()));
+            $this->replyToAdd(sprintf('Quote saved as #%s', $db->lastInsertId()));
         } elseif ($db->errorInfo()) {
             $this->reply(implode(PHP_EOL, $db->errorInfo()));
         }

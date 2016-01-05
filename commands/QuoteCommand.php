@@ -64,10 +64,7 @@ class QuoteCommand extends Command
                 $response = sprintf('Quote #%d:' . PHP_EOL, $quote->id);
                 $response .= sprintf('*%s*' . PHP_EOL, $quote->quote);
                 $response .= sprintf('_-- %s_', $quote->citation);
-
-                if (isset($quote->source)) {
-                    $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
-                }
+                $response .= sprintf(PHP_EOL . PHP_EOL . 'Source: %s', $quote->source);
 
                 $this->reply($response);
             } else {
