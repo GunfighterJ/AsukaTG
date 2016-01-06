@@ -29,13 +29,7 @@ class QuoteCommand extends BaseCommand
     public function handle($arguments)
     {
         $db = $this->getDatabase();
-        if (!$db) {
-            return;
-        }
-
-        if (!$this->createOrUpdateUser($this->getUpdate()->getMessage()->getFrom())) {
-            return;
-        };
+        $this->createOrUpdateUser($this->getUpdate()->getMessage()->getFrom());
 
         // Detect a reply and add it as a quote
         $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();
@@ -60,9 +54,7 @@ class QuoteCommand extends BaseCommand
             }
 
             $quoteUser = $quoteSource->getFrom();
-            if (!$this->createOrUpdateUser($quoteUser)) {
-                return;
-            };
+            $this->createOrUpdateUser($quoteUser);
 
             $values = [
                 'content'           => $quoteSource->getText(),

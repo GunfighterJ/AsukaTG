@@ -44,6 +44,10 @@ class BaseCommand extends Command
         $ch = curl_init();
         curl_setopt_array($ch, $curlOpts);
         $output = curl_exec($ch);
+        if (!$output && curl_errno($ch)) {
+            $this->reply(curl_error($ch));
+            die();
+        }
         curl_close($ch);
 
         return $output;
@@ -74,20 +78,17 @@ class BaseCommand extends Command
         } else {
             $this->getDatabase()->insertInto('users', $values)->onDuplicateKeyUpdate($values);
         }
-
-        return true;
     }
 
     /**
-     * @return null|FluentPDO
+     * @return FluentPDO
      */
     public function getDatabase()
     {
         if (!$this->database) {
             if (!file_exists($this->databasePath)) {
                 $this->reply('Bot database doesn\'t exist!');
-
-                return null;
+                die();
             }
 
             try {
@@ -96,8 +97,7 @@ class BaseCommand extends Command
                 $this->getDatabase()->getPdo()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
             } catch (\PDOException $exception) {
                 $this->reply($exception->getMessage());
-
-                return null;
+                die();
             }
         }
 
@@ -120,7 +120,7 @@ class BaseCommand extends Command
 
     /**
      * @param $userId
-     * @return mixed|null
+     * @return mixed
      */
     protected function getUserById($userId)
     {
@@ -128,7 +128,8 @@ class BaseCommand extends Command
         $getUserStmnt->execute();
 
         if (!$getUserStmnt->execute()) {
-            return null;
+            $this->reply($this->getDatabase()->getPdo()->errorInfo()[2]);
+            die();
         }
 
         return $getUserStmnt->fetch();
