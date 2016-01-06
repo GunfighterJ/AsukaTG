@@ -41,8 +41,12 @@ class BaseCommand extends Command
 
         // SQLite doesn't support ON DUPLICATE KEY UPDATE
         if ($this->getDatabase()->getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) == 'sqlite') {
-            $this->getDatabase()->insertInto('users', $values)->ignore()->execute();
-            $this->getDatabase()->update('users')->set($values)->where('user_id', $userId)->execute();
+            // Disable error reporting for insertInto because FluentPDO's ignore() causes a syntax error
+            $this->getDatabase()->getPdo()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+            if (!$this->getDatabase()->insertInto('users', $values)->execute()) {
+                $this->getDatabase()->getPdo()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+                $this->getDatabase()->update('users')->set($values)->where('user_id', $userId)->execute();
+            }
         } else {
             $this->getDatabase()->insertInto('users', $values)->onDuplicateKeyUpdate($values);
         }
@@ -65,6 +69,7 @@ class BaseCommand extends Command
             try {
                 $this->database = new FluentPDO(new PDO('sqlite:' . $this->databasePath));
                 $this->database->getPdo()->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+                $this->getDatabase()->getPdo()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
             } catch (\PDOException $exception) {
                 $this->reply($exception->getMessage());
 
