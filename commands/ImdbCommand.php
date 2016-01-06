@@ -40,7 +40,7 @@ class ImdbCommand extends BaseCommand
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        $searchJson    = file_get_contents(sprintf('http://www.omdbapi.com/?s=%s&r=json&type=movie', urlencode($arguments)));
+        $searchJson    = $this->curl_get_contents(sprintf('http://www.omdbapi.com/?s=%s&r=json&type=movie', urlencode($arguments)));
         $searchResults = json_decode($searchJson, true);
 
         if (is_null($searchResults)) {
@@ -55,7 +55,7 @@ class ImdbCommand extends BaseCommand
             return;
         }
 
-        $json   = file_get_contents(sprintf('http://www.omdbapi.com/?i=%s&r=json&type=movie&plot=full', $searchResults['Search'][0]['imdbID']));
+        $json   = $this->curl_get_contents(sprintf('http://www.omdbapi.com/?i=%s&r=json&type=movie&plot=full', $searchResults['Search'][0]['imdbID']));
         $result = json_decode($json, true);
 
         $response = implode(PHP_EOL, [

@@ -42,7 +42,7 @@ class GoogleCommand extends BaseCommand
 
         $query    = urlencode($arguments);
         $url      = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=' . $query;
-        $body     = file_get_contents($url);
+        $body     = $this->curl_get_contents($url);
         $json     = json_decode($body);
         $response = $json->responseData->results[0]->unescapedUrl;
 

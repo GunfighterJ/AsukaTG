@@ -80,6 +80,21 @@ class BaseCommand extends Command
         return $this->database;
     }
 
+    function curl_get_contents($url)
+    {
+        $curlOpts = [
+            CURLOPT_URL => $url,
+            CURLOPT_HEADER => false,
+            CURLOPT_RETURNTRANSFER => true,
+        ];
+
+        $ch = curl_init();
+        curl_setopt_array($ch, $curlOpts);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        return $output;
+    }
+
     /**
      * @param $response String to send as a reply
      * @param array $params Extra parameters to sendMessage
