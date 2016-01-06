@@ -39,10 +39,13 @@ class BaseCommand extends Command
             'username'   => $username
         ];
 
-        $this->getDatabase()->insertInto('users')->values($values)->ignore()->execute();
-
-        unset($values['user_id']);
-        $this->getDatabase()->update('users')->set($values)->where('user_id', $userId)->execute();
+        // SQLite doesn't support ON DUPLICATE KEY UPDATE
+        if ($this->getDatabase()->getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) == 'sqlite') {
+            $this->getDatabase()->insertInto('users', $values)->ignore()->execute();
+            $this->getDatabase()->update('users')->set($values)->where('user_id', $userId)->execute();
+        } else {
+            $this->getDatabase()->insertInto('users', $values)->onDuplicateKeyUpdate($values);
+        }
 
         return true;
     }
@@ -87,7 +90,7 @@ class BaseCommand extends Command
     }
 
     /**
-     * @param $userId ID of the user we want
+     * @param $userId user id of the user we want
      * @return mixed|null
      */
     protected function getDBUser($userId)
