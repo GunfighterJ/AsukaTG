@@ -54,7 +54,7 @@ class RollCommand extends BaseCommand
         }
 
         $diceCount = intval($diceParam[0]);
-        $diceType  = intval($diceParam[1]);
+        $diceType = intval($diceParam[1]);
         // }}}
 
         if ($diceCount < 1 || $diceCount > self::DICE_MAX_AMOUNT) {

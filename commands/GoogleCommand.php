@@ -40,10 +40,10 @@ class GoogleCommand extends BaseCommand
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        $query    = urlencode($arguments);
-        $url      = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=' . $query;
-        $body     = $this->curl_get_contents($url);
-        $json     = json_decode($body);
+        $query = trim(urlencode($arguments));
+        $url = sprintf('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=%s', $query);
+        $body = $this->curl_get_contents($url);
+        $json = json_decode($body);
         $response = $json->responseData->results[0]->unescapedUrl;
 
         if (is_null($response)) {
