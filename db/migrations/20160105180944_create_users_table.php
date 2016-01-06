@@ -29,11 +29,11 @@ class CreateUsersTable extends AbstractMigration
     {
         $table = $this->table('users', ['id' => false, 'primary_key' => ['user_id']]);
         $table
-            ->addColumn('user_id', 'integer')
+            ->addColumn('user_id', 'integer', ['null' => false])
             ->addColumn('first_name', 'text', ['null' => false])
             ->addColumn('last_name', 'text', ['default' => null])
             ->addColumn('username', 'text', ['default' => null])
-            ->addIndex(['user_id'], ['unique' => true, 'null' => false])
+            ->addIndex(['user_id'], ['unique' => true])
             ->create();
     }
 }
