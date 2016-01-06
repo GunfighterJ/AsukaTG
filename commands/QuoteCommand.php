@@ -100,31 +100,32 @@ class QuoteCommand extends BaseCommand
             $getQuoteStmnt = $db->from('quotes')->select('*')->orderBy(new FluentLiteral('RANDOM()'))->limit(1);
         }
 
-        if ($getQuoteStmnt->execute()) {
-            $quote = $getQuoteStmnt->fetch();
-            if ($quote) {
-                $response = sprintf('%s' . PHP_EOL, $this->escapeMarkdown($quote->content));
-                $user = $this->getUserById($quote->user_id);
-
-                $citation = $user->first_name;
-                if ($user->last_name) {
-                    $citation .= sprintf(' %s', $user->last_name);
-                }
-
-                if ($user->username) {
-                    $citation .= sprintf(' (%s)', $user->username);
-                }
-
-                $response .= sprintf('-- %s, %s (#%s)', $this->escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
-
-                $this->reply($response, [
-                    'disable_web_page_preview' => true,
-                ]);
-            } else {
-                $this->reply('No such quote!');
-            }
-        } else {
+        if (!$getQuoteStmnt->execute()) {
             $this->reply($db->getPdo()->errorInfo()[2]);
+            return;
+        }
+
+        $quote = $getQuoteStmnt->fetch();
+        if ($quote) {
+            $response = sprintf('%s' . PHP_EOL, $this->escapeMarkdown($quote->content));
+            $user = $this->getUserById($quote->user_id);
+
+            $citation = $user->first_name;
+            if ($user->last_name) {
+                $citation .= sprintf(' %s', $user->last_name);
+            }
+
+            if ($user->username) {
+                $citation .= sprintf(' (%s)', $user->username);
+            }
+
+            $response .= sprintf('-- %s, %s (#%s)', $this->escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
+
+            $this->reply($response, [
+                'disable_web_page_preview' => true,
+            ]);
+        } else {
+            $this->reply('No such quote!');
         }
     }
 }
