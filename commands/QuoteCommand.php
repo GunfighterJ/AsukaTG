@@ -102,10 +102,10 @@ class QuoteCommand extends BaseCommand
                 return;
             }
 
-            $getQuoteStmnt = $db->from('quotes')->select('*')->where('id', $quoteId);
+            $getQuoteStmnt = $db->from('quotes')->select('*')->where('id', $quoteId)->limit(1);
         } else {
             // Random quote
-            $getQuoteStmnt = $db->from('quotes')->select('*')->orderBy(new FluentLiteral('RANDOM()'));
+            $getQuoteStmnt = $db->from('quotes')->select('*')->orderBy(new FluentLiteral('RANDOM()'))->limit(1);
         }
 
         if ($getQuoteStmnt->execute()) {
