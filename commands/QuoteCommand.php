@@ -102,6 +102,7 @@ class QuoteCommand extends BaseCommand
 
         if (!$getQuoteStmnt->execute()) {
             $this->reply($db->getPdo()->errorInfo()[2]);
+
             return;
         }
 
