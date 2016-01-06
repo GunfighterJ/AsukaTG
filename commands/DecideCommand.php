@@ -85,6 +85,10 @@ class DecideCommand extends BaseCommand
             return;
         }
 
+        if (count($choices) == 2) {
+            array_push($choices, 'Neither.');
+        }
+
         $this->reply($choices[array_rand($choices)], ['disable_web_page_preview' => true]);
     }
 }
