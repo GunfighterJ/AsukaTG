@@ -94,7 +94,7 @@ class QuoteCommand extends BaseCommand
 
         if ($arguments) {
             $arguments = explode(' ', $arguments);
-            $quoteId = intval(trim(trim($arguments[0], '#')));
+            $quoteId = intval(preg_replace('/[^0-9]/', '', $arguments[0]));
 
             if (!$quoteId) {
                 $this->reply('Please supply a numeric quote ID.');
