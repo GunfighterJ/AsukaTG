@@ -53,7 +53,7 @@ class QuoteCommand extends BaseCommand
             }
 
             $messageType = $this->getTelegram()->detectMessageType($quoteSource);
-            if ('text' != $messageType) {
+            if ($messageType != 'text') {
                 $this->reply(sprintf('I cannot quote %s messages, please send me a text message.', $messageType));
 
                 return;
