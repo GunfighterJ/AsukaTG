@@ -78,7 +78,7 @@ class BaseCommand extends Command
                 $this->getDatabase()->update('users')->set($values)->where('user_id', $userId)->execute();
             }
         } else {
-            $this->getDatabase()->insertInto('users', $values)->onDuplicateKeyUpdate($values);
+            $this->getDatabase()->insertInto('users', $values)->onDuplicateKeyUpdate($values)->execute();
         }
     }
 
