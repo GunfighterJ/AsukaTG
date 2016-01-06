@@ -42,7 +42,7 @@ class BaseCommand extends Command
         $this->getDatabase()->insertInto('users')->values($values)->ignore()->execute();
 
         unset($values['user_id']);
-        $this->getDatabase()->update('users')->set($values)->execute();
+        $this->getDatabase()->update('users')->set($values)->where('user_id', $userId)->execute();
 
         return true;
     }
