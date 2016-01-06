@@ -125,8 +125,6 @@ class BaseCommand extends Command
     protected function getUserById($userId)
     {
         $getUserStmnt = $this->getDatabase()->from('users')->where('user_id', $userId)->limit(1);
-        $getUserStmnt->execute();
-
         if (!$getUserStmnt->execute()) {
             $this->reply($this->getDatabase()->getPdo()->errorInfo()[2]);
             die();
