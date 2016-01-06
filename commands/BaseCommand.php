@@ -44,10 +44,12 @@ class BaseCommand extends Command
         $ch = curl_init();
         curl_setopt_array($ch, $curlOpts);
         $output = curl_exec($ch);
+
         if (!$output && curl_errno($ch)) {
             $this->reply(curl_error($ch));
             die();
         }
+        
         curl_close($ch);
 
         return $output;
