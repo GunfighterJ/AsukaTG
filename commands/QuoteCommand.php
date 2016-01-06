@@ -112,7 +112,7 @@ class QuoteCommand extends BaseCommand
             $quote = $getQuoteStmnt->fetch();
             if ($quote) {
                 $response = sprintf('%s' . PHP_EOL, $this->escapeMarkdown($quote->content));
-                $user = $this->getDBUser($quote->user_id);
+                $user = $this->getUserById($quote->user_id);
 
                 $citation = $user->first_name;
                 if ($user->last_name) {

@@ -25,6 +25,30 @@ class BaseCommand extends Command
         parent::handle($arguments);
     }
 
+    /**
+     * @param $url
+     * @return mixed
+     */
+    function curl_get_contents($url)
+    {
+        $curlOpts = [
+            CURLOPT_URL            => $url,
+            CURLOPT_HEADER         => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_USERAGENT      => 'AsukaTG (https://github.com/TheReverend403/AsukaTG)',
+            CURLOPT_MAXREDIRS      => 5,
+        ];
+
+        $ch = curl_init();
+        curl_setopt_array($ch, $curlOpts);
+        $output = curl_exec($ch);
+        curl_close($ch);
+
+        return $output;
+    }
+
     protected function createOrUpdateUser(User $user)
     {
         $userId = $user->getId();
@@ -80,40 +104,25 @@ class BaseCommand extends Command
         return $this->database;
     }
 
-    function curl_get_contents($url)
-    {
-        $curlOpts = [
-            CURLOPT_URL => $url,
-            CURLOPT_HEADER => false,
-            CURLOPT_RETURNTRANSFER => true,
-        ];
-
-        $ch = curl_init();
-        curl_setopt_array($ch, $curlOpts);
-        $output = curl_exec($ch);
-        curl_close($ch);
-        return $output;
-    }
-
     /**
-     * @param $response String to send as a reply
-     * @param array $params Extra parameters to sendMessage
+     * @param $response
+     * @param array $extraParams
      */
-    protected function reply($response, $params = [])
+    protected function reply($response, $extraParams = [])
     {
-        $params = array_merge([
+        $extraParams = array_merge([
             'text'                => $response,
             'reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId(),
-        ], $params);
+        ], $extraParams);
 
-        $this->replyWithMessage($params);
+        $this->replyWithMessage($extraParams);
     }
 
     /**
-     * @param $userId user id of the user we want
+     * @param $userId
      * @return mixed|null
      */
-    protected function getDBUser($userId)
+    protected function getUserById($userId)
     {
         $getUserStmnt = $this->getDatabase()->from('users')->where('user_id', $userId)->limit(1);
         $getUserStmnt->execute();
