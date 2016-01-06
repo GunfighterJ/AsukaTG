@@ -1,5 +1,6 @@
 <?php
 
+use Phinx\Db\Adapter\AdapterInterface;
 use Phinx\Migration\AbstractMigration;
 
 class CreateQuotesTable extends AbstractMigration
@@ -29,15 +30,36 @@ class CreateQuotesTable extends AbstractMigration
     {
         $table = $this->table('quotes');
         $table
-            ->addColumn('content', 'text', ['null' => false])
-            ->addColumn('chat_id', 'integer', ['null' => false, 'default' => 0])
-            ->addColumn('message_id', 'integer', ['null' => false, 'default' => 0])
-            ->addColumn('user_id', 'integer', ['null' => false, 'default' => 0])
-            ->addColumn('addedby_id', 'integer', ['null' => false, 'default' => 0])
-            ->addColumn('message_timestamp', 'integer', ['null' => false, 'default' => 0])
-            ->addColumn('added_timestamp', 'timestamp', ['null' => false, 'default' => 'CURRENT_TIMESTAMP'])
-            ->addIndex(['content', 'message_id'], ['unique' => true])
-            ->addForeignKey(['user_id'], 'users', ['user_id'])
+            ->addColumn('content', AdapterInterface::PHINX_TYPE_TEXT, [
+                'null' => false
+            ])
+            ->addColumn('chat_id', AdapterInterface::PHINX_TYPE_INTEGER, [
+                'null' => false,
+                'signed' => false,
+                'limit' => 64
+            ])
+            ->addColumn('message_id', AdapterInterface::PHINX_TYPE_INTEGER, [
+                'null' => false,
+                'limit' => 64
+            ])
+            ->addColumn('user_id', AdapterInterface::PHINX_TYPE_INTEGER, [
+                'null' => false,
+                'limit' => 64
+            ])
+            ->addColumn('addedby_id', AdapterInterface::PHINX_TYPE_INTEGER, [
+                'null' => false,
+                'limit' => 64
+            ])
+            ->addColumn('message_timestamp', AdapterInterface::PHINX_TYPE_INTEGER, [
+                'null' => false,
+                'limit' => 64
+            ])
+            ->addColumn('added_timestamp', AdapterInterface::PHINX_TYPE_TIMESTAMP, [
+                'null' => false,
+                'default' => 'CURRENT_TIMESTAMP'
+            ])
+            ->addIndex(['message_id'], ['unique' => true])
+            ->addForeignKey('user_id', 'users', 'user_id', ['delete' => 'CASCADE', 'update'=> 'NO_ACTION'])
             ->create();
     }
 }

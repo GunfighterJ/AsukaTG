@@ -12,6 +12,7 @@
   },
   "scripts": {
     "post-install-cmd": [
+      "php -r \"copy('phinx.yml.dist', 'phinx.yml');\"",
       "php vendor/bin/phinx migrate"
     ],
     "post-update-cmd": [

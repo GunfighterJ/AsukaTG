@@ -2,6 +2,7 @@ paths:
     migrations: %%PHINX_CONFIG_DIR%%/db/migrations
     seeds: %%PHINX_CONFIG_DIR%%/db/seeds
 
+# http://docs.phinx.org/en/latest/configuration.html#supported-adapters
 environments:
     default_migration_table: phinxlog
     default_database: production
