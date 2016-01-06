@@ -87,6 +87,8 @@ class DecideCommand extends BaseCommand
 
         if (count($choices) == 2) {
             array_push($choices, 'Neither.');
+        } else {
+            array_push($choices, 'None of the above.', 'All of the above.');
         }
 
         $this->reply($choices[array_rand($choices)], ['disable_web_page_preview' => true]);
