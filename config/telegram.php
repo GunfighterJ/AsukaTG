@@ -118,8 +118,11 @@ return [
         Commands\DecideCommand::class,
         Commands\EchoCommand::class,
         Commands\GoogleCommand::class,
+        Commands\HelpCommand::class,
         Commands\ImdbCommand::class,
+        Commands\QuoteCommand::class,
         Commands\RollCommand::class,
+        Commands\StartCommand::class,
         Commands\UptimeCommand::class,
     ],
 
