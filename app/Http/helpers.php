@@ -101,7 +101,8 @@ class AsukaDB
         $messageId = $message->getReplyToMessage()->getMessageId();
 
         $values = [
-            'user_id'           => $message->getFrom()->getId(),
+            'added_by_id'       => $message->getFrom()->getId(),
+            'user_id'           => $message->getReplyToMessage()->getFrom()->getId(),
             'group_id'          => $groupId,
             'message_id'        => $messageId,
             'message_timestamp' => $message->getDate(),
