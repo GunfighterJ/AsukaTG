@@ -5,6 +5,7 @@ namespace Asuka\commands;
 use FluentPDO;
 use PDO;
 use Telegram\Bot\Commands\Command;
+use Telegram\Bot\Objects\Chat;
 use Telegram\Bot\Objects\User;
 
 class BaseCommand extends Command
@@ -82,6 +83,33 @@ class BaseCommand extends Command
         }
     }
 
+    protected function createOrUpdateGroup(Chat $group)
+    {
+        if ($group->getType() != 'group') {
+            return;
+        }
+
+        $groupId = $group->getId();
+        $groupName = $group->getTitle();
+
+        $values = [
+            'group_id'    => $groupId,
+            'title' => $groupName,
+        ];
+
+        // SQLite doesn't support ON DUPLICATE KEY UPDATE
+        if ($this->getDatabase()->getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) == 'sqlite') {
+            // Disable error reporting for insertInto because FluentPDO's ignore() causes a syntax error
+            $this->getDatabase()->getPdo()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+            if (!$this->getDatabase()->insertInto('groups', $values)->execute()) {
+                $this->getDatabase()->getPdo()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+                $this->getDatabase()->update('groups')->set($values)->where('group_id', $groupId)->execute();
+            }
+        } else {
+            $this->getDatabase()->insertInto('groups', $values)->onDuplicateKeyUpdate($values)->execute();
+        }
+    }
+
     /**
      * @return FluentPDO
      */
@@ -127,6 +155,21 @@ class BaseCommand extends Command
     protected function getUserById($userId)
     {
         $getUserStmnt = $this->getDatabase()->from('users')->where('user_id', $userId)->limit(1);
+        if (!$getUserStmnt->execute()) {
+            $this->reply($this->getDatabase()->getPdo()->errorInfo()[2]);
+            die();
+        }
+
+        return $getUserStmnt->fetch();
+    }
+
+    /**
+     * @param $groupId
+     * @return mixed
+     */
+    protected function getGroupById($groupId)
+    {
+        $getUserStmnt = $this->getDatabase()->from('groups')->where('user_id', $groupId)->limit(1);
         if (!$getUserStmnt->execute()) {
             $this->reply($this->getDatabase()->getPdo()->errorInfo()[2]);
             die();

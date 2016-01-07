@@ -33,7 +33,7 @@ class CreateQuotesTable extends AbstractMigration
             ->addColumn('content', AdapterInterface::PHINX_TYPE_TEXT, [
                 'null' => false
             ])
-            ->addColumn('chat_id', AdapterInterface::PHINX_TYPE_INTEGER, [
+            ->addColumn('group_id', AdapterInterface::PHINX_TYPE_INTEGER, [
                 'null' => false,
                 'signed' => false,
                 'limit' => 64
@@ -60,6 +60,7 @@ class CreateQuotesTable extends AbstractMigration
             ])
             ->addIndex(['message_id'], ['unique' => true])
             ->addForeignKey('user_id', 'users', 'user_id', ['delete' => 'CASCADE', 'update'=> 'NO_ACTION'])
+            ->addForeignKey('group_id', 'groups', 'group_id', ['delete' => 'CASCADE', 'update'=> 'NO_ACTION'])
             ->create();
     }
 }

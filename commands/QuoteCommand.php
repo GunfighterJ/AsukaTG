@@ -33,12 +33,15 @@ class QuoteCommand extends BaseCommand
 
         // Detect a reply and add it as a quote
         $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();
+        $groupId = $this->getUpdate()->getMessage()->getChat()->getId();
         if ($quoteSource) {
             if ($this->getUpdate()->getMessage()->getChat()->getType() != 'group') {
                 $this->reply('You can only add quotes in a group.');
 
                 return;
             }
+
+            $this->createOrUpdateGroup($this->getUpdate()->getMessage()->getChat());
 
             if ($this->getTelegram()->getMe()->getId() == $quoteSource->getFrom()->getId()) {
                 $this->reply('You cannot quote me >:)');
@@ -58,7 +61,7 @@ class QuoteCommand extends BaseCommand
 
             $values = [
                 'content'           => $quoteSource->getText(),
-                'chat_id'           => $quoteSource->getChat()->getId(),
+                'group_id'          => $groupId,
                 'message_id'        => $quoteSource->getMessageId(),
                 'user_id'           => $quoteSource->getFrom()->getId(),
                 'addedby_id'        => $this->getUpdate()->getMessage()->getFrom()->getId(),
@@ -94,10 +97,10 @@ class QuoteCommand extends BaseCommand
                 return;
             }
 
-            $getQuoteStmnt = $db->from('quotes')->select('*')->where('id', $quoteId)->limit(1);
+            $getQuoteStmnt = $db->from('quotes')->select('*')->where('id', $quoteId)->where('group_id', $groupId);
         } else {
             // Random quote
-            $getQuoteStmnt = $db->from('quotes')->select('*')->orderBy(new FluentLiteral('RANDOM()'))->limit(1);
+            $getQuoteStmnt = $db->from('quotes')->select('*')->where('group_id', $groupId)->orderBy(new FluentLiteral('RANDOM()'))->limit(1);
         }
 
         if (!$getQuoteStmnt->execute()) {
