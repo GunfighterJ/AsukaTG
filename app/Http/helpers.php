@@ -36,7 +36,7 @@ function curl_get_contents($url)
     curl_setopt_array($ch, $curlOpts);
     $output = curl_exec($ch);
 
-    if (curl_errno($ch)) {
+    if (!$output) {
         $update = app('telegram')->bot()->getWebhookUpdates();
         sendMessage(curl_error($ch), $update->getMessage()->getChat()->getId(), $update->getMessage()->getMessageId());
         app()->abort(200);
