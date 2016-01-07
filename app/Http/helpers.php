@@ -125,16 +125,16 @@ class AsukaDB
         $db = app('db')->connection();
 
         if (!$id) {
-            return $db->table('quotes')->where('id', $id)->limit(1)->orderByRaw('RAND()')->get();
+            return $db->table('quotes')->where('id', $id)->limit(1)->orderByRaw('RAND()')->first();
         }
-        return $db->table('quotes')->where('id', $id)->limit(1)->get();
+        return $db->table('quotes')->where('id', $id)->limit(1)->first();
     }
 
 
     public static function getUser($id)
     {
         $db = app('db')->connection();
-        return $db->table('user')->where('id', $id)->limit(1)->get();
+        return $db->table('user')->where('id', $id)->limit(1)->first();
     }
 
     public static function createOrUpdateGroup(Chat $group)
@@ -145,7 +145,7 @@ class AsukaDB
             'title' => $group->getTitle(),
         ];
 
-        if (!count($db->table('groups')->where('id', $group->getId())->limit(1)->get(['id']))) {
+        if ($db->table('groups')->where('id', $group->getId())->limit(1)->first(['id'])) {
             $db->table('groups')->insert($values);
         } else {
             unset($values['id']);
