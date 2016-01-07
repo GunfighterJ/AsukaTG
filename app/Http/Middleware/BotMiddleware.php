@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class BotMiddleware
 {
@@ -20,15 +21,13 @@ class BotMiddleware
             $botKey = $request->route()[2]['botKey'];
         }
 
-        $invalidResponse = response('Page Not Found', 404);
-
         if (!$botKey) {
-            return $invalidResponse;
+            throw new NotFoundHttpException;
         }
 
         $telegram = app('telegram');
         if ($botKey != $telegram->getBotConfig(config('telegram.default'))['token']) {
-            return $invalidResponse;
+            throw new NotFoundHttpException;
         }
         return $next($request);
     }

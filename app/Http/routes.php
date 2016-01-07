@@ -16,10 +16,6 @@
  * along with AsukaTG.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$app->get('/', function () {
-    return response('Page Not Found', 404);
-});
-
 $app->get('/{botKey}',
     ['as' => 'bans', 'middleware' => 'bot', 'uses' => 'BotController@index']);
 
