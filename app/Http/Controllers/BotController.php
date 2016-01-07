@@ -22,28 +22,20 @@ use Illuminate\Http\Request;
 
 class BotController extends Controller
 {
-    function index(Request $request, $botKey)
+    function index(Request $request)
     {
-        $telegram = app('telegram');
-        if ($botKey != $telegram->getBotConfig(config('telegram.default'))['token']) {
-            return '';
-        }
-
-        $bot = $telegram->bot();
-        $updates = $bot->commandsHandler($request->getMethod() == Request::METHOD_POST);
+        $telegram = app('telegram')->bot();
+        $updates = $telegram->commandsHandler($request->getMethod() == Request::METHOD_POST);
         return $updates;
     }
 
     function updateWebhook(Request $request, $action, $botKey)
     {
         $telegram = app('telegram');
-        if ($botKey != $telegram->getBotConfig(config('telegram.default'))['token']) {
-            return '';
-        }
 
         $ownerId = $telegram->getBotConfig(config('telegram.default'))['owner_id'];
         if ($ownerId) {
-            sendMessage(sprintf('The IP %s just accessed %s', $request->getClientIp(), $request->getUri()), $ownerId);
+            sendMessage(sprintf('The IP %s just accessed %s', $request->getClientIp(), $request->url()), $ownerId);
         }
 
         $bot = $telegram->bot();

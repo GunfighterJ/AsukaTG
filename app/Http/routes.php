@@ -17,14 +17,14 @@
  */
 
 $app->get('/', function () {
-    return 'I think you\'re in the wrong place.';
+    return response('Page Not Found', 404);
 });
 
 $app->get('/{botKey}',
-    ['as' => 'bans', 'uses' => 'BotController@index']);
+    ['as' => 'bans', 'middleware' => 'bot', 'uses' => 'BotController@index']);
 
 $app->post('/{botKey}',
-    ['as' => 'bans', 'uses' => 'BotController@index']);
+    ['as' => 'bans', 'middleware' => 'bot', 'uses' => 'BotController@index']);
 
 $app->get('/{botKey}/webhook/{action}',
-    ['as' => 'bans', 'uses' => 'BotController@updateWebhook']);
+    ['as' => 'bans', 'middleware' => 'bot', 'uses' => 'BotController@updateWebhook']);
