@@ -22,7 +22,7 @@ use Illuminate\Http\Request;
 
 class BotController extends Controller
 {
-    function index($botKey)
+    function index(Request $request, $botKey)
     {
         $telegram = app('telegram');
         if ($botKey != $telegram->getBotConfig(config('telegram.default'))['token']) {
@@ -30,7 +30,7 @@ class BotController extends Controller
         }
 
         $bot = $telegram->bot();
-        $updates = $bot->commandsHandler(app()->environment() == 'production');
+        $updates = $bot->commandsHandler($request->getMethod() == Request::METHOD_POST);
         return $updates;
     }
 
@@ -44,10 +44,6 @@ class BotController extends Controller
         $ownerId = $telegram->getBotConfig(config('telegram.default'))['owner_id'];
         if ($ownerId) {
             sendMessage(sprintf('The IP %s just accessed %s', $request->getClientIp(), $request->getUri()), $ownerId);
-        }
-
-        if (app()->environment() != 'production') {
-            return 'You must set APP_ENV to production before you can use webhooks.';
         }
 
         $bot = $telegram->bot();
