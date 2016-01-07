@@ -40,6 +40,7 @@ function curl_get_contents($url)
         $update = app('telegram')->bot()->getWebhookUpdates();
         sendMessage(curl_error($ch), $update->getMessage()->getChat()->getId(), $update->getMessage()->getMessageId());
         app()->abort(200);
+        return null;
     }
 
     curl_close($ch);
