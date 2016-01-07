@@ -27,6 +27,7 @@ class BotController extends Controller
         }
 
         $telegram = app('telegram')->bot();
+
         $updates = $telegram->commandsHandler(app()->environment() == 'production');
         return $updates;
     }

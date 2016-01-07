@@ -113,8 +113,13 @@ return [
     |
     */
     'commands' => [
-        Commands\EchoCommand::class,
+        Commands\BotsCommand::class,
         Commands\CoinCommand::class,
+        Commands\EchoCommand::class,
+        Commands\GoogleCommand::class,
+        Commands\ImdbCommand::class,
+        Commands\RollCommand::class,
+        Commands\UptimeCommand::class,
     ],
 
     /*
