@@ -42,8 +42,8 @@ class Helpers {
         $output = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            $update = app('telegram')->bot()->getWebhookUpdates();
-            Helpers::sendMessage(curl_error($ch), $update->getMessage()->getChat()->getId(), $update->getMessage()->getMessageId());
+            $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
+            Helpers::sendMessage(curl_error($ch), $message->getChat()->getId(), $message->getMessageId());
             if ($dieOnError) {
                 curl_close($ch);
                 app()->abort(200);
