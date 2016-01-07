@@ -134,7 +134,7 @@ class AsukaDB
     public static function getUser($id)
     {
         $db = app('db')->connection();
-        return $db->table('user')->where('id', $id)->limit(1)->first();
+        return $db->table('users')->where('id', $id)->limit(1)->first();
     }
 
     public static function createOrUpdateGroup(Chat $group)
