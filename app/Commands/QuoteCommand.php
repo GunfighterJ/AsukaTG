@@ -53,7 +53,7 @@ class QuoteCommand extends BaseCommand
             $result = AsukaDB::createQuote($this->getUpdate()->getMessage());
             if ($result) {
                 $this->reply(sprintf('Quote saved as #%s', $result), [
-                    'reply_to_message_id' => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId(),
+                    'reply_to_message_id' => $quoteSource->getMessageId(),
                 ]);
             }
 

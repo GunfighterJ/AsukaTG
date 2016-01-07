@@ -33,7 +33,9 @@ class BaseCommand extends Command
 
     protected function reply($response, $params = [])
     {
-        $params['reply_to_message_id'] = $this->update->getMessage()->getMessageId();
+        if (!array_key_exists('reply_to_message_id', $params)) {
+            $params['reply_to_message_id'] = $this->update->getMessage()->getMessageId();
+        }
         Helpers::sendMessage($response, $this->getUpdate()->getMessage()->getChat()->getId(), $params);
     }
 }
