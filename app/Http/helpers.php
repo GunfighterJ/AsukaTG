@@ -87,7 +87,7 @@ class AsukaDB
             'username'   => $user->getUsername() ? $user->getUsername() : null,
         ];
 
-        if (!$db->table('users')->where('id', $user->getId())->limit(1)->get('id')) {
+        if (!$db->table('users')->where('id', $user->getId())->limit(1)->get(['id'])) {
             $db->table('users')->insert($values);
         } else {
             $db->table('users')->update($values);
