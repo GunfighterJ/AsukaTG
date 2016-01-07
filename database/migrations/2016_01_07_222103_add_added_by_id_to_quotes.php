@@ -12,7 +12,7 @@ class AddAddedByIdToQuotes extends Migration
      */
     public function up()
     {
-        Schema::create('quotes', function (Blueprint $table) {
+        Schema::table('quotes', function (Blueprint $table) {
             $table->bigInteger('added_by_id');
             $table->foreign('added_by_id')->references('id')->on('users')->onDelete('cascade');
         });
