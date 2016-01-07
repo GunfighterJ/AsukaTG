@@ -99,7 +99,7 @@ class AsukaDB
     {
         $db = app('db')->connection();
         $groupId = $message->getChat()->getId();
-        $messageId = $message->getMessageId();
+        $messageId = $message->getReplyToMessage()->getMessageId();
 
         $values = [
             'added_by_id'       => $message->getFrom()->getId(),
