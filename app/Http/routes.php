@@ -14,5 +14,8 @@
 $app->get('/{bot}',
     ['as' => 'bans', 'uses' => 'BotController@index']);
 
+$app->post('/{bot}',
+    ['as' => 'bans', 'uses' => 'BotController@index']);
+
 $app->get('/{bot}/webhook/{action}',
     ['as' => 'bans', 'uses' => 'BotController@updateWebhook']);
