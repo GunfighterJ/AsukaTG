@@ -135,6 +135,11 @@ class AsukaDB
             'title' => $group->getTitle(),
         ];
 
-        $db->table('groups')->insert($values);
+        if (!count($db->table('groups')->where('id', $group->getId())->limit(1)->get(['id']))) {
+            $db->table('groups')->insert($values);
+        } else {
+            unset($values['id']);
+            $db->table('groups')->where('id', $group->getId())->update($values);
+        }
     }
 }
