@@ -13,7 +13,7 @@ class CreateGroupsTable extends Migration
     public function up()
     {
         Schema::create('groups', function (Blueprint $table) {
-            $table->bigInteger('id')->unsigned();
+            $table->bigInteger('id');
             $table->text('title');
             $table->timestamp('created_at')->default(app('db')->connection()->raw('CURRENT_TIMESTAMP'));
             $table->primary('id');

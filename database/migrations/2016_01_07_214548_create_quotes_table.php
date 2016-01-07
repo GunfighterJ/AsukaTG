@@ -16,7 +16,7 @@ class CreateQuotesTable extends Migration
             $table->increments('id');
             $table->bigInteger('added_by_id');
             $table->bigInteger('user_id');
-            $table->bigInteger('group_id')->unsigned();
+            $table->bigInteger('group_id');
             $table->integer('message_id');
             $table->bigInteger('message_timestamp');
             $table->text('content');
