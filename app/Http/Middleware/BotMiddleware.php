@@ -15,11 +15,7 @@ class BotMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $botKey = null;
-        if (isset($request->botKey)) {
-            $botKey = $request->botKey;
-        }
-
+        $botKey = $request->botKey;
         if (!$botKey) {
             return redirect();
         }
