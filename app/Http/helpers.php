@@ -40,16 +40,14 @@ function curl_get_contents($url)
     return $output;
 }
 
-function reply($response, $params = [], $chatId, $replyTo = null)
+function sendMessage($response, $chatId, $replyTo = null, $params = [])
 {
     if ($replyTo) {
         $params['reply_to_message_id'] = $replyTo;
     }
 
-    $params = array_merge([
-        'text' => $response,
-        'chat_id' => $chatId
-    ], $params);
+    $params['chat_id'] = $chatId;
+    $params['text'] = $response;
 
     app('telegram')->bot()->sendMessage($params);
 }

@@ -18,36 +18,44 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 class BotController extends Controller
 {
     function index($bot)
     {
-        if ($bot != config(sprintf('telegram.bots.%s.token', config('telegram.default')))) {
+        $telegram = app('telegram');
+        if ($bot != $telegram->getBotConfig(config('telegram.default')['token'])) {
             return '';
         }
 
-        $telegram = app('telegram')->bot();
-
-        $updates = $telegram->commandsHandler(app()->environment() == 'production');
+        $bot = $telegram->bot();
+        $updates = $bot->commandsHandler(app()->environment() == 'production');
         return $updates;
     }
 
-    function updateWebhook($action, $bot)
+    function updateWebhook(Request $request, $action, $bot)
     {
-        if ($bot != config(sprintf('telegram.bots.%s.token', config('telegram.default')))) {
+        $telegram = app('telegram');
+        if ($bot != $telegram->getBotConfig(config('telegram.default')['token'])) {
             return '';
+        }
+
+        $ownerId = $telegram->getBotConfig(config('telegram.default')['owner_id']);
+        if ($ownerId) {
+            sendMessage(sprintf('The IP %s just accessed %s', $request->getClientIp(), $request->getUri()), $ownerId);
         }
 
         if (app()->environment() != 'production') {
             return 'You must set APP_ENV to production before you can use webhooks.';
         }
 
-        $telegram = app('telegram')->bot();
+        $bot = $telegram->bot();
 
         if ($action == 'set') {
-            return $telegram->setWebhook(['url' => url($bot)]);
+            return $bot->setWebhook(['url' => url($bot)]);
         } elseif ($action == 'remove') {
-            return $telegram->removeWebhook();
+            return $bot->removeWebhook();
         }
         return '';
     }

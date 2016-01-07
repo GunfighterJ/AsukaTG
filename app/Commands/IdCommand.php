@@ -18,19 +18,14 @@
 
 namespace App\Commands;
 
-use Telegram\Bot\Commands\Command;
-
-class BaseCommand extends Command
+class IdCommand extends BaseCommand
 {
-    /**
-     * {@inheritdoc}
-     */
+    protected $description = 'Shows your user ID.';
+
+    protected $name = 'id';
+
     public function handle($arguments)
     {
-        parent::handle($arguments);
-    }
-
-    protected function reply($response, $params = []) {
-        sendMessage($response, $this->getUpdate()->getMessage()->getChat()->getId(), $this->getUpdate()->getMessage()->getMessageId(), $params);
+        $this->reply(sprintf('Your Telegram user ID is %s', $this->getUpdate()->getMessage()->getFrom()->getId()));
     }
 }
