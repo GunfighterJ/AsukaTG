@@ -115,6 +115,7 @@ return [
     'commands' => [
         Commands\BotsCommand::class,
         Commands\CoinCommand::class,
+        Commands\DecideCommand::class,
         Commands\EchoCommand::class,
         Commands\GoogleCommand::class,
         Commands\ImdbCommand::class,
