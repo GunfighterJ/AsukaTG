@@ -50,7 +50,7 @@ class ImdbCommand extends BaseCommand
             return;
         }
 
-        if ($searchResults['Error']) {
+        if (array_key_exists($searchResults, 'Error')) {
             $this->reply($searchResults['Error']);
 
             return;
