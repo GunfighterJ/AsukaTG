@@ -20,11 +20,11 @@ $app->get('/', function () {
     return 'I think you\'re in the wrong place.';
 });
 
-$app->get('/{bot}',
+$app->get('/{botKey}',
     ['as' => 'bans', 'uses' => 'BotController@index']);
 
-$app->post('/{bot}',
+$app->post('/{botKey}',
     ['as' => 'bans', 'uses' => 'BotController@index']);
 
-$app->get('/{bot}/webhook/{action}',
+$app->get('/{botKey}/webhook/{action}',
     ['as' => 'bans', 'uses' => 'BotController@updateWebhook']);

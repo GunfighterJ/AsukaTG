@@ -22,10 +22,10 @@ use Illuminate\Http\Request;
 
 class BotController extends Controller
 {
-    function index($bot)
+    function index($botKey)
     {
         $telegram = app('telegram');
-        if ($bot != $telegram->getBotConfig(config('telegram.default'))['token']) {
+        if ($botKey != $telegram->getBotConfig(config('telegram.default'))['token']) {
             return '';
         }
 
@@ -34,10 +34,10 @@ class BotController extends Controller
         return $updates;
     }
 
-    function updateWebhook(Request $request, $action, $bot)
+    function updateWebhook(Request $request, $action, $botKey)
     {
         $telegram = app('telegram');
-        if ($bot != $telegram->getBotConfig(config('telegram.default'))['token']) {
+        if ($botKey != $telegram->getBotConfig(config('telegram.default'))['token']) {
             return '';
         }
 
