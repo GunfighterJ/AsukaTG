@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace Asuka\Http\Middleware;
 
 use Closure;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

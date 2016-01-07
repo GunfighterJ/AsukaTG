@@ -16,8 +16,9 @@
  * along with AsukaTG.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Commands;
+namespace Asuka\Commands;
 
+use Asuka\Http\Helpers;
 use Telegram\Bot\Commands\Command;
 
 class BaseCommand extends Command
@@ -33,6 +34,6 @@ class BaseCommand extends Command
     protected function reply($response, $params = [])
     {
         $params['reply_to_message_id'] = $this->update->getMessage()->getMessageId();
-        sendMessage($response, $this->getUpdate()->getMessage()->getChat()->getId(), $params);
+        Helpers::sendMessage($response, $this->getUpdate()->getMessage()->getChat()->getId(), $params);
     }
 }

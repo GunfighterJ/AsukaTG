@@ -36,12 +36,12 @@ $app = new Laravel\Lumen\Application(
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
-    App\Exceptions\Handler::class
+    Asuka\Exceptions\Handler::class
 );
 
 $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
-    App\Console\Kernel::class
+    Asuka\Console\Kernel::class
 );
 
 /*
@@ -64,7 +64,7 @@ $app->singleton(
 // ]);
 
 $app->routeMiddleware([
-    'bot' => 'App\Http\Middleware\BotMiddleware',
+    'bot' => 'Asuka\Http\Middleware\BotMiddleware',
 ]);
 
 /*
@@ -93,7 +93,7 @@ $app->register(Telegram\Bot\Laravel\TelegramServiceProvider::class);
 |
 */
 
-$app->group(['namespace' => 'App\Http\Controllers'], function ($app) {
+$app->group(['namespace' => 'Asuka\Http\Controllers'], function ($app) {
     require __DIR__.'/../app/Http/routes.php';
 });
 

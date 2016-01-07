@@ -16,7 +16,7 @@
  * along with AsukaTG.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Commands;
+namespace Asuka\Commands;
 
 class QuoteCommand extends BaseCommand
 {

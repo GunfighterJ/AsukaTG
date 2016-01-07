@@ -1,6 +1,6 @@
 <?php
 
-use App\Commands;
+use Asuka\Commands;
 
 return [
     /*

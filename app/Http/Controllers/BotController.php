@@ -16,7 +16,7 @@
  * along with AsukaTG.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Http\Controllers;
+namespace Asuka\Http\Controllers;
 
 use Illuminate\Http\Request;
 

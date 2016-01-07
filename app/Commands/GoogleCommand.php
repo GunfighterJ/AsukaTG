@@ -16,8 +16,9 @@
  * along with AsukaTG.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace App\Commands;
+namespace Asuka\Commands;
 
+use Asuka\Http\Helpers;
 use Telegram\Bot\Actions;
 
 class GoogleCommand extends BaseCommand
@@ -41,7 +42,7 @@ class GoogleCommand extends BaseCommand
 
         $query = trim(urlencode($arguments));
         $url = sprintf('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=%s', $query);
-        $body = curl_get_contents($url);
+        $body = Helpers::curl_get_contents($url);
         $json = json_decode($body);
         $response = $json->responseData->results[0]->unescapedUrl;
 

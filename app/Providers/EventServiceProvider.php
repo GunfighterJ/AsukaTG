@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Asuka\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -12,8 +12,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\SomeEvent' => [
-            'App\Listeners\EventListener',
+        'Asuka\Events\SomeEvent' => [
+            'Asuka\Listeners\EventListener',
         ],
     ];
 }
