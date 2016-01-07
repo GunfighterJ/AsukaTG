@@ -53,7 +53,7 @@ class BotController extends Controller
         $bot = $telegram->bot();
 
         if ($action == 'set') {
-            return $bot->setWebhook(['url' => url($bot)]);
+            return $bot->setWebhook(['url' => url($botKey)]);
         } elseif ($action == 'remove') {
             return $bot->removeWebhook();
         }
