@@ -28,6 +28,12 @@ class QuoteCommand extends BaseCommand
 
     public function handle($arguments)
     {
+        if ($this->getUpdate()->getMessage()->getChat()->getType() != 'group') {
+            $this->reply('You can only use this command in a group.');
+
+            return;
+        }
+
         $db = $this->getDatabase();
         $this->createOrUpdateUser($this->getUpdate()->getMessage()->getFrom());
 
@@ -35,12 +41,6 @@ class QuoteCommand extends BaseCommand
         $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();
         $groupId = $this->getUpdate()->getMessage()->getChat()->getId();
         if ($quoteSource) {
-            if ($this->getUpdate()->getMessage()->getChat()->getType() != 'group') {
-                $this->reply('You can only add quotes in a group.');
-
-                return;
-            }
-
             $this->createOrUpdateGroup($this->getUpdate()->getMessage()->getChat());
 
             if ($this->getTelegram()->getMe()->getId() == $quoteSource->getFrom()->getId()) {
