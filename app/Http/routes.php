@@ -16,6 +16,10 @@
  * along with AsukaTG.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+$app->get('/', function () {
+    return 'I think you\'re in the wrong place.';
+});
+
 $app->get('/{bot}',
     ['as' => 'bans', 'uses' => 'BotController@index']);
 

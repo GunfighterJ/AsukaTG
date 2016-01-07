@@ -49,5 +49,6 @@ class BotController extends Controller
         } elseif ($action == 'remove') {
             return $telegram->removeWebhook();
         }
+        return redirect();
     }
 }
