@@ -23,7 +23,7 @@ class BotController extends Controller
     function index($bot)
     {
         if ($bot != config(sprintf('telegram.bots.%s.token', config('telegram.default')))) {
-            return redirect();
+            return '';
         }
 
         $telegram = app('telegram')->bot();
@@ -35,7 +35,7 @@ class BotController extends Controller
     function updateWebhook($action, $bot)
     {
         if ($bot != config(sprintf('telegram.bots.%s.token', config('telegram.default')))) {
-            return redirect();
+            return '';
         }
 
         if (app()->environment() != 'production') {
@@ -49,6 +49,6 @@ class BotController extends Controller
         } elseif ($action == 'remove') {
             return $telegram->removeWebhook();
         }
-        return redirect();
+        return '';
     }
 }
