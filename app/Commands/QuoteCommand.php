@@ -18,6 +18,9 @@
 
 namespace Asuka\Commands;
 
+use Asuka\Http\AsukaDB;
+use Asuka\Http\Helpers;
+
 class QuoteCommand extends BaseCommand
 {
     protected $description = 'Returns a random quote or adds a new quote if a message is supplied as a reply.';
@@ -25,6 +28,77 @@ class QuoteCommand extends BaseCommand
 
     public function handle($arguments)
     {
-        $this->reply('Not implemented yet, busy switching to Lumen\'s database system.');
+        if ($this->getUpdate()->getMessage()->getChat()->getType() != 'group') {
+            $this->reply('You can only use this command in a group.');
+
+            return;
+        }
+
+        // Detect a reply and add it as a quote
+        $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();
+        if ($quoteSource) {
+            if ($this->getTelegram()->getMe()->getId() == $quoteSource->getFrom()->getId()) {
+                $this->reply('You cannot quote me >:)');
+
+                return;
+            }
+
+            $messageType = $this->getTelegram()->detectMessageType($quoteSource);
+            if ($messageType != 'text') {
+                $this->reply(sprintf('I cannot quote %s messages, please send me a text message.', $messageType));
+
+                return;
+            }
+
+            $result = AsukaDB::createQuote($quoteSource);
+            if ($result) {
+                $this->reply(sprintf('Quote saved as #%s', $result), [
+                    'reply_to_message_id' => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId(),
+                ]);
+            } else {
+                $this->reply('Something went wrong...');
+            }
+
+            return;
+        }
+
+        $quote = null;
+        if ($arguments) {
+            $arguments = explode(' ', $arguments);
+            $quoteId = intval(preg_replace('/[^0-9]/', '', $arguments[0]));
+
+            if (!$quoteId) {
+                $this->reply('Please supply a numeric quote ID.');
+
+                return;
+            }
+
+            $quote = AsukaDB::getQuote($quoteId);
+        } else {
+            // Random quote
+            $quote = AsukaDB::getQuote();
+        }
+
+        if ($quote) {
+            $response = sprintf('%s' . PHP_EOL, Helpers::escapeMarkdown($quote->content));
+            $user = AsukaDB::getUser($quote->user_id);
+
+            $citation = $user->first_name;
+            if ($user->last_name) {
+                $citation .= sprintf(' %s', $user->last_name);
+            }
+
+            if ($user->username) {
+                $citation .= sprintf(' (%s)', $user->username);
+            }
+
+            $response .= sprintf('-- %s, %s (#%s)', Helpers::escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
+
+            $this->reply($response, [
+                'disable_web_page_preview' => true,
+            ]);
+        } else {
+            $this->reply('No quote found!');
+        }
     }
 }

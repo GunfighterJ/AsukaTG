@@ -120,11 +120,21 @@ class AsukaDB
         }
     }
 
-    public static function getQuote(int $id)
+    public static function getQuote($id = null)
     {
         $db = app('db')->connection();
 
+        if (!$id) {
+            return $db->table('quotes')->where('id', $id)->limit(1)->orderByRaw('RANDOM()')->get();
+        }
         return $db->table('quotes')->where('id', $id)->limit(1)->get();
+    }
+
+
+    public static function getUser($id)
+    {
+        $db = app('db')->connection();
+        return $db->table('user')->where('id', $id)->limit(1)->get();
     }
 
     public static function createOrUpdateGroup(Chat $group)
