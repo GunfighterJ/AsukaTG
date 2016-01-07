@@ -55,8 +55,6 @@ class QuoteCommand extends BaseCommand
                 $this->reply(sprintf('Quote saved as #%s', $result), [
                     'reply_to_message_id' => $this->getUpdate()->getMessage()->getReplyToMessage()->getMessageId(),
                 ]);
-            } else {
-                $this->reply('Something went wrong...');
             }
 
             return;
