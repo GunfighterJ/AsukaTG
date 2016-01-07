@@ -43,7 +43,7 @@ class Helpers {
 
         if (curl_errno($ch)) {
             $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
-            Helpers::sendMessage(curl_error($ch), $message->getChat()->getId(), $message->getMessageId());
+            self::sendMessage(curl_error($ch), $message->getChat()->getId(), $message->getMessageId());
             if ($dieOnError) {
                 curl_close($ch);
                 app()->abort(200);
