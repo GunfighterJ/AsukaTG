@@ -98,16 +98,16 @@ class AsukaDB
     public static function createQuote(Message $message)
     {
         $db = app('db')->connection();
-        $groupId = $message->getChat()->getId();
+        $quoteSource = $message->getReplyToMessage();
         $messageId = $message->getReplyToMessage()->getMessageId();
 
         $values = [
             'added_by_id'       => $message->getFrom()->getId(),
-            'user_id'           => $message->getReplyToMessage()->getFrom()->getId(),
-            'group_id'          => $groupId,
+            'user_id'           => $quoteSource->getFrom()->getId(),
+            'group_id'          => $quoteSource->getChat()->getId(),
             'message_id'        => $messageId,
-            'message_timestamp' => $message->getDate(),
-            'content'           => $message->getText(),
+            'message_timestamp' => $quoteSource->getDate(),
+            'content'           => $quoteSource->getText()
         ];
 
         $quoteId = $db->table('quotes')->insertGetId($values);
