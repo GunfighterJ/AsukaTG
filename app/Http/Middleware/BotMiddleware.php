@@ -20,13 +20,15 @@ class BotMiddleware
             $botKey = $request->route()[2]['botKey'];
         }
 
+        $invalidResponse = response('Page Not Found', 404);
+
         if (!$botKey) {
-            return redirect();
+            return $invalidResponse;
         }
 
         $telegram = app('telegram');
         if ($botKey != $telegram->getBotConfig(config('telegram.default'))['token']) {
-            return redirect();
+            return $invalidResponse;
         }
         return $next($request);
     }
