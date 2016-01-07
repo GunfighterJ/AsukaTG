@@ -7,7 +7,7 @@ class BotController extends Controller
     function index($bot)
     {
         if ($bot != config(sprintf('telegram.bots.%s.token', config('telegram.default')))) {
-            return response($bot, 404);
+            return response('No such bot.', 404);
         }
 
         $telegram = app('telegram')->bot();
