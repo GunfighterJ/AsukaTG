@@ -87,7 +87,7 @@ class AsukaDB
             'username'   => $user->getUsername() ? $user->getUsername() : null,
         ];
 
-        if (!count($db->table('users')->where('id', $user->getId())->limit(1)->get(['id']))) {
+        if (!$db->table('users')->where('id', $user->getId())->limit(1)->value('id')) {
             $db->table('users')->insert($values);
         } else {
             unset($values['id']);
@@ -145,7 +145,7 @@ class AsukaDB
             'title' => $group->getTitle(),
         ];
 
-        if (!count($db->table('groups')->where('id', $group->getId())->limit(1)->get(['id']))) {
+        if (!$db->table('groups')->where('id', $group->getId())->limit(1)->value('id')) {
             $db->table('groups')->insert($values);
         } else {
             unset($values['id']);
