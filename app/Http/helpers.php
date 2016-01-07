@@ -90,7 +90,8 @@ class AsukaDB
         if (!$db->table('users')->where('id', $user->getId())->limit(1)->get(['id'])) {
             $db->table('users')->insert($values);
         } else {
-            $db->table('users')->update($values);
+            unset($values['id']);
+            $db->table('users')->where('id', $user->getId())->update($values);
         }
     }
 
