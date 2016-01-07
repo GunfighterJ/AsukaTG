@@ -18,6 +18,7 @@
 
 namespace Asuka\Http\Controllers;
 
+use Asuka\Http\Helpers;
 use Illuminate\Http\Request;
 
 class BotController extends Controller
@@ -35,7 +36,7 @@ class BotController extends Controller
 
         $ownerId = $telegram->getBotConfig(config('telegram.default'))['owner_id'];
         if ($ownerId) {
-            sendMessage(sprintf('The IP %s just accessed %s', $request->getClientIp(), $request->url()), $ownerId);
+            Helpers::sendMessage(sprintf('The IP %s just accessed %s', $request->getClientIp(), $request->url()), $ownerId);
         }
 
         $bot = $telegram->bot();
