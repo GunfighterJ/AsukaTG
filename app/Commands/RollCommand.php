@@ -21,13 +21,10 @@ namespace App\Commands;
 class RollCommand extends BaseCommand
 {
     const DICE_MAX_AMOUNT = 128;
-
     const DIE_MAX_FACES = 120;
-
     const DIE_MIN_FACES = 4;
 
     protected $description = 'Rolls some dice.';
-
     protected $name = 'roll';
 
     public function handle($arguments)

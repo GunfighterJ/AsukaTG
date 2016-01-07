@@ -23,7 +23,6 @@ use Uptime\System;
 class UptimeCommand extends BaseCommand
 {
     protected $description = 'Displays the current system uptime.';
-
     protected $name = 'uptime';
 
     public function handle($arguments)

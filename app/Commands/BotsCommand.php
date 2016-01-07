@@ -21,7 +21,6 @@ namespace App\Commands;
 class BotsCommand extends BaseCommand
 {
     protected $description = 'Report in!';
-
     protected $name = 'bots';
 
     public function handle($arguments)

@@ -52,12 +52,8 @@ function curl_get_contents($url, $dieOnError = true)
     return $output;
 }
 
-function sendMessage($response, $chatId, $replyTo = null, $params = [])
+function sendMessage($response, $chatId, $params = [])
 {
-    if ($replyTo) {
-        $params['reply_to_message_id'] = $replyTo;
-    }
-
     $params['chat_id'] = $chatId;
     $params['text'] = $response;
 

@@ -21,7 +21,6 @@ namespace App\Commands;
 class HelpCommand extends BaseCommand
 {
     protected $description = 'Displays a list of bot commands.';
-
     protected $name = '?';
 
     public function handle($arguments)
@@ -40,7 +39,6 @@ class HelpCommand extends BaseCommand
 class StartCommand extends BaseCommand
 {
     protected $description = 'Displays a list of bot commands.';
-
     protected $name = 'start';
 
     public function handle($arguments)

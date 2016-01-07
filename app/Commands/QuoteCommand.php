@@ -21,7 +21,6 @@ namespace App\Commands;
 class QuoteCommand extends BaseCommand
 {
     protected $description = 'Returns a random quote or adds a new quote if a message is supplied as a reply.';
-
     protected $name = 'q';
 
     public function handle($arguments)

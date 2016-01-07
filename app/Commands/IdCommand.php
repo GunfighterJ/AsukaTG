@@ -21,7 +21,6 @@ namespace App\Commands;
 class IdCommand extends BaseCommand
 {
     protected $description = 'Shows your user ID.';
-
     protected $name = 'id';
 
     public function handle($arguments)

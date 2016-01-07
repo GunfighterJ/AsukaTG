@@ -30,7 +30,8 @@ class BaseCommand extends Command
         parent::handle($arguments);
     }
 
-    protected function reply($response, $params = []) {
-        sendMessage($response, $this->getUpdate()->getMessage()->getChat()->getId(), $this->getUpdate()->getMessage()->getMessageId(), $params);
+    protected function reply($response, $params = ['reply_to_message_id' => $this->getUpdate()->getMessage()->getMessageId()])
+    {
+        sendMessage($response, $this->getUpdate()->getMessage()->getChat()->getId(), $params);
     }
 }

@@ -23,7 +23,6 @@ use Telegram\Bot\Actions;
 class ImdbCommand extends BaseCommand
 {
     protected $description = 'Returns the first IMDb result for a set of search terms.';
-
     protected $name = 'imdb';
 
     public function handle($arguments)

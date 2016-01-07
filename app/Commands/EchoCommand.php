@@ -21,7 +21,6 @@ namespace App\Commands;
 class EchoCommand extends BaseCommand
 {
     protected $description = 'Returns whatever input you send.';
-
     protected $name = 'echo';
 
     public function handle($arguments)

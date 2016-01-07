@@ -20,13 +20,12 @@ namespace App\Commands;
 
 class DecideCommand extends BaseCommand
 {
+    protected $description = 'Decides between a set of choices.';
+    protected $name = 'decide';
+
     protected $choiceDelimiters = [
         ' or ', '|', ',', '/', '\\',
     ];
-
-    protected $description = 'Decides between a set of choices.';
-
-    protected $name = 'decide';
 
     protected $singleChoiceResults = [
         'No.', 'Probably not.', 'Maybe.',

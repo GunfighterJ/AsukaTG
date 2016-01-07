@@ -23,7 +23,6 @@ use Telegram\Bot\Actions;
 class GoogleCommand extends BaseCommand
 {
     protected $description = 'Returns the first Google result for a set of search terms.';
-
     protected $name = 'g';
 
     public function handle($arguments)

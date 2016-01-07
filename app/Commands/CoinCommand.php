@@ -21,7 +21,6 @@ namespace App\Commands;
 class CoinCommand extends BaseCommand
 {
     protected $description = 'Flip a coin.';
-
     protected $name = 'coin';
 
     public function handle($arguments)
