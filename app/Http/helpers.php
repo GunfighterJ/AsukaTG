@@ -18,9 +18,10 @@
 
 /**
  * @param $url
+ * @param bool $dieOnError
  * @return mixed
  */
-function curl_get_contents($url)
+function curl_get_contents($url, $dieOnError = true)
 {
     $curlOpts = [
         CURLOPT_URL            => $url,
@@ -40,7 +41,9 @@ function curl_get_contents($url)
     if (curl_errno($ch)) {
         $update = app('telegram')->bot()->getWebhookUpdates();
         sendMessage(curl_error($ch), $update->getMessage()->getChat()->getId(), $update->getMessage()->getMessageId());
-        app()->abort(200);
+        if ($dieOnError) {
+            app()->abort(200);
+        }
     }
 
     curl_close($ch);
