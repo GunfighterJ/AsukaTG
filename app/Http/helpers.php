@@ -30,17 +30,17 @@ function curl_get_contents($url)
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_USERAGENT      => 'AsukaTG (https://github.com/TheReverend403/AsukaTG)',
         CURLOPT_MAXREDIRS      => 5,
+        CURLOPT_FAILONERROR    => true,
     ];
 
     $ch = curl_init();
     curl_setopt_array($ch, $curlOpts);
     $output = curl_exec($ch);
 
-    if (!$output) {
+    if (curl_errno($ch)) {
         $update = app('telegram')->bot()->getWebhookUpdates();
         sendMessage(curl_error($ch), $update->getMessage()->getChat()->getId(), $update->getMessage()->getMessageId());
         app()->abort(200);
-        return null;
     }
 
     curl_close($ch);
