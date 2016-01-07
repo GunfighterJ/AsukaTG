@@ -169,7 +169,7 @@ class BaseCommand extends Command
      */
     protected function getGroupById($groupId)
     {
-        $getUserStmnt = $this->getDatabase()->from('groups')->where('user_id', $groupId)->limit(1);
+        $getUserStmnt = $this->getDatabase()->from('groups')->where('group_id', $groupId)->limit(1);
         if (!$getUserStmnt->execute()) {
             $this->reply($this->getDatabase()->getPdo()->errorInfo()[2]);
             die();
