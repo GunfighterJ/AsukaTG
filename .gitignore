@@ -1,6 +1,2 @@
-composer.phar
-vendor/
-
-config.ini
-data/*.db
-phinx.yml
+/vendor
+.env
