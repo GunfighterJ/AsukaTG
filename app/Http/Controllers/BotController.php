@@ -25,7 +25,7 @@ class BotController extends Controller
     function index($bot)
     {
         $telegram = app('telegram');
-        if ($bot != $telegram->getBotConfig(config('telegram.default')['token'])) {
+        if ($bot != $telegram->getBotConfig(config('telegram.default'))['token']) {
             return '';
         }
 
@@ -37,7 +37,7 @@ class BotController extends Controller
     function updateWebhook(Request $request, $action, $bot)
     {
         $telegram = app('telegram');
-        if ($bot != $telegram->getBotConfig(config('telegram.default')['token'])) {
+        if ($bot != $telegram->getBotConfig(config('telegram.default'))['token']) {
             return '';
         }
 
