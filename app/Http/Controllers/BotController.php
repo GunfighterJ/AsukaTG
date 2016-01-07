@@ -18,6 +18,7 @@
 
 namespace Asuka\Http\Controllers;
 
+use Asuka\Http\AsukaDB;
 use Asuka\Http\Helpers;
 use Illuminate\Http\Request;
 
@@ -26,7 +27,14 @@ class BotController extends Controller
     function index(Request $request)
     {
         $telegram = app('telegram')->bot();
-        $updates = $telegram->commandsHandler($request->getMethod() == Request::METHOD_POST);
+        $updates = $telegram->getWebhookUpdates();
+
+        AsukaDB::createOrUpdateUser($updates->getMessage()->getFrom());
+        if ($updates->getMessage()->getChat()->getType() == 'group') {
+            AsukaDB::createOrUpdateGroup($updates->getMessage()->getChat());
+        }
+
+        $telegram->commandsHandler($request->getMethod() == Request::METHOD_POST);
         return $updates;
     }
 

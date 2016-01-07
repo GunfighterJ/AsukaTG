@@ -18,7 +18,12 @@
 
 namespace Asuka\Http;
 
-class Helpers {
+use Telegram\Bot\Objects\Chat;
+use Telegram\Bot\Objects\Message;
+use Telegram\Bot\Objects\User;
+
+class Helpers
+{
     /**
      * @param $url
      * @param bool $dieOnError
@@ -67,5 +72,67 @@ class Helpers {
     {
         return $string;
         //return preg_replace('/([*_])/i', '\\\\$1', $string);
+    }
+}
+
+class AsukaDB
+{
+    public static function createOrUpdateUser(User $user)
+    {
+        $db = app('db')->connection();
+        $values = [
+            'id'         => $user->getId(),
+            'first_name' => $user->getFirstName(),
+            'last_name'  => $user->getLastName() ? $user->getLastName() : null,
+            'username'   => $user->getUsername() ? $user->getUsername() : null,
+        ];
+
+        if (!$db->table('users')->where('id', $user->getId())->limit(1)->get('id')) {
+            $db->table('users')->insert($values);
+        } else {
+            $db->table('users')->update($values);
+        }
+    }
+
+    public static function createQuote(Message $message)
+    {
+        $db = app('db')->connection();
+        $groupId = $message->getChat()->getId();
+        $messageId = $message->getReplyToMessage()->getMessageId();
+
+        $values = [
+            'user_id'           => $message->getFrom()->getId(),
+            'group_id'          => $groupId,
+            'message_id'        => $messageId,
+            'message_timestamp' => $message->getDate(),
+            'content'           => $message->getText(),
+        ];
+
+        $quoteId = $db->table('quotes')->insertGetId($values);
+        if ($quoteId) {
+            return $quoteId;
+        } else {
+            Helpers::sendMessage('I already have that quote.', $messageId, ['reply_to_message_id' => $messageId]);
+
+            return false;
+        }
+    }
+
+    public static function getQuote(int $id)
+    {
+        $db = app('db')->connection();
+
+        return $db->table('quotes')->where('id', $id)->limit(1)->get();
+    }
+
+    public static function createOrUpdateGroup(Chat $group)
+    {
+        $db = app('db')->connection();
+        $values = [
+            'id'    => $group->getId(),
+            'title' => $group->getTitle(),
+        ];
+
+        $db->table('groups')->insert($values);
     }
 }
