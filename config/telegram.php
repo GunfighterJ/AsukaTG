@@ -114,6 +114,7 @@ return [
     */
     'commands' => [
         Commands\EchoCommand::class,
+        Commands\CoinCommand::class,
     ],
 
     /*

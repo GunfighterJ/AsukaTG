@@ -16,11 +16,16 @@
  * along with AsukaTG.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$app->get('/{bot}',
-    ['as' => 'bans', 'uses' => 'BotController@index']);
+namespace App\Commands;
 
-$app->post('/{bot}',
-    ['as' => 'bans', 'uses' => 'BotController@index']);
+class CoinCommand extends BaseCommand
+{
+    protected $description = 'Flip a coin.';
 
-$app->get('/{bot}/webhook/{action}',
-    ['as' => 'bans', 'uses' => 'BotController@updateWebhook']);
+    protected $name = 'coin';
+
+    public function handle($arguments)
+    {
+        $this->reply(mt_rand(0, 1) ? 'Heads' : 'Tails');
+    }
+}
