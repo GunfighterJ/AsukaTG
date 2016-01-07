@@ -100,6 +100,7 @@ class AsukaDB
         $db = app('db')->connection();
         $quoteSource = $message->getReplyToMessage();
         $messageId = $message->getReplyToMessage()->getMessageId();
+        self::createOrUpdateUser($quoteSource->getFrom());
 
         $values = [
             'added_by_id'       => $message->getFrom()->getId(),
