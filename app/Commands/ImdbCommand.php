@@ -40,7 +40,7 @@ class ImdbCommand extends BaseCommand
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        $query = trim(urlencode($arguments));
+        $query = trim(rawurlencode($arguments));
         $searchJson = Helpers::curl_get_contents(sprintf('http://www.omdbapi.com/?s=%s&r=json&type=movie', $query));
         $searchResults = json_decode($searchJson, true);
 
