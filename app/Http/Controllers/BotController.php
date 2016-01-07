@@ -41,7 +41,7 @@ class BotController extends Controller
             return '';
         }
 
-        $ownerId = $telegram->getBotConfig(config('telegram.default')['owner_id']);
+        $ownerId = $telegram->getBotConfig(config('telegram.default'))['owner_id'];
         if ($ownerId) {
             sendMessage(sprintf('The IP %s just accessed %s', $request->getClientIp(), $request->getUri()), $ownerId);
         }
