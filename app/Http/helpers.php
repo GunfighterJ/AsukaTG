@@ -125,7 +125,7 @@ class AsukaDB
         $db = app('db')->connection();
 
         if (!$id) {
-            return $db->table('quotes')->where('id', $id)->limit(1)->orderByRaw('RANDOM()')->get();
+            return $db->table('quotes')->where('id', $id)->limit(1)->orderByRaw('RAND()')->get();
         }
         return $db->table('quotes')->where('id', $id)->limit(1)->get();
     }
