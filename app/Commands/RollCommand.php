@@ -66,6 +66,11 @@ class RollCommand extends BaseCommand
             return;
         }
 
+        if ($diceCount == 1) {
+            $this->reply(mt_rand(1, $diceType));
+            return;
+        }
+
         // Create an array of $diceCount $diceType-sided dice.
         $diceArray = [];
         while (count($diceArray) < $diceCount) {
