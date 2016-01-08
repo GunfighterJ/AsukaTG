@@ -34,7 +34,7 @@ class BotController extends Controller
         }
 
         if ($updates->getMessage()->getChat()->getType() == 'group') {
-            if ($updates->getMessage()->getGroupChatCreated() || $updates->getMessage()->getNewChatParticipant()->getId() == $telegram->getMe()->getId()) {
+            if ($updates->getMessage()->getGroupChatCreated() || ($updates->getMessage()->getNewChatParticipant() && ($updates->getMessage()->getNewChatParticipant()->getId() == $telegram->getMe()->getId()))) {
                 AsukaDB::createOrUpdateGroup($updates->getMessage()->getChat());
             }
 
