@@ -43,11 +43,11 @@ class ImdbCommand extends BaseCommand
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $query = trim(rawurlencode($arguments));
-        $queryArgs = http_build_query([
+        $queryArgs = [
             't' => $query,
             'type' => 'movie',
             'r' => 'json'
-        ]);
+        ];
 
         $json = Helpers::curlGetContents(sprintf('%s/?%s', self::OMDB_API_ENDPOINT, http_build_query($queryArgs)));
         $results = json_decode($json, true);
