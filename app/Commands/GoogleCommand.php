@@ -44,11 +44,9 @@ class GoogleCommand extends BaseCommand
         $url = sprintf('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=%s', $query);
         $body = Helpers::curl_get_contents($url);
         $json = json_decode($body);
-        $response = $json->responseData->results[0]->unescapedUrl . PHP_EOL;
 
-        if ($json->responseData->cursor->estimatedResultCount > 1) {
-            $response .= sprintf('and %d more results...', $json->responseData->cursor->estimatedResultCount - 1);
-        }
+        $response = sprintf('About %d results (%s seconds)' . PHP_EOL, $json->responseData->cursor->estimatedResultCount, $json->responseData->cursor->searchResultTime);
+        $response .= $json->responseData->results[0]->unescapedUrl;
 
         if (!$response) {
             $this->reply('No results found!');
