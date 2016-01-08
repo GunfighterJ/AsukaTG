@@ -77,6 +77,36 @@ class Helpers
 
 class AsukaDB
 {
+    public static function createQuote(Message $message)
+    {
+        $db = app('db')->connection();
+        $quoteSource = $message->getReplyToMessage();
+        $messageId = $message->getReplyToMessage()->getMessageId();
+        $groupId = $quoteSource->getChat()->getId();
+
+        self::createOrUpdateUser($quoteSource->getFrom());
+
+        $values = [
+            'added_by_id'       => $message->getFrom()->getId(),
+            'user_id'           => $quoteSource->getFrom()->getId(),
+            'group_id'          => $groupId,
+            'message_id'        => $messageId,
+            'message_timestamp' => $quoteSource->getDate(),
+            'content'           => $quoteSource->getText()
+        ];
+
+        $existing = $db->table('quotes')->where('message_id', $messageId)->where('group_id', $groupId)->limit(1)->value('id');
+        if (!$existing) {
+            $quoteId = $db->table('quotes')->insertGetId($values);
+
+            return $quoteId;
+        } else {
+            Helpers::sendMessage(sprintf('I already have that quote saved as #%s.', $existing), $groupId, ['reply_to_message_id' => $message->getMessageId()]);
+
+            return null;
+        }
+    }
+
     public static function createOrUpdateUser(User $user)
     {
         $db = app('db')->connection();
@@ -95,34 +125,6 @@ class AsukaDB
         }
     }
 
-    public static function createQuote(Message $message)
-    {
-        $db = app('db')->connection();
-        $quoteSource = $message->getReplyToMessage();
-        $messageId = $message->getReplyToMessage()->getMessageId();
-        $groupId = $quoteSource->getChat()->getId();
-        self::createOrUpdateUser($quoteSource->getFrom());
-
-        $values = [
-            'added_by_id'       => $message->getFrom()->getId(),
-            'user_id'           => $quoteSource->getFrom()->getId(),
-            'group_id'          => $groupId,
-            'message_id'        => $messageId,
-            'message_timestamp' => $quoteSource->getDate(),
-            'content'           => $quoteSource->getText()
-        ];
-
-        $existing = $db->table('quotes')->where('message_id', $messageId)->where('group_id', $groupId)->limit(1)->value('id');
-        if (!$existing) {
-            $quoteId = $db->table('quotes')->insertGetId($values);
-            return $quoteId;
-        } else {
-            Helpers::sendMessage(sprintf('I already have that quote saved as #%s.', $existing), $groupId, ['reply_to_message_id' => $message->getMessageId()]);
-
-            return null;
-        }
-    }
-
     public static function getQuote($id = null)
     {
         $db = app('db')->connection();
@@ -130,13 +132,14 @@ class AsukaDB
         if (!$id) {
             return $db->table('quotes')->limit(1)->orderByRaw('RAND()')->first();
         }
+
         return $db->table('quotes')->where('id', $id)->limit(1)->first();
     }
-
 
     public static function getUser($id)
     {
         $db = app('db')->connection();
+
         return $db->table('users')->where('id', $id)->limit(1)->first();
     }
 
@@ -155,7 +158,8 @@ class AsukaDB
         }
     }
 
-    public static function updateGroup(Chat $group) {
+    public static function updateGroup(Chat $group)
+    {
         $db = app('db')->connection();
         $values = [
             'title' => $group->getTitle(),
