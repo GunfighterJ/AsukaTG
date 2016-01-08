@@ -46,7 +46,7 @@ class GoogleCommand extends BaseCommand
         $json = json_decode($body);
         $response = $json->responseData->results[0]->unescapedUrl;
 
-        if (is_null($response)) {
+        if (!$response) {
             $this->reply('No results found!');
 
             return;

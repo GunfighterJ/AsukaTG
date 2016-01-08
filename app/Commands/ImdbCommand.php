@@ -44,7 +44,7 @@ class ImdbCommand extends BaseCommand
         $searchJson = Helpers::curl_get_contents(sprintf('http://www.omdbapi.com/?s=%s&r=json&type=movie', $query));
         $searchResults = json_decode($searchJson, true);
 
-        if (is_null($searchResults)) {
+        if (!$searchResults) {
             $this->reply('No results found!');
 
             return;
