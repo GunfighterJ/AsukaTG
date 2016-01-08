@@ -45,7 +45,7 @@ class GoogleCommand extends BaseCommand
         $body = Helpers::curl_get_contents($url);
         $json = json_decode($body);
 
-        $response = sprintf('About %d results (%s seconds)' . PHP_EOL, $json->responseData->cursor->estimatedResultCount, $json->responseData->cursor->searchResultTime);
+        $response = sprintf('About %s results (%s seconds)' . PHP_EOL, $json->responseData->cursor->resultCount, $json->responseData->cursor->searchResultTime);
         $response .= $json->responseData->results[0]->unescapedUrl;
 
         if (!$response) {
