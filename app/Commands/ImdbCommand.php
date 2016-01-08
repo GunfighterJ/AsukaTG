@@ -24,7 +24,6 @@ use Telegram\Bot\Actions;
 class ImdbCommand extends BaseCommand
 {
     const OMDB_API_ENDPOINT = 'https://omdbapi.com';
-
     protected $description = 'Returns the first IMDb result for a set of search terms.';
     protected $name = 'imdb';
 
@@ -42,11 +41,10 @@ class ImdbCommand extends BaseCommand
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        $query = trim($arguments);
         $queryArgs = [
-            't' => $query,
+            't'    => trim($arguments),
             'type' => 'movie',
-            'r' => 'json'
+            'r'    => 'json'
         ];
 
         $json = Helpers::curlGetContents(sprintf('%s/?%s', self::OMDB_API_ENDPOINT, http_build_query($queryArgs)));
