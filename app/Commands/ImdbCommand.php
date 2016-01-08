@@ -74,10 +74,10 @@ class ImdbCommand extends BaseCommand
         $response = implode(PHP_EOL, [
             sprintf('URL: http://www.imdb.com/title/%s', $results['imdbID']),
             sprintf('Title: %s', $results['Title']),
-            sprintf('Year: %s', $results['Year']),
+            sprintf('Year: %d', $results['Year']),
             sprintf('Genre: %s', $results['Genre']),
             sprintf('IMDb Score: %.1f/10', $results['imdbRating']),
-            sprintf('Runtime: %s', $results['Runtime']),
+            sprintf('Runtime: %d', $results['Runtime']),
             sprintf('Rating: %s', $results['Rated']),
             sprintf('Stars: %s', $results['Actors']),
             sprintf('Director: %s', $results['Director']),
