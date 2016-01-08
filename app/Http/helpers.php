@@ -168,19 +168,28 @@ class AsukaDB
     }
 
     /**
-     * Fetches quote data for a quote with an ID matching $id, or a random quote if $id is not specified
+     * Fetches quote data for a quote with an ID matching $id, or a random quote if $id is not specified.
+     * Optionally specify a group ID to only get quotes originating from that group.
      * @param null $id
+     * @param bool|null $global
      * @return mixed|static Returns a quote object on success.
      */
-    public static function getQuote($id = null)
+    public static function getQuote($id = null, $global = true)
     {
         $db = app('db')->connection();
+        $query = $db->table('quotes')->limit(1);
 
         if (!$id) {
-            return $db->table('quotes')->limit(1)->orderByRaw('RAND()')->first();
+            $query = $query->orderByRaw('RAND()');
+        } else {
+            $query = $query->where('id', $id);
         }
 
-        return $db->table('quotes')->where('id', $id)->limit(1)->first();
+        if (!$global) {
+            $query = $query->where('group_id', $global);
+        }
+
+        return $query->first();
     }
 
     /**
