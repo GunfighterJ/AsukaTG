@@ -27,7 +27,13 @@ class UptimeCommand extends BaseCommand
 
     public function handle($arguments)
     {
-        $system = new System();
+        try {
+            $system = new System();
+        } catch (System\UnsupportedSystemException $ex) {
+            $this->reply($ex->getMessage(), ['disable_web_page_preview' => true]);
+            return;
+        }
+
         $uptime = $system->getUptime();
 
         $response = implode(', ', [
