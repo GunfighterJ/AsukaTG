@@ -109,8 +109,6 @@ class QuoteCommand extends BaseCommand
 
         $response .= sprintf('-- %s, %s (#%d)', Helpers::escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
 
-        $this->reply($response, [
-            'disable_web_page_preview' => true,
-        ]);
+        $this->reply($response, ['disable_web_page_preview' => true]);
     }
 }

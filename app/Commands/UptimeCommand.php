@@ -43,6 +43,6 @@ class UptimeCommand extends BaseCommand
             sprintf(ngettext('%d second', '%d seconds', $uptime->s), $uptime->s),
         ]);
 
-        $this->reply($response, ['disable_web_page_preview' => true]);
+        $this->reply($response);
     }
 }
