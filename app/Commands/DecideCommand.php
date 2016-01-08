@@ -61,7 +61,7 @@ class DecideCommand extends BaseCommand
         $singleChoiceResponse = $this->singleChoiceResults[array_rand($this->singleChoiceResults)];
 
         // No delimiters found in string, assume it's a single choice message.
-        if (is_null($choiceDelimiter)) {
+        if (!$choiceDelimiter) {
             $this->reply($singleChoiceResponse);
 
             return;
