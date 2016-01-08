@@ -41,35 +41,46 @@ class ImdbCommand extends BaseCommand
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $query = trim(rawurlencode($arguments));
-        $searchJson = Helpers::curl_get_contents(sprintf('http://www.omdbapi.com/?s=%s&r=json&type=movie', $query));
-        $searchResults = json_decode($searchJson, true);
+        $json = Helpers::curl_get_contents(sprintf('http://www.omdbapi.com/?t=%s&r=json&type=movie', $query));
+        $results = json_decode($json, true);
 
-        if (!$searchResults) {
+        if (!$results) {
             $this->reply('No results found!');
 
             return;
         }
 
-        if (array_key_exists('Error', $searchResults)) {
-            $this->reply($searchResults['Error']);
+        if (array_key_exists('Error', $results)) {
+            $json = Helpers::curl_get_contents(sprintf('http://www.omdbapi.com/?s=%s&r=json&type=movie', $query));
+            $results = json_decode($json, true);
 
-            return;
+            if (!$results) {
+                $this->reply('No results found!');
+
+                return;
+            }
+
+            if (array_key_exists('Error', $results)) {
+                $this->reply($results['Error']);
+
+                return;
+            }
+
+            $json = Helpers::curl_get_contents(sprintf('http://www.omdbapi.com/?i=%s&r=json&type=movie&plot=full', $results['Search'][0]['imdbID']));
+            $results = json_decode($json, true);
         }
 
-        $json = Helpers::curl_get_contents(sprintf('http://www.omdbapi.com/?i=%s&r=json&type=movie&plot=full', $searchResults['Search'][0]['imdbID']));
-        $result = json_decode($json, true);
-
         $response = implode(PHP_EOL, [
-            sprintf('URL: http://www.imdb.com/title/%s', $result['imdbID']),
-            sprintf('Title: %s', $result['Title']),
-            sprintf('Year: %s', $result['Year']),
-            sprintf('Genre: %s', $result['Genre']),
-            sprintf('IMDb Score: %s/10', $result['imdbRating']),
-            sprintf('Runtime: %s', $result['Runtime']),
-            sprintf('Rating: %s', $result['Rated']),
-            sprintf('Stars: %s', $result['Actors']),
-            sprintf('Director: %s', $result['Director']),
-            PHP_EOL . trim($result['Plot']),
+            sprintf('URL: http://www.imdb.com/title/%s', $results['imdbID']),
+            sprintf('Title: %s', $results['Title']),
+            sprintf('Year: %s', $results['Year']),
+            sprintf('Genre: %s', $results['Genre']),
+            sprintf('IMDb Score: %s/10', $results['imdbRating']),
+            sprintf('Runtime: %s', $results['Runtime']),
+            sprintf('Rating: %s', $results['Rated']),
+            sprintf('Stars: %s', $results['Actors']),
+            sprintf('Director: %s', $results['Director']),
+            PHP_EOL . trim($results['Plot']),
         ]);
 
         $this->reply($response, ['disable_web_page_preview' => true]);
