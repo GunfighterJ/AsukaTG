@@ -42,7 +42,7 @@ class ImdbCommand extends BaseCommand
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        $query = trim(rawurlencode($arguments));
+        $query = trim($arguments);
         $queryArgs = [
             't' => $query,
             'type' => 'movie',
