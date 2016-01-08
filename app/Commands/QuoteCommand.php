@@ -83,26 +83,28 @@ class QuoteCommand extends BaseCommand
             $quote = AsukaDB::getQuote();
         }
 
-        if ($quote) {
-            $response = sprintf('%s' . PHP_EOL, Helpers::escapeMarkdown($quote->content));
-            $user = AsukaDB::getUser($quote->user_id);
-
-            $citation = $user->first_name;
-            if ($user->last_name) {
-                $citation .= sprintf(' %s', $user->last_name);
-            }
-
-            if ($user->username) {
-                $citation .= sprintf(' (%s)', $user->username);
-            }
-
-            $response .= sprintf('-- %s, %s (#%s)', Helpers::escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
-
-            $this->reply($response, [
-                'disable_web_page_preview' => true,
-            ]);
-        } else {
+        if (!$quote) {
             $this->reply('No quote found!');
+
+            return;
         }
+
+        $response = sprintf('%s' . PHP_EOL, Helpers::escapeMarkdown($quote->content));
+        $user = AsukaDB::getUser($quote->user_id);
+
+        $citation = $user->first_name;
+        if ($user->last_name) {
+            $citation .= sprintf(' %s', $user->last_name);
+        }
+
+        if ($user->username) {
+            $citation .= sprintf(' (%s)', $user->username);
+        }
+
+        $response .= sprintf('-- %s, %s (#%s)', Helpers::escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
+
+        $this->reply($response, [
+            'disable_web_page_preview' => true,
+        ]);
     }
 }
