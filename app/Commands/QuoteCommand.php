@@ -38,7 +38,7 @@ class QuoteCommand extends BaseCommand
         // Detect a reply and add it as a quote
         $quoteSource = $message->getReplyToMessage();
         if ($quoteSource) {
-            if ($this->getTelegram()->getMe()->getId() == $quoteSource->getFrom()->getId()) {
+            if (Helpers::userIsMe($quoteSource->getFrom())) {
                 $this->reply('You cannot quote me >:)');
 
                 return;
@@ -50,7 +50,7 @@ class QuoteCommand extends BaseCommand
                 return;
             }
 
-            if ($message->getFrom()->getId() == $quoteSource->getFrom()->getId()) {
+            if (Helpers::usersAreSame($message->getFrom(), $quoteSource->getFrom())) {
                 $this->reply('Why would you quote yourself? What are you, some kind of loner?');
 
                 return;

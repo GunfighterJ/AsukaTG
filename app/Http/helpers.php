@@ -25,8 +25,30 @@ use Telegram\Bot\Objects\User;
 class Helpers
 {
     /**
+     * Checks to see if a given user is actually the bot.
+     * @param User $user The user we're comparing.
+     * @return bool
+     */
+    public static function userIsMe(User $user)
+    {
+        return $user->getId() == app('telegram')->bot()->getMe()->getId();
+    }
+
+    /**
+     * Checks to see if two users are actually the same user.
+     * @param User $user1
+     * @param User $user2
+     * @return bool
+     */
+    public static function usersAreSame(User $user1, User $user2)
+    {
+        return $user1->getId() == $user2->getId();
+    }
+
+    /**
+     * Similar to file_get_contents() but only works on URLs and uses cURL.
      * @param $url
-     * @param bool $dieOnError
+     * @param bool $dieOnError Exit the whole script if curl throws an error.
      * @return mixed
      */
     public static function curl_get_contents($url, $dieOnError = true)
@@ -60,14 +82,25 @@ class Helpers
         return $output;
     }
 
-    public static function sendMessage($response, $chatId, $params = [])
+    /**
+     * Sends a message to a Telegram Chat.
+     * @param $message
+     * @param $chatId
+     * @param array $params Extra Telegram Bot API parameters to send with this message.
+     */
+    public static function sendMessage($message, $chatId, $params = [])
     {
         $params['chat_id'] = $chatId;
-        $params['text'] = $response;
+        $params['text'] = $message;
 
         app('telegram')->bot()->sendMessage($params);
     }
 
+    /**
+     * Escapes Markdown special characters in a string with backslashes.
+     * @param $string
+     * @return mixed
+     */
     public static function escapeMarkdown($string)
     {
         return $string;
@@ -77,6 +110,11 @@ class Helpers
 
 class AsukaDB
 {
+    /**
+     * Creates a new quote from a Message containing another Message as a reply.
+     * @param Message $message The Message to make a quote from. Assumed to contain a valid reply.
+     * @return int|null Qoute ID on success, null on failure.
+     */
     public static function createQuote(Message $message)
     {
         $db = app('db')->connection();
@@ -107,6 +145,10 @@ class AsukaDB
         }
     }
 
+    /**
+     * Adds a new {@User} to the database, or updates an existing one if it already exists.
+     * @param User $user The user to add to the database.
+     */
     public static function createOrUpdateUser(User $user)
     {
         $db = app('db')->connection();
@@ -125,6 +167,11 @@ class AsukaDB
         }
     }
 
+    /**
+     * Fetches quote data for a quote with an ID matching $id, or a random quote if $id is not specified
+     * @param null $id
+     * @return mixed|static Returns a quote object on success.
+     */
     public static function getQuote($id = null)
     {
         $db = app('db')->connection();
@@ -136,6 +183,11 @@ class AsukaDB
         return $db->table('quotes')->where('id', $id)->limit(1)->first();
     }
 
+    /**
+     * Fetches user data for a user with an ID matching $id
+     * @param null $id
+     * @return mixed|static Returns a user object on success.
+     */
     public static function getUser($id)
     {
         $db = app('db')->connection();
@@ -143,6 +195,10 @@ class AsukaDB
         return $db->table('users')->where('id', $id)->limit(1)->first();
     }
 
+    /**
+     * Adds a new group to the database, or updates an existing one if it already exists.
+     * @param Chat $group Group to add to the database.
+     */
     public static function createOrUpdateGroup(Chat $group)
     {
         $db = app('db')->connection();
@@ -158,6 +214,10 @@ class AsukaDB
         }
     }
 
+    /**
+     * Updates an existing group with new data such as group titles.
+     * @param Chat $group Group to update.
+     */
     public static function updateGroup(Chat $group)
     {
         $db = app('db')->connection();
