@@ -33,7 +33,7 @@ class BotController extends Controller
             AsukaDB::createOrUpdateUser($updates->getMessage()->getFrom());
         }
 
-        if ($updates->getMessage()->getChat()->getType() == 'group' && $updates->getMessage()->getNewChatTitle()) {
+        if ($updates->getMessage()->getChat()->getType() == 'group') {
             AsukaDB::createOrUpdateGroup($updates->getMessage()->getChat());
         }
 
