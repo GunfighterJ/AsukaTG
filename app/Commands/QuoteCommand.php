@@ -66,7 +66,6 @@ class QuoteCommand extends BaseCommand
             return;
         }
 
-        $quote = null;
         if ($arguments) {
             $arguments = explode(' ', $arguments);
             $quoteId = intval(preg_replace('/[^0-9]/', '', $arguments[0]));
