@@ -111,14 +111,18 @@ class AsukaDB
             'content'           => $quoteSource->getText()
         ];
 
-        $quoteId = $db->table('quotes')->insertGetId($values);
-        if ($quoteId) {
-            return $quoteId;
-        } else {
-            Helpers::sendMessage('I already have that quote.', $messageId, ['reply_to_message_id' => $messageId]);
+        $existing = $db->table('quotes')->where('message_id', $messageId)->where('group_id', $quoteSource->getChat()->getId())->limit(1)->value('id');
+        if (!$db->table('quotes')->where('message_id', $messageId)->limit(1)->value('id')) {
+            $quoteId = $db->table('quotes')->insertGetId($values);
+            if ($quoteId) {
+                return $quoteId;
+            } else {
+                Helpers::sendMessage(sprintf('I already have that quote saved as #%s.', $existing), $messageId);
 
-            return false;
+                return false;
+            }
         }
+        return true;
     }
 
     public static function getQuote($id = null)
