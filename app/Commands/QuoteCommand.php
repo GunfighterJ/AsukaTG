@@ -34,8 +34,9 @@ class QuoteCommand extends BaseCommand
             return;
         }
 
+        $message = $this->getUpdate()->getMessage();
         // Detect a reply and add it as a quote
-        $quoteSource = $this->getUpdate()->getMessage()->getReplyToMessage();
+        $quoteSource = $message->getReplyToMessage();
         if ($quoteSource) {
             if ($this->getTelegram()->getMe()->getId() == $quoteSource->getFrom()->getId()) {
                 $this->reply('You cannot quote me >:)');
@@ -43,7 +44,7 @@ class QuoteCommand extends BaseCommand
                 return;
             }
 
-            if ($this->getUpdate()->getMessage()->getFrom()->getId() == $quoteSource->getFrom()->getId()) {
+            if ($message->getFrom()->getId() == $quoteSource->getFrom()->getId()) {
                 $this->reply('Why would you quote yourself? What are you, some kind of loner?');
 
                 return;
@@ -56,7 +57,7 @@ class QuoteCommand extends BaseCommand
                 return;
             }
 
-            $result = AsukaDB::createQuote($this->getUpdate()->getMessage());
+            $result = AsukaDB::createQuote($message);
             if ($result) {
                 $this->reply(sprintf('Quote saved as #%s', $result), [
                     'reply_to_message_id' => $quoteSource->getMessageId(),
