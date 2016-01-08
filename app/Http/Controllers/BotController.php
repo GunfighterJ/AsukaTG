@@ -29,8 +29,11 @@ class BotController extends Controller
         $telegram = app('telegram')->bot();
         $updates = $telegram->getWebhookUpdates();
 
-        AsukaDB::createOrUpdateUser($updates->getMessage()->getFrom());
-        if ($updates->getMessage()->getChat()->getType() == 'group') {
+        if ($updates->getMessage()->getFrom()) {
+            AsukaDB::createOrUpdateUser($updates->getMessage()->getFrom());
+        }
+
+        if ($updates->getMessage()->getChat()->getType() == 'group' && $updates->getMessage()->getNewChatTitle()) {
             AsukaDB::createOrUpdateGroup($updates->getMessage()->getChat());
         }
 
