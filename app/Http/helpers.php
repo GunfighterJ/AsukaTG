@@ -112,17 +112,14 @@ class AsukaDB
         ];
 
         $existing = $db->table('quotes')->where('message_id', $messageId)->where('group_id', $quoteSource->getChat()->getId())->limit(1)->value('id');
-        if (!$db->table('quotes')->where('message_id', $messageId)->limit(1)->value('id')) {
+        if (!$existing) {
             $quoteId = $db->table('quotes')->insertGetId($values);
-            if ($quoteId) {
-                return $quoteId;
-            } else {
-                Helpers::sendMessage(sprintf('I already have that quote saved as #%s.', $existing), $messageId);
+            return $quoteId;
+        } else {
+            Helpers::sendMessage(sprintf('I already have that quote saved as #%s.', $existing), $messageId);
 
-                return false;
-            }
+            return null;
         }
-        return true;
     }
 
     public static function getQuote($id = null)
