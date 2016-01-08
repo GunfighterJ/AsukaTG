@@ -43,7 +43,13 @@ class ImdbCommand extends BaseCommand
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $query = trim(rawurlencode($arguments));
-        $json = Helpers::curlGetContents(sprintf('%s/?t=%s&r=json&type=movie', self::OMDB_API_ENDPOINT, $query));
+        $queryArgs = http_build_query([
+            't' => $query,
+            'type' => 'movie',
+            'r' => 'json'
+        ]);
+
+        $json = Helpers::curlGetContents(sprintf('%s/?%s', self::OMDB_API_ENDPOINT, http_build_query($queryArgs)));
         $results = json_decode($json, true);
 
         if (!$results) {
@@ -54,7 +60,9 @@ class ImdbCommand extends BaseCommand
 
         // Exact title match failed, fall back to search
         if (array_key_exists('Error', $results)) {
-            $json = Helpers::curlGetContents(sprintf('%s/?s=%s&r=json&type=movie', self::OMDB_API_ENDPOINT, $query));
+            $queryArgs['s'] = $queryArgs['t'];
+            unset($queryArgs['t']);
+            $json = Helpers::curlGetContents(sprintf('%s/?%s', self::OMDB_API_ENDPOINT, http_build_query($queryArgs)));
             $results = json_decode($json, true);
 
             if (!$results) {
@@ -69,7 +77,10 @@ class ImdbCommand extends BaseCommand
                 return;
             }
 
-            $json = Helpers::curlGetContents(sprintf('%s/?i=%s&r=json&type=movie&plot=full', self::OMDB_API_ENDPOINT, $results['Search'][0]['imdbID']));
+            unset($queryArgs['s']);
+            $queryArgs['i'] = $results['Search'][0]['imdbID'];
+            $queryArgs['plot'] = 'full';
+            $json = Helpers::curlGetContents(sprintf('%s/?%s', self::OMDB_API_ENDPOINT, http_build_query($queryArgs)));
             $results = json_decode($json, true);
         }
 
