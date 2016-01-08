@@ -51,7 +51,7 @@ class Helpers
      * @param bool $dieOnError Exit the whole script if curl throws an error.
      * @return mixed
      */
-    public static function curl_get_contents($url, $dieOnError = true)
+    public static function curlGetContents($url, $dieOnError = true)
     {
         $curlOpts = [
             CURLOPT_URL            => $url,

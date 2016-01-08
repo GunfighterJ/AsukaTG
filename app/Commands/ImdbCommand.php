@@ -41,7 +41,7 @@ class ImdbCommand extends BaseCommand
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $query = trim(rawurlencode($arguments));
-        $json = Helpers::curl_get_contents(sprintf('http://www.omdbapi.com/?t=%s&r=json&type=movie', $query));
+        $json = Helpers::curlGetContents(sprintf('http://www.omdbapi.com/?t=%s&r=json&type=movie', $query));
         $results = json_decode($json, true);
 
         if (!$results) {
@@ -52,7 +52,7 @@ class ImdbCommand extends BaseCommand
 
         // Exact title match failed, fall back to search
         if (array_key_exists('Error', $results)) {
-            $json = Helpers::curl_get_contents(sprintf('http://www.omdbapi.com/?s=%s&r=json&type=movie', $query));
+            $json = Helpers::curlGetContents(sprintf('http://www.omdbapi.com/?s=%s&r=json&type=movie', $query));
             $results = json_decode($json, true);
 
             if (!$results) {
@@ -67,7 +67,7 @@ class ImdbCommand extends BaseCommand
                 return;
             }
 
-            $json = Helpers::curl_get_contents(sprintf('http://www.omdbapi.com/?i=%s&r=json&type=movie&plot=full', $results['Search'][0]['imdbID']));
+            $json = Helpers::curlGetContents(sprintf('http://www.omdbapi.com/?i=%s&r=json&type=movie&plot=full', $results['Search'][0]['imdbID']));
             $results = json_decode($json, true);
         }
 

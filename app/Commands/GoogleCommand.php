@@ -42,7 +42,7 @@ class GoogleCommand extends BaseCommand
 
         $query = trim(rawurlencode($arguments));
         $url = sprintf('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=%s', $query);
-        $body = Helpers::curl_get_contents($url);
+        $body = Helpers::curlGetContents($url);
         $json = json_decode($body);
 
         if (!$json || !count($json->responseData->results)) {
