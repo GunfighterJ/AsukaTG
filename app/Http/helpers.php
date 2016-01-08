@@ -117,7 +117,7 @@ class AsukaDB
             $quoteId = $db->table('quotes')->insertGetId($values);
             return $quoteId;
         } else {
-            Helpers::sendMessage(sprintf('I already have that quote saved as #%s.', $existing), $groupId);
+            Helpers::sendMessage(sprintf('I already have that quote saved as #%s.', $existing), $groupId, ['reply_to_message_id' => $message->getMessageId()]);
 
             return null;
         }
