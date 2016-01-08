@@ -135,9 +135,7 @@ class AsukaDB
 
         $existing = $db->table('quotes')->where('message_id', $messageId)->where('group_id', $groupId)->limit(1)->value('id');
         if (!$existing) {
-            $quoteId = $db->table('quotes')->insertGetId($values);
-
-            return $quoteId;
+            return $db->table('quotes')->insertGetId($values);
         } else {
             Helpers::sendMessage(sprintf('I already have that quote saved as #%s.', $existing), $groupId, ['reply_to_message_id' => $message->getMessageId()]);
 
