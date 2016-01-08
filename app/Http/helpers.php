@@ -151,8 +151,16 @@ class AsukaDB
         if (!$db->table('groups')->where('id', $group->getId())->limit(1)->value('id')) {
             $db->table('groups')->insert($values);
         } else {
-            unset($values['id']);
-            $db->table('groups')->where('id', $group->getId())->update($values);
+            self::updateGroup($group);
         }
+    }
+
+    public static function updateGroup(Chat $group) {
+        $db = app('db')->connection();
+        $values = [
+            'title' => $group->getTitle(),
+        ];
+
+        $db->table('groups')->where('id', $group->getId())->update($values);
     }
 }
