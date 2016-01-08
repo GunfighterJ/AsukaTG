@@ -46,8 +46,8 @@ class GoogleCommand extends BaseCommand
         $json = json_decode($body);
         $response = $json->responseData->results[0]->unescapedUrl . PHP_EOL;
 
-        if ($json->responseData->estimatedResultCount > 1) {
-            $response .= sprintf('and %d more results...', $json->responseData->estimatedResultCount - 1);
+        if ($json->responseData->cursor->estimatedResultCount > 1) {
+            $response .= sprintf('and %d more results...', $json->responseData->cursor->estimatedResultCount - 1);
         }
 
         if (!$response) {
