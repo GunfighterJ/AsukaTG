@@ -44,7 +44,7 @@ class QuoteCommand extends BaseCommand
                 return;
             }
 
-            if (starts_with(trim($message->getText()), '/')) {
+            if (starts_with(trim($quoteSource->getText()), '/')) {
                 $this->reply('Don\'t be silly, why would you quote commands?');
 
                 return;
