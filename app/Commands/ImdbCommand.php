@@ -50,6 +50,7 @@ class ImdbCommand extends BaseCommand
             return;
         }
 
+        // Exact title match failed, fall back to search
         if (array_key_exists('Error', $results)) {
             $json = Helpers::curl_get_contents(sprintf('http://www.omdbapi.com/?s=%s&r=json&type=movie', $query));
             $results = json_decode($json, true);
