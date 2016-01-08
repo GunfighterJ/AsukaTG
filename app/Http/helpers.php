@@ -100,23 +100,24 @@ class AsukaDB
         $db = app('db')->connection();
         $quoteSource = $message->getReplyToMessage();
         $messageId = $message->getReplyToMessage()->getMessageId();
+        $groupId = $quoteSource->getChat()->getId();
         self::createOrUpdateUser($quoteSource->getFrom());
 
         $values = [
             'added_by_id'       => $message->getFrom()->getId(),
             'user_id'           => $quoteSource->getFrom()->getId(),
-            'group_id'          => $quoteSource->getChat()->getId(),
+            'group_id'          => $groupId,
             'message_id'        => $messageId,
             'message_timestamp' => $quoteSource->getDate(),
             'content'           => $quoteSource->getText()
         ];
 
-        $existing = $db->table('quotes')->where('message_id', $messageId)->where('group_id', $quoteSource->getChat()->getId())->limit(1)->value('id');
+        $existing = $db->table('quotes')->where('message_id', $messageId)->where('group_id', $groupId)->limit(1)->value('id');
         if (!$existing) {
             $quoteId = $db->table('quotes')->insertGetId($values);
             return $quoteId;
         } else {
-            Helpers::sendMessage(sprintf('I already have that quote saved as #%s.', $existing), $messageId);
+            Helpers::sendMessage(sprintf('I already have that quote saved as #%s.', $existing), $groupId);
 
             return null;
         }
