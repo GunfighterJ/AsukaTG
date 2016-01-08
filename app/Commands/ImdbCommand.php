@@ -23,7 +23,7 @@ use Telegram\Bot\Actions;
 
 class ImdbCommand extends BaseCommand
 {
-    const OMDB_API_ENDPOINT = 'http://www.omdbapi.com';
+    const OMDB_API_ENDPOINT = 'https://omdbapi.com';
 
     protected $description = 'Returns the first IMDb result for a set of search terms.';
     protected $name = 'imdb';
