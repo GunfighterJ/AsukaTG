@@ -25,6 +25,6 @@ class BotsCommand extends BaseCommand
 
     public function handle($arguments)
     {
-        $this->reply('Reporting in! [PHP]');
+        $this->reply(sprintf('Reporting in! [PHP %s]', phpversion()));
     }
 }
