@@ -45,14 +45,14 @@ class GoogleCommand extends BaseCommand
         $body = Helpers::curl_get_contents($url);
         $json = json_decode($body);
 
-        $response = sprintf('About %s results (%.2f seconds)' . PHP_EOL, $json->responseData->cursor->resultCount, $json->responseData->cursor->searchResultTime);
-        $response .= $json->responseData->results[0]->unescapedUrl;
-
-        if (!$response) {
+        if (!$json || !count($json->responseData->results)) {
             $this->reply('No results found!');
 
             return;
         }
+
+        $response = sprintf('About %s results (%.2f seconds)' . PHP_EOL, $json->responseData->cursor->resultCount, $json->responseData->cursor->searchResultTime);
+        $response .= $json->responseData->results[0]->unescapedUrl;
 
         $this->reply($response);
     }
