@@ -76,7 +76,7 @@ class ImdbCommand extends BaseCommand
             sprintf('Title: %s', $results['Title']),
             sprintf('Year: %s', $results['Year']),
             sprintf('Genre: %s', $results['Genre']),
-            sprintf('IMDb Score: %s/10', $results['imdbRating']),
+            sprintf('IMDb Score: %.1f/10', $results['imdbRating']),
             sprintf('Runtime: %s', $results['Runtime']),
             sprintf('Rating: %s', $results['Rated']),
             sprintf('Stars: %s', $results['Actors']),

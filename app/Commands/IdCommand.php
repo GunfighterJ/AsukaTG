@@ -25,6 +25,6 @@ class IdCommand extends BaseCommand
 
     public function handle($arguments)
     {
-        $this->reply(sprintf('Your Telegram user ID is %s', $this->getUpdate()->getMessage()->getFrom()->getId()));
+        $this->reply(sprintf('Your Telegram user ID is %d', $this->getUpdate()->getMessage()->getFrom()->getId()));
     }
 }

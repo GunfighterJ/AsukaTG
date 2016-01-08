@@ -85,7 +85,7 @@ class DecideCommand extends BaseCommand
         }
 
         if (count($choices) == 2) {
-            array_push($choices, 'Neither.');
+            array_push($choices, 'Neither.', 'Both.');
         } else {
             array_push($choices, 'None of the above.', 'All of the above.');
         }

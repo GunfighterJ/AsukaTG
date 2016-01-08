@@ -65,7 +65,7 @@ class QuoteCommand extends BaseCommand
 
             $result = AsukaDB::createQuote($message);
             if ($result) {
-                $this->reply(sprintf('Quote saved as #%s', $result), [
+                $this->reply(sprintf('Quote saved as #%d', $result), [
                     'reply_to_message_id' => $quoteSource->getMessageId(),
                 ]);
             }
@@ -107,7 +107,7 @@ class QuoteCommand extends BaseCommand
             $citation .= sprintf(' (%s)', $user->username);
         }
 
-        $response .= sprintf('-- %s, %s (#%s)', Helpers::escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
+        $response .= sprintf('-- %s, %s (#%d)', Helpers::escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
 
         $this->reply($response, [
             'disable_web_page_preview' => true,

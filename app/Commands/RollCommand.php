@@ -55,13 +55,13 @@ class RollCommand extends BaseCommand
         // }}}
 
         if ($diceCount < 1 || $diceCount > self::DICE_MAX_AMOUNT) {
-            $this->reply(sprintf('Amount of dice must be between 1 and %s (inclusive).', self::DICE_MAX_AMOUNT));
+            $this->reply(sprintf('Amount of dice must be between 1 and %d (inclusive).', self::DICE_MAX_AMOUNT));
 
             return;
         }
 
         if ($diceType < self::DIE_MIN_FACES || $diceType > self::DIE_MAX_FACES) {
-            $this->reply(sprintf('Die type must be between %s and %s (inclusive).' . PHP_EOL, self::DIE_MIN_FACES, self::DIE_MAX_FACES));
+            $this->reply(sprintf('Die type must be between %d and %d (inclusive).' . PHP_EOL, self::DIE_MIN_FACES, self::DIE_MAX_FACES));
 
             return;
         }
