@@ -18,6 +18,7 @@
 
 namespace Asuka\Http;
 
+use Exception;
 use Telegram\Bot\Objects\Chat;
 use Telegram\Bot\Objects\Message;
 use Telegram\Bot\Objects\User;
@@ -105,6 +106,36 @@ class Helpers
     {
         return $string;
         //return preg_replace('/([*_])/i', '\\\\$1', $string);
+    }
+
+    /**
+     * Tries to use the best available method for the current platform to generate a random int
+     * @param $min
+     * @param $max
+     * @return int random integer between $min and $max
+     */
+    public static function getRandomInt($min, $max)
+    {
+        if ($min < PHP_INT_MIN) {
+            $min = PHP_INT_MIN;
+        }
+
+        if ($max > PHP_INT_MAX) {
+            $max = PHP_INT_MAX;
+        }
+
+        try {
+            // Uses random_compat for PHP < 7
+            return random_int($min, $max);
+        } catch (Exception $ex) {
+            $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
+
+            $error = 'Error occurred in Helpers::getRandomInt(), falling back to mt_rand()' . PHP_EOL;
+            $error .= $ex->getMessage();
+
+            self::sendMessage($error, $message->getChat()->getId());
+            return mt_rand($min, $max);
+        }
     }
 }
 

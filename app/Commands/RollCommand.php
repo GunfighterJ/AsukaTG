@@ -18,6 +18,8 @@
 
 namespace Asuka\Commands;
 
+use Asuka\Http\Helpers;
+
 class RollCommand extends BaseCommand
 {
     const DICE_MAX_AMOUNT = 128;
@@ -67,14 +69,14 @@ class RollCommand extends BaseCommand
         }
 
         if ($diceCount == 1) {
-            $this->reply(mt_rand(1, $diceType));
+            $this->reply(Helpers::getRandomInt(1, $diceType));
             return;
         }
 
         // Create an array of $diceCount $diceType-sided dice.
         $diceArray = [];
         while (count($diceArray) < $diceCount) {
-            array_push($diceArray, mt_rand(1, $diceType));
+            array_push($diceArray, Helpers::getRandomInt(1, $diceType));
         }
 
         $response = sprintf('[%s] = %d', implode(', ', $diceArray), array_sum($diceArray));

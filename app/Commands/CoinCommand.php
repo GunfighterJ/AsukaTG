@@ -18,6 +18,8 @@
 
 namespace Asuka\Commands;
 
+use Asuka\Http\Helpers;
+
 class CoinCommand extends BaseCommand
 {
     protected $description = 'Flip a coin.';
@@ -25,6 +27,6 @@ class CoinCommand extends BaseCommand
 
     public function handle($arguments)
     {
-        $this->reply(mt_rand(0, 1) ? 'Heads' : 'Tails');
+        $this->reply(Helpers::getRandomInt(0, 1) ? 'Heads' : 'Tails');
     }
 }
