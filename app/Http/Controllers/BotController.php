@@ -30,7 +30,7 @@ class BotController extends Controller
         $telegram = app('telegram')->bot();
         $updates = $telegram->getWebhookUpdates();
 
-        if (!$updates) {
+        if (!$updates->getMessage()) {
             return response('No Updates');
         }
 
