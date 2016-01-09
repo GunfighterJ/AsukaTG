@@ -30,6 +30,10 @@ class BotController extends Controller
         $telegram = app('telegram')->bot();
         $updates = $telegram->getWebhookUpdates();
 
+        if (!$updates) {
+            return response('No Updates');
+        }
+
         if ($updates->getMessage()->getFrom()) {
             AsukaDB::createOrUpdateUser($updates->getMessage()->getFrom());
         }
