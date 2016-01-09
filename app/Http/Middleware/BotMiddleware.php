@@ -18,7 +18,9 @@
 
 namespace Asuka\Http\Middleware;
 
+use Asuka\Http\Helpers;
 use Closure;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class BotMiddleware
@@ -44,6 +46,13 @@ class BotMiddleware
         $telegram = app('telegram');
         if ($botKey != $telegram->getBotConfig(config('telegram.default'))['token']) {
             throw new NotFoundHttpException;
+        }
+
+        if ($request->getMethod() != Request::METHOD_POST) {
+            $ownerId = $telegram->getBotConfig(config('telegram.default'))['owner_id'];
+            if ($ownerId) {
+                Helpers::sendMessage(sprintf('The IP %s just accessed %s', $request->getClientIp(), $request->url()), $ownerId);
+            }
         }
 
         return $next($request);

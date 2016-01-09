@@ -21,6 +21,7 @@ namespace Asuka\Http\Controllers;
 use Asuka\Http\AsukaDB;
 use Asuka\Http\Helpers;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class BotController extends Controller
 {
@@ -50,14 +51,9 @@ class BotController extends Controller
         return $updates;
     }
 
-    function updateWebhook(Request $request, $action, $botKey)
+    function updateWebhook($action, $botKey)
     {
         $telegram = app('telegram');
-
-        $ownerId = $telegram->getBotConfig(config('telegram.default'))['owner_id'];
-        if ($ownerId) {
-            Helpers::sendMessage(sprintf('The IP %s just accessed %s', $request->getClientIp(), $request->url()), $ownerId);
-        }
 
         $bot = $telegram->bot();
 
@@ -67,6 +63,6 @@ class BotController extends Controller
             return $bot->removeWebhook();
         }
 
-        return '';
+        throw new NotFoundHttpException;
     }
 }
