@@ -25,7 +25,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class BotController extends Controller
 {
-    function index(Request $request)
+    function index() {
+        return app('telegram')->bot()->getMe()->toJson();
+    }
+
+    function webhook(Request $request)
     {
         $telegram = app('telegram')->bot();
         $updates = $telegram->getWebhookUpdates();
