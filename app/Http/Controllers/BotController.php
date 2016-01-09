@@ -20,7 +20,6 @@ namespace Asuka\Http\Controllers;
 
 use Asuka\Http\AsukaDB;
 use Asuka\Http\Helpers;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class BotController extends Controller
@@ -30,7 +29,7 @@ class BotController extends Controller
         return app('telegram')->bot()->getMe()->toJson();
     }
 
-    function webhook(Request $request)
+    function webhook()
     {
         $telegram = app('telegram')->bot();
         $updates = $telegram->getWebhookUpdates();
@@ -51,7 +50,7 @@ class BotController extends Controller
             }
         }
 
-        $telegram->commandsHandler($request->getMethod() == Request::METHOD_POST);
+        $telegram->commandsHandler(true);
 
         return response('OK');
     }
