@@ -48,7 +48,7 @@ class BotController extends Controller
 
         $telegram->commandsHandler($request->getMethod() == Request::METHOD_POST);
 
-        return response($updates);
+        return response('OK');
     }
 
     function updateWebhook($action, $botKey)

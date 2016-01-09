@@ -16,6 +16,10 @@
  * along with AsukaTG.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+$app->get('/{botKey}', function() {
+    return app('telegram')->bot()->getMe()->toJson();
+});
+
 $app->post('/{botKey}/webhook',
     ['as' => 'bot.webhook', 'middleware' => 'bot', 'uses' => 'BotController@index']);
 
