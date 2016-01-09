@@ -16,7 +16,7 @@
  * along with AsukaTG.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-$app->post('/{botKey}',
+$app->get('/{botKey}',
     ['as' => 'bot', 'middleware' => 'bot', 'uses' => 'BotController@index']);
 
 $app->post('/{botKey}/webhook',
