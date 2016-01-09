@@ -125,7 +125,7 @@ class Helpers
             $error = 'Error occurred in Helpers::getRandomInt(), falling back to mt_rand()' . PHP_EOL;
             $error .= $ex->getMessage();
 
-            self::sendMessage($error, $message->getChat()->getId());
+            self::sendMessage($error, $message->getChat()->getId(), $message->getMessageId());
             return mt_rand($min, $max);
         }
     }
