@@ -32,8 +32,6 @@ class BotController extends Controller
 
         if ($updates->getMessage()->getFrom()) {
             AsukaDB::createOrUpdateUser($updates->getMessage()->getFrom());
-        } else {
-            return response('No Updates');
         }
 
         if ($updates->getMessage()->getChat()->getType() == 'group') {
@@ -50,7 +48,7 @@ class BotController extends Controller
 
         $telegram->commandsHandler($request->getMethod() == Request::METHOD_POST);
 
-        return $updates;
+        return response($updates);
     }
 
     function updateWebhook($action, $botKey)
@@ -60,7 +58,7 @@ class BotController extends Controller
         $bot = $telegram->bot();
 
         if ($action == 'set') {
-            return $bot->setWebhook(['url' => url($botKey)]);
+            return $bot->setWebhook(['url' => route('bot.webhook', ['botKey' => $botKey])]);
         } elseif ($action == 'remove') {
             return $bot->removeWebhook();
         }
