@@ -116,14 +116,6 @@ class Helpers
      */
     public static function getRandomInt($min, $max)
     {
-        if ($min < PHP_INT_MIN) {
-            $min = PHP_INT_MIN;
-        }
-
-        if ($max > PHP_INT_MAX) {
-            $max = PHP_INT_MAX;
-        }
-
         try {
             // Uses random_compat for PHP < 7
             return random_int($min, $max);
