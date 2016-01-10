@@ -110,7 +110,7 @@ class QuoteCommand extends BaseCommand
         $response .= sprintf('-- %s, %s (#%d)', Helpers::escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
 
         if ($quote->comment) {
-            $response .= sprintf(PHP_EOL . 'Comment: %s', $user->comment);
+            $response .= sprintf(PHP_EOL . 'Comment: %s', $quote->comment);
         }
 
         $this->reply($response, ['disable_web_page_preview' => true]);
