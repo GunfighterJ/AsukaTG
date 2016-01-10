@@ -92,7 +92,11 @@ class QuoteCommand extends BaseCommand
             }
         } else {
             // Random quote
-            $quote = AsukaDB::getQuote(null, $message->getChat()->getId());
+            if ($message->getChat()->getType() != 'group') {
+                $quote = AsukaDB::getQuote();
+            } else {
+                $quote = AsukaDB::getQuote(null, $message->getChat()->getId());
+            }
         }
 
         if (!$quote) {
