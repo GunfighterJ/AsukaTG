@@ -221,7 +221,8 @@ class AsukaDB
         }
 
         if (!$global) {
-            $db = $db->where('group_id', $global);
+            $groupId = app('telegram')->bot()->getWebhookUpdates()->getMessage()->getChat()->getId();
+            $db = $db->where('group_id', $groupId);
         }
 
         return $db->first();
