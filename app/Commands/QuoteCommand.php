@@ -96,21 +96,33 @@ class QuoteCommand extends BaseCommand
         }
 
         $response = sprintf('%s' . PHP_EOL, Helpers::escapeMarkdown($quote->content));
-        $user = AsukaDB::getUser($quote->user_id);
+        $quotee = AsukaDB::getUser($quote->user_id);
+        $quoter = AsukaDB::getUser($quote->added_by_id);
 
-        $citation = $user->first_name;
-        if ($user->last_name) {
-            $citation .= sprintf(' %s', $user->last_name);
+        $citation = $quotee->first_name;
+        if ($quotee->last_name) {
+            $citation .= sprintf(' %s', $quotee->last_name);
         }
 
-        if ($user->username) {
-            $citation .= sprintf(' (%s)', $user->username);
+        if ($quotee->username) {
+            $citation .= sprintf(' (%s)', $quotee->username);
         }
 
-        $response .= sprintf('-- %s, %s (#%d)', Helpers::escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
+        $response .= sprintf('-- %s, %s (#%d)' . PHP_EOL, Helpers::escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
+
+        $addedBy = $quoter->first_name;
+        if ($quoter->last_name) {
+            $addedBy .= sprintf(PHP_EOL . ' %s', $quoter->last_name);
+        }
+
+        if ($quoter->username) {
+            $addedBy .= sprintf(' (%s)', $quoter->username);
+        }
+
+        $response .= sprintf('Added by: %s, %s' . PHP_EOL, Helpers::escapeMarkdown($addedBy), date('D, jS M Y H:i:s T', strtotime($quote->created_at)));
 
         if ($quote->comment) {
-            $response .= sprintf(PHP_EOL . 'Comment: %s', $quote->comment);
+            $response .= sprintf('Comment: %s', $quote->comment);
         }
 
         $this->reply($response, ['disable_web_page_preview' => true]);
