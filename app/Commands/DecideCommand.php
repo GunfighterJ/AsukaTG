@@ -22,11 +22,9 @@ class DecideCommand extends BaseCommand
 {
     protected $description = 'Decides between a set of choices.';
     protected $name = 'decide';
-
     protected $choiceDelimiters = [
         ' or ', '|', ',', '/', '\\',
     ];
-
     protected $singleChoiceResults = [
         'No.', 'Probably not.', 'Maybe.',
         'Probably.', 'Undecided, ask me again later.', 'Yes.',

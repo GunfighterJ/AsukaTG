@@ -51,7 +51,9 @@ class GoogleCommand extends BaseCommand
             return;
         }
 
-        $response = sprintf('About %s results (%.2f seconds)' . PHP_EOL, $json->responseData->cursor->resultCount, $json->responseData->cursor->searchResultTime);
+        $response = sprintf('About %s results (%.2f seconds)' . PHP_EOL,
+            $json->responseData->cursor->resultCount, $json->responseData->cursor->searchResultTime);
+
         $response .= $json->responseData->results[0]->unescapedUrl;
 
         $this->reply($response);

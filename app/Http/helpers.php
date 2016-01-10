@@ -27,6 +27,7 @@ class Helpers
 {
     /**
      * Checks to see if a given user is actually the bot.
+     *
      * @param User $user The user we're comparing.
      * @return bool
      */
@@ -37,6 +38,7 @@ class Helpers
 
     /**
      * Checks to see if two users are actually the same user.
+     *
      * @param User $user1
      * @param User $user2
      * @return bool
@@ -48,6 +50,7 @@ class Helpers
 
     /**
      * Similar to file_get_contents() but only works on URLs and uses cURL.
+     *
      * @param $url
      * @param bool $dieOnError Exit the whole script if curl throws an error.
      * @return mixed
@@ -85,6 +88,7 @@ class Helpers
 
     /**
      * Sends a message to a Telegram Chat.
+     *
      * @param $message
      * @param $chatId
      * @param array $params Extra Telegram Bot API parameters to send with this message.
@@ -99,6 +103,7 @@ class Helpers
 
     /**
      * Escapes Markdown special characters in a string with backslashes.
+     *
      * @param $string
      * @return mixed
      */
@@ -111,6 +116,7 @@ class Helpers
     /**
      * Tries to use random_int() (random_compat or PHP 7) to get a random integer and falls back to mt_rand() on failure.
      * Not cryptographically secure due to the fallback.
+     *
      * @param $min
      * @param $max
      * @return int random integer between $min and $max
@@ -137,12 +143,13 @@ class AsukaDB
 {
     /**
      * Creates a new quote from a Message containing another Message as a reply.
+     *
      * @param Message $message The Message to make a quote from. Assumed to contain a valid reply.
      * @return int|null Qoute ID on success, null on failure.
      */
     public static function createQuote(Message $message)
     {
-        $db = app('db')->connection();
+        $db = app('db')->connection()->table('quotes');
         $quoteSource = $message->getReplyToMessage();
         $messageId = $message->getReplyToMessage()->getMessageId();
         $groupId = $quoteSource->getChat()->getId();
@@ -160,11 +167,13 @@ class AsukaDB
             'comment'           => empty($comment) ? null : $comment,
         ];
 
-        $existing = $db->table('quotes')->where('message_id', $messageId)->where('group_id', $groupId)->limit(1)->value('id');
+        $existing = $db->where('message_id', $messageId)->where('group_id', $groupId)->limit(1)->value('id');
         if (!$existing) {
-            return $db->table('quotes')->insertGetId($values);
+            return $db->insertGetId($values);
         } else {
-            Helpers::sendMessage(sprintf('I already have that quote saved as #%s.', $existing), $groupId, ['reply_to_message_id' => $message->getMessageId()]);
+            Helpers::sendMessage(sprintf('I already have that quote saved as #%s.', $existing), $groupId, [
+                'reply_to_message_id' => $message->getMessageId()
+            ]);
 
             return null;
         }
@@ -172,11 +181,12 @@ class AsukaDB
 
     /**
      * Adds a new {@User} to the database, or updates an existing one if it already exists.
+     *
      * @param User $user The user to add to the database.
      */
     public static function createOrUpdateUser(User $user)
     {
-        $db = app('db')->connection();
+        $db = app('db')->connection()->table('users');
         $values = [
             'id'         => $user->getId(),
             'first_name' => $user->getFirstName(),
@@ -184,65 +194,67 @@ class AsukaDB
             'username'   => $user->getUsername() ? $user->getUsername() : null,
         ];
 
-        if (!$db->table('users')->where('id', $user->getId())->limit(1)->value('id')) {
-            $db->table('users')->insert($values);
+        if (!$db->where('id', $user->getId())->limit(1)->value('id')) {
+            $db->insert($values);
         } else {
             unset($values['id']);
-            $db->table('users')->where('id', $user->getId())->update($values);
+            $db->where('id', $user->getId())->update($values);
         }
     }
 
     /**
      * Fetches quote data for a quote with an ID matching $id, or a random quote if $id is not specified.
      * Optionally specify a group ID to only get quotes originating from that group.
+     *
      * @param null $id
      * @param bool|null $global
      * @return mixed|static Returns a quote object on success.
      */
     public static function getQuote($id = null, $global = true)
     {
-        $db = app('db')->connection();
-        $query = $db->table('quotes')->limit(1);
+        $db = app('db')->connection()->table('quotes')->limit(1);
 
         if (!$id) {
-            $query = $query->orderByRaw('RAND()');
+            $db = $db->orderByRaw('RAND()');
         } else {
-            $query = $query->where('id', $id);
+            $db = $db->where('id', $id);
         }
 
         if (!$global) {
-            $query = $query->where('group_id', $global);
+            $db = $db->where('group_id', $global);
         }
 
-        return $query->first();
+        return $db->first();
     }
 
     /**
      * Fetches user data for a user with an ID matching $id
+     *
      * @param null $id
      * @return mixed|static Returns a user object on success.
      */
     public static function getUser($id)
     {
-        $db = app('db')->connection();
+        $db = app('db')->connection()->table('users');
 
-        return $db->table('users')->where('id', $id)->limit(1)->first();
+        return $db->where('id', $id)->limit(1)->first();
     }
 
     /**
      * Adds a new group to the database, or updates an existing one if it already exists.
+     *
      * @param Chat $group Group to add to the database.
      */
     public static function createOrUpdateGroup(Chat $group)
     {
-        $db = app('db')->connection();
+        $db = app('db')->connection()->table('groups');
         $values = [
             'id'    => $group->getId(),
             'title' => $group->getTitle(),
         ];
 
-        if (!$db->table('groups')->where('id', $group->getId())->limit(1)->value('id')) {
-            $db->table('groups')->insert($values);
+        if (!$db->where('id', $group->getId())->limit(1)->value('id')) {
+            $db->insert($values);
         } else {
             self::updateGroup($group);
         }
@@ -250,15 +262,16 @@ class AsukaDB
 
     /**
      * Updates an existing group with new data such as group titles.
+     *
      * @param Chat $group Group to update.
      */
     public static function updateGroup(Chat $group)
     {
-        $db = app('db')->connection();
+        $db = app('db')->connection()->table('groups');
         $values = [
             'title' => $group->getTitle(),
         ];
 
-        $db->table('groups')->where('id', $group->getId())->update($values);
+        $db->where('id', $group->getId())->update($values);
     }
 }

@@ -108,7 +108,8 @@ class QuoteCommand extends BaseCommand
             $citation .= sprintf(' (%s)', $quotee->username);
         }
 
-        $response .= sprintf('-- %s, %s (#%d)' . PHP_EOL, Helpers::escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
+        $response .= sprintf('-- %s, %s (#%d)' . PHP_EOL,
+            Helpers::escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
 
         $addedBy = $quoter->first_name;
         if ($quoter->last_name) {

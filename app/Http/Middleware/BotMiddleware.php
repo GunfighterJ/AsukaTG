@@ -51,7 +51,8 @@ class BotMiddleware
         if ($request->getMethod() != Request::METHOD_POST) {
             $ownerId = $telegram->getBotConfig(config('telegram.default'))['owner_id'];
             if ($ownerId) {
-                Helpers::sendMessage(sprintf('The IP %s just accessed %s', $request->getClientIp(), $request->url()), $ownerId);
+                Helpers::sendMessage(sprintf('The IP %s just accessed %s',
+                    $request->getClientIp(), $request->url()), $ownerId);
             }
         }
 

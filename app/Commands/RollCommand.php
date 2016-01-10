@@ -25,7 +25,6 @@ class RollCommand extends BaseCommand
     const DICE_MAX_AMOUNT = 128;
     const DIE_MAX_FACES = 120;
     const DIE_MIN_FACES = 4;
-
     protected $description = 'Rolls some dice.';
     protected $name = 'roll';
 
@@ -63,13 +62,15 @@ class RollCommand extends BaseCommand
         }
 
         if ($diceType < self::DIE_MIN_FACES || $diceType > self::DIE_MAX_FACES) {
-            $this->reply(sprintf('Die type must be between %d and %d (inclusive).' . PHP_EOL, self::DIE_MIN_FACES, self::DIE_MAX_FACES));
+            $this->reply(sprintf('Die type must be between %d and %d (inclusive).' . PHP_EOL,
+                self::DIE_MIN_FACES, self::DIE_MAX_FACES));
 
             return;
         }
 
         if ($diceCount == 1) {
             $this->reply(Helpers::getRandomInt(1, $diceType));
+
             return;
         }
 
