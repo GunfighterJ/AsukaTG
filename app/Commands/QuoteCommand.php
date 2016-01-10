@@ -79,7 +79,7 @@ class QuoteCommand extends BaseCommand
             $quoteId = intval(preg_replace('/[^0-9]/', '', $arguments[0]));
 
             // Always use global for non-group chats
-            if ($message->getChat()->getType() != 'group' || array_search('-g', $arguments) != false) {
+            if ($message->getChat()->getType() != 'group' || array_search('-g', $arguments) !== false) {
                 $quote = AsukaDB::getQuote($quoteId);
             } else {
                 $quote = AsukaDB::getQuote($quoteId, $message->getChat()->getId());
