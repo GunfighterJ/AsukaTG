@@ -33,7 +33,7 @@ class QuoteCommand extends BaseCommand
         $quoteSource = $message->getReplyToMessage();
         if ($quoteSource) {
             if ($this->getUpdate()->getMessage()->getChat()->getType() != 'group') {
-                $this->reply('You can only use this command in a group.');
+                $this->reply('You can only add quotes in a group.');
 
                 return;
             }
