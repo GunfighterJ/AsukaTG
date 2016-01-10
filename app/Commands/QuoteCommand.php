@@ -28,16 +28,16 @@ class QuoteCommand extends BaseCommand
 
     public function handle($arguments)
     {
-        if ($this->getUpdate()->getMessage()->getChat()->getType() != 'group') {
-            $this->reply('You can only use this command in a group.');
-
-            return;
-        }
-
         $message = $this->getUpdate()->getMessage();
         // Detect a reply and add it as a quote
         $quoteSource = $message->getReplyToMessage();
         if ($quoteSource) {
+            if ($this->getUpdate()->getMessage()->getChat()->getType() != 'group') {
+                $this->reply('You can only use this command in a group.');
+
+                return;
+            }
+
             if (Helpers::userIsMe($quoteSource->getFrom())) {
                 $this->reply('You cannot quote me >:)');
 
@@ -122,7 +122,7 @@ class QuoteCommand extends BaseCommand
         $response .= sprintf(PHP_EOL . 'Added by: %s' . PHP_EOL, Helpers::escapeMarkdown($addedBy));
 
         if ($quote->comment) {
-            $response .= sprintf('Comment: %s', $quote->comment);
+            $response .= sprintf('Comment: %s', Helpers::escapeMarkdown($quote->comment));
         }
 
         $this->reply($response, ['disable_web_page_preview' => true]);
