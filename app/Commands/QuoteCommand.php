@@ -32,7 +32,7 @@ class QuoteCommand extends BaseCommand
         // Detect a reply and add it as a quote
         $quoteSource = $message->getReplyToMessage();
         if ($quoteSource) {
-            if ($this->getUpdate()->getMessage()->getChat()->getType() != 'group') {
+            if ($message->getChat()->getType() != 'group') {
                 $this->reply('You can only add quotes in a group.');
 
                 return;
@@ -73,17 +73,23 @@ class QuoteCommand extends BaseCommand
             return;
         }
 
+        // If arguments are supplied, try to parse a quote ID and an optional global (-g) flag
         if ($arguments) {
             $arguments = explode(' ', $arguments);
             $quoteId = intval(preg_replace('/[^0-9]/', '', $arguments[0]));
 
-            if (!$quoteId) {
+            // Always use global for non-group chats
+            if ($message->getChat()->getType() != 'group' || array_search('-g', $arguments)) {
+                $quote = AsukaDB::getQuote($quoteId);
+            } else {
+                $quote = AsukaDB::getQuote($quoteId, $message->getChat()->getId());
+            }
+
+            if (!$quote) {
                 $this->reply('Please supply a numeric quote ID.');
 
                 return;
             }
-
-            $quote = AsukaDB::getQuote($quoteId);
         } else {
             // Random quote
             $quote = AsukaDB::getQuote();
