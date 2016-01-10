@@ -207,10 +207,10 @@ class AsukaDB
      * Optionally specify a group ID to only get quotes originating from that group.
      *
      * @param null $id
-     * @param bool|null $global
+     * @param int|null $groupId
      * @return mixed|static Returns a quote object on success.
      */
-    public static function getQuote($id = null, $global = true)
+    public static function getQuote($id = null, $groupId = null)
     {
         $db = app('db')->connection()->table('quotes')->limit(1);
 
@@ -220,8 +220,7 @@ class AsukaDB
             $db = $db->where('id', $id);
         }
 
-        if (!$global) {
-            $groupId = app('telegram')->bot()->getWebhookUpdates()->getMessage()->getChat()->getId();
+        if ($groupId) {
             $db = $db->where('group_id', $groupId);
         }
 
