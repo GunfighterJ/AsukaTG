@@ -146,6 +146,7 @@ class AsukaDB
         $quoteSource = $message->getReplyToMessage();
         $messageId = $message->getReplyToMessage()->getMessageId();
         $groupId = $quoteSource->getChat()->getId();
+        $comment = ltrim($message->getText(), '/q ');
 
         self::createOrUpdateUser($quoteSource->getFrom());
 
@@ -155,7 +156,8 @@ class AsukaDB
             'group_id'          => $groupId,
             'message_id'        => $messageId,
             'message_timestamp' => $quoteSource->getDate(),
-            'content'           => $quoteSource->getText()
+            'content'           => $quoteSource->getText(),
+            'comment'           => empty($comment) ? null : $comment,
         ];
 
         $existing = $db->table('quotes')->where('message_id', $messageId)->where('group_id', $groupId)->limit(1)->value('id');
