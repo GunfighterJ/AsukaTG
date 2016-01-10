@@ -112,14 +112,14 @@ class QuoteCommand extends BaseCommand
 
         $addedBy = $quoter->first_name;
         if ($quoter->last_name) {
-            $addedBy .= sprintf(PHP_EOL . ' %s', $quoter->last_name);
+            $addedBy .= sprintf(' %s', $quoter->last_name);
         }
 
         if ($quoter->username) {
             $addedBy .= sprintf(' (%s)', $quoter->username);
         }
 
-        $response .= sprintf('Added by: %s, %s' . PHP_EOL, Helpers::escapeMarkdown($addedBy), date('D, jS M Y H:i:s T', strtotime($quote->created_at)));
+        $response .= sprintf(PHP_EOL . 'Added by: %s, %s' . PHP_EOL, Helpers::escapeMarkdown($addedBy), date('D, jS M Y H:i:s T', strtotime($quote->created_at)));
 
         if ($quote->comment) {
             $response .= sprintf('Comment: %s', $quote->comment);
