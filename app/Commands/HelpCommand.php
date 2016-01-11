@@ -21,10 +21,16 @@ namespace Asuka\Commands;
 class HelpCommand extends BaseCommand
 {
     protected $description = 'Displays a list of bot commands.';
-    protected $name = '?';
+    protected $name = 'help';
 
     public function handle($arguments)
     {
+        // Prevent the bot SDK from running this of it's own accord
+        $message = $this->getUpdate()->getMessage()->getText();
+        if (!starts_with($message, ['/help', '/start'])) {
+            return;
+        }
+
         $response = '';
         $commands = $this->getTelegram()->getCommands();
         foreach ($commands as $name => $command) {
@@ -43,6 +49,6 @@ class StartCommand extends BaseCommand
 
     public function handle($arguments)
     {
-        $this->triggerCommand('?');
+        $this->triggerCommand('help');
     }
 }
