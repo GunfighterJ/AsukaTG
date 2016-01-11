@@ -42,7 +42,6 @@ class BotController extends Controller
             return response('OK');
         }
 
-
         AsukaDB::createOrUpdateUser($updates->getMessage()->getFrom());
 
         if ($updates->getMessage()->getChat()->getType() == 'group') {
