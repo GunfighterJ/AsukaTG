@@ -121,6 +121,7 @@ class SpurdoCommand extends BaseCommand
         if ($replyToSpurdo) {
             $params['reply_to_message_id'] = $replyToSpurdo->getMessageId();
         }
+        
         $this->reply($response, $params);
     }
 }
