@@ -82,22 +82,24 @@ class SpurdoCommand extends BaseCommand
     {
         $message = $this->getUpdate()->getMessage();
         // Detect a reply and spurdo it
-        $toSpurdo = $message->getReplyToMessage();
-        if (!$toSpurdo) {
+        $replyToSpurdo = $message->getReplyToMessage();
+        if (!$replyToSpurdo) {
             if ($arguments) {
                 $response = strtolower($arguments);
             } else {
                 $this->reply('Please supply me with either a reply, or some text.');
+
                 return;
             }
         } else {
-            $messageType = $this->getTelegram()->detectMessageType($toSpurdo);
+            $messageType = $this->getTelegram()->detectMessageType($replyToSpurdo);
             if ($messageType != 'text') {
                 $this->reply(sprintf('I cannot spurdo %s messages, please send me a text message.', $messageType));
+
                 return;
             }
 
-            $response = strtolower($toSpurdo->getText());
+            $response = strtolower($replyToSpurdo->getText());
         }
 
         foreach (self::SPURDO_REPLACEMENTS as $match => $replacement) {
@@ -115,6 +117,10 @@ class SpurdoCommand extends BaseCommand
             }
         }
 
-        $this->reply($response, ['disable_web_page_preview' => true]);
+        $params = ['disable_web_page_preview' => true];
+        if ($replyToSpurdo) {
+            $params['reply_to_message_id'] = $replyToSpurdo->getMessageId();
+        }
+        $this->reply($response, $params);
     }
 }
