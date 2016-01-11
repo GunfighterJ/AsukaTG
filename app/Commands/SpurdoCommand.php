@@ -80,13 +80,25 @@ class SpurdoCommand extends BaseCommand
 
     public function handle($arguments)
     {
-        if (empty($arguments)) {
-            $this->reply('Arguments cannot be empty!');
+        $message = $this->getUpdate()->getMessage();
+        // Detect a reply and spurdo it
+        $toSpurdo = $message->getReplyToMessage();
+        if (!$toSpurdo) {
+            if ($arguments) {
+                $response = strtolower($arguments);
+            } else {
+                $this->reply('Please supply me with either a reply, or some text.');
+                return;
+            }
+        } else {
+            $messageType = $this->getTelegram()->detectMessageType($toSpurdo);
+            if ($messageType != 'text') {
+                $this->reply(sprintf('I cannot spurdo %s messages, please send me a text message.', $messageType));
+                return;
+            }
 
-            return;
+            $response = strtolower($toSpurdo->getText());
         }
-
-        $response = strtolower($arguments);
 
         foreach (self::SPURDO_REPLACEMENTS as $match => $replacement) {
             $response = str_replace($match, $replacement, $response);
