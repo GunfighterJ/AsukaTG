@@ -32,27 +32,26 @@ class BotController extends Controller
     function webhook()
     {
         $telegram = app('telegram')->bot();
-        $updates = $telegram->getWebhookUpdates();
+        $message = $telegram->getWebhookUpdates()->getMessage();
 
-        if (!$updates->getMessage()->getFrom()) {
+        if (!$message->getFrom()) {
             return response('OK');
         }
 
-        if (AsukaDB::getUser($updates->getMessage()->getFrom()->getId())->ignored) {
+        if (AsukaDB::getUser($message->getFrom()->getId())->ignored) {
             return response('OK');
         }
 
-        AsukaDB::createOrUpdateUser($updates->getMessage()->getFrom());
+        AsukaDB::createOrUpdateUser($message->getFrom());
 
-        if ($updates->getMessage()->getChat()->getType() == 'group') {
-            if ($updates->getMessage()->getGroupChatCreated() ||
-                ($updates->getMessage()->getNewChatParticipant() && Helpers::userIsMe($updates->getMessage()->getNewChatParticipant()))
-            ) {
-                AsukaDB::createOrUpdateGroup($updates->getMessage()->getChat());
+        if ($message->getChat()->getType() == 'group') {
+            if ($message->getGroupChatCreated() ||
+                ($message->getNewChatParticipant() && Helpers::userIsMe($message->getNewChatParticipant()))) {
+                AsukaDB::createOrUpdateGroup($message->getChat());
             }
 
-            if ($updates->getMessage()->getNewChatTitle()) {
-                AsukaDB::updateGroup($updates->getMessage()->getChat());
+            if ($message->getNewChatTitle()) {
+                AsukaDB::updateGroup($message->getChat());
             }
         }
 
