@@ -21,6 +21,7 @@ namespace Asuka\Commands;
 class SpurdoCommand extends BaseCommand
 {
     const SPURDO_REPLACEMENTS = [
+        'epic' => 'ebin',
         'wh'   => 'w',
         'th'   => 'd',
         'af'   => 'ab',
@@ -68,7 +69,6 @@ class SpurdoCommand extends BaseCommand
         'ic'   => 'ig',
         'ng'   => 'nk',
         'kek'  => 'geg',
-        'epic' => 'ebin',
         'some' => 'sum',
         'meme' => 'maymay',
     ];
