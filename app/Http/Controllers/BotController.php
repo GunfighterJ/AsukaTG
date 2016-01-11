@@ -38,11 +38,11 @@ class BotController extends Controller
             return response('OK');
         }
 
+        AsukaDB::createOrUpdateUser($message->getFrom());
+        
         if (AsukaDB::getUser($message->getFrom()->getId())->ignored) {
             return response('OK');
         }
-
-        AsukaDB::createOrUpdateUser($message->getFrom());
 
         if ($message->getChat()->getType() == 'group') {
             if ($message->getGroupChatCreated() ||
