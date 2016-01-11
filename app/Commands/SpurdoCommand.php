@@ -73,7 +73,7 @@ class SpurdoCommand extends BaseCommand
         'meme' => 'maymay',
     ];
 
-    const EBIN_FACES = [':D', ':DD', ':DDD', ':-D', 'D', 'XXD', 'XDD', 'XXDD', 'xD', 'xDD', ':dd'];
+    const EBIN_FACES = [':D', ':DD', ':DDD', ':-D', 'XD', 'XXD', 'XDD', 'XXDD', 'xD', 'xDD', ':dd'];
 
     protected $description = 'Spurdos whatever input you send.';
     protected $name = 'spurdo';
@@ -121,7 +121,7 @@ class SpurdoCommand extends BaseCommand
         if ($replyToSpurdo) {
             $params['reply_to_message_id'] = $replyToSpurdo->getMessageId();
         }
-        
+
         $this->reply($response, $params);
     }
 }
