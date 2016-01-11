@@ -47,8 +47,8 @@ class IgnoreCommand extends BaseCommand
         }
 
         AsukaDB::updateUserIgnore($userToIgnore);
-        $this->reply(sprintf('Ignored %s'),
-            $userToIgnore->getUsername() ? $userToIgnore->getUsername() : $userToIgnore->getFirstName());
+        $this->reply(sprintf('Ignored %s',
+            $userToIgnore->getUsername() ? $userToIgnore->getUsername() : $userToIgnore->getFirstName()));
     }
 }
 
@@ -78,7 +78,7 @@ class UnignoreCommand extends BaseCommand
         }
 
         AsukaDB::updateUserIgnore($userToUnignore, false);
-        $this->reply(sprintf('Unignored %s'),
-            $userToUnignore->getUsername() ? $userToUnignore->getUsername() : $userToUnignore->getFirstName());
+        $this->reply(sprintf('Unignored %s',
+            $userToUnignore->getUsername() ? $userToUnignore->getUsername() : $userToUnignore->getFirstName()));
     }
 }
