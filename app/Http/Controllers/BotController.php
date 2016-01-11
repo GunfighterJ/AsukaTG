@@ -39,7 +39,7 @@ class BotController extends Controller
         }
 
         AsukaDB::createOrUpdateUser($message->getFrom());
-        
+
         if (AsukaDB::getUser($message->getFrom()->getId())->ignored) {
             return response('OK');
         }

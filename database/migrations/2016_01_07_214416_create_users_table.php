@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->string('first_name', 191);
             $table->string('last_name', 191)->nullable();
             $table->string('username', 191)->nullable();
-            $table->timestamp('created_at')->default(app('db')->connection()->raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->useCurrent();
             $table->primary('id');
         });
     }
