@@ -121,11 +121,13 @@ return [
         Commands\GoogleCommand::class,
         Commands\HelpCommand::class,
         Commands\IdCommand::class,
+        Commands\IgnoreCommand::class,
         Commands\ImdbCommand::class,
         Commands\QuoteCommand::class,
         Commands\RollCommand::class,
         Commands\StartCommand::class,
         Commands\SpurdoCommand::class,
+        Commands\UnignoreCommand::class,
         Commands\UptimeCommand::class,
     ],
 
