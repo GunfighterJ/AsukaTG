@@ -107,7 +107,7 @@ class SpurdoCommand extends BaseCommand
         }
 
         while (preg_match('/\.|,(?=\s|$|\.)/m', $response)) {
-            $response = preg_replace('/\.|,(?=\s|$|\.)/m', sprintf(' %s', self::EBIN_FACES[array_rand(self::EBIN_FACES)]), $response);
+            $response = preg_replace('/\.|,(?=\s|$|\.)/m', sprintf(' %s', self::EBIN_FACES[array_rand(self::EBIN_FACES)]), $response, 1);
         }
 
         foreach (self::EBIN_FACES as $ebinFace) {
