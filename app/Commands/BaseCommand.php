@@ -18,6 +18,7 @@
 
 namespace Asuka\Commands;
 
+use Asuka\Http\AsukaDB;
 use Asuka\Http\Helpers;
 use Telegram\Bot\Commands\Command;
 
@@ -28,6 +29,11 @@ class BaseCommand extends Command
      */
     public function handle($arguments)
     {
+        $message = $this->getUpdate()->getMessage();
+
+        if (AsukaDB::getUser($message->getFrom()->getId())->ignored) {
+            return;
+        }
         parent::handle($arguments);
     }
 

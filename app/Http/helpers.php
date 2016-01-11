@@ -49,6 +49,17 @@ class Helpers
     }
 
     /**
+     * Checks whether or not a user is the bot's owner.
+     *
+     * @param User $user
+     * @return bool
+     */
+    public static function userIsOwner(User $user)
+    {
+        return $user->getId() == app('telegram')->getBotConfig(config('telegram.default'))['owner_id'];
+    }
+
+    /**
      * Similar to file_get_contents() but only works on URLs and uses cURL.
      *
      * @param $url
@@ -183,8 +194,9 @@ class AsukaDB
      * Adds a new {@User} to the database, or updates an existing one if it already exists.
      *
      * @param User $user The user to add to the database.
+     * @param array $params
      */
-    public static function createOrUpdateUser(User $user)
+    public static function createOrUpdateUser(User $user, $params = [])
     {
         $db = app('db')->connection()->table('users');
         $values = [
@@ -194,12 +206,24 @@ class AsukaDB
             'username'   => $user->getUsername() ? $user->getUsername() : null,
         ];
 
+        $values = array_merge($params, $values);
         if (!$db->where('id', $user->getId())->limit(1)->value('id')) {
             $db->insert($values);
         } else {
             unset($values['id']);
             $db->where('id', $user->getId())->update($values);
         }
+    }
+
+    /**
+     * Adds a new {@User} to the database, or updates an existing one if it already exists.
+     *
+     * @param User $user The user to ignore or unignore to the database.
+     * @param bool $ignored
+     */
+    public static function updateUserIgnore(User $user, $ignored = true)
+    {
+        self::createOrUpdateUser($user, ['ignored' => $ignored]);
     }
 
     /**
