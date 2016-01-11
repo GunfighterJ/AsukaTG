@@ -47,6 +47,7 @@ class IgnoreCommand extends BaseCommand
         }
 
         AsukaDB::updateUserIgnore($userToIgnore);
+
         $this->reply(sprintf('Ignored %s',
             $userToIgnore->getUsername() ? $userToIgnore->getUsername() : $userToIgnore->getFirstName()));
     }
@@ -71,13 +72,8 @@ class UnignoreCommand extends BaseCommand
         }
 
         $userToUnignore = $message->getReplyToMessage()->getFrom();
-
-        if (Helpers::userIsMe($userToUnignore) || Helpers::userIsOwner($userToUnignore)) {
-            $this->reply('You cannot ignore that user.');
-            return;
-        }
-
         AsukaDB::updateUserIgnore($userToUnignore, false);
+
         $this->reply(sprintf('Unignored %s',
             $userToUnignore->getUsername() ? $userToUnignore->getUsername() : $userToUnignore->getFirstName()));
     }
