@@ -125,6 +125,7 @@ return [
         Commands\QuoteCommand::class,
         Commands\RollCommand::class,
         Commands\StartCommand::class,
+        Commands\SpurdoCommand::class,
         Commands\UptimeCommand::class,
     ],
 
