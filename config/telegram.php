@@ -123,6 +123,7 @@ return [
         Commands\IdCommand::class,
         Commands\IgnoreCommand::class,
         Commands\ImdbCommand::class,
+        Commands\MorseCommand::class,
         Commands\QuoteCommand::class,
         Commands\RollCommand::class,
         Commands\StartCommand::class,
