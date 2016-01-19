@@ -79,7 +79,7 @@ class MorseCommand extends BaseCommand
         $replyToMorse = $message->getReplyToMessage();
         if (!$replyToMorse) {
             if ($arguments) {
-                $response = strtolower($arguments);
+                $replyToMorse = strtolower($arguments);
             } else {
                 $this->reply('Please supply me with either a reply, or some text.');
 
@@ -93,11 +93,14 @@ class MorseCommand extends BaseCommand
                 return;
             }
 
-            $response = strtolower($replyToMorse->getText());
+            $replyToMorse = strtolower($replyToMorse->getText());
         }
 
-        foreach (self::MORSE_REPLACEMENTS as $match => $replacement) {
-            $response = str_replace($match, ' ' . $replacement . ' ', $response);
+        $response = '';
+        foreach (str_split($replyToMorse) as $symbol) {
+            if (array_key_exists($symbol, self::MORSE_REPLACEMENTS)) {
+                $response .= sprintf(' %s ', self::MORSE_REPLACEMENTS[$symbol]);
+            }
         }
 
         $params = ['disable_web_page_preview' => true];
