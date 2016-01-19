@@ -120,7 +120,7 @@ class QuoteCommand extends BaseCommand
             $addedBy .= sprintf(' (%s)', $quoter->username);
         }
 
-        $response .= sprintf(PHP_EOL . 'Added by: %s' . PHP_EOL, Helpers::escapeMarkdown($addedBy));
+        $response .= sprintf(PHP_EOL . 'Added by %s' . PHP_EOL, Helpers::escapeMarkdown($addedBy));
 
         if ($quote->comment) {
             $response .= sprintf('Comment: %s', Helpers::escapeMarkdown($quote->comment));
