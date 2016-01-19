@@ -97,7 +97,7 @@ class MorseCommand extends BaseCommand
         }
 
         foreach (self::MORSE_REPLACEMENTS as $match => $replacement) {
-            $response = str_replace($match, $replacement, $response);
+            $response = str_replace($match, ' ' . $replacement . ' ', $response);
         }
 
         $params = ['disable_web_page_preview' => true];
