@@ -83,18 +83,18 @@ class ImdbCommand extends BaseCommand
         }
 
         $response = implode(PHP_EOL, [
-            sprintf('URL: http://www.imdb.com/title/%s', $results['imdbID']),
-            sprintf('Title: %s', $results['Title']),
-            sprintf('Year: %d', $results['Year']),
-            sprintf('Genre: %s', $results['Genre']),
-            sprintf('IMDb Score: %.1f/10', $results['imdbRating']),
-            sprintf('Runtime: %s', $results['Runtime']),
-            sprintf('Rating: %s', $results['Rated']),
-            sprintf('Stars: %s', $results['Actors']),
-            sprintf('Director: %s', $results['Director']),
+            sprintf('<b>URL:</b> http://www.imdb.com/title/%s', Helpers::escapeMarkdown($results['imdbID'])),
+            sprintf('<b>Title:</b> %s', Helpers::escapeMarkdown($results['Title'])),
+            sprintf('<b>Year:</b> %d', Helpers::escapeMarkdown($results['Year'])),
+            sprintf('<b>Genre:</b> %s', Helpers::escapeMarkdown($results['Genre'])),
+            sprintf('<b>IMDb Score:</b> %.1f/10', Helpers::escapeMarkdown($results['imdbRating'])),
+            sprintf('<b>Runtime:</b> %s', Helpers::escapeMarkdown($results['Runtime'])),
+            sprintf('<b>Rating:</b> %s', Helpers::escapeMarkdown($results['Rated'])),
+            sprintf('<b>Stars:</b> %s', Helpers::escapeMarkdown($results['Actors'])),
+            sprintf('<b>Director:</b> %s', Helpers::escapeMarkdown($results['Director'])),
             PHP_EOL . trim($results['Plot']),
         ]);
 
-        $this->reply($response, ['disable_web_page_preview' => true]);
+        $this->reply($response, ['disable_web_page_preview' => true, 'parse_mode' => 'HTML']);
     }
 }

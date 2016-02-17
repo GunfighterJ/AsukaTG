@@ -100,7 +100,8 @@ class Helpers
     public static function sendMessage($message, $chatId, $params = [])
     {
         $params['chat_id'] = $chatId;
-        $params['text'] = str_limit($message, 4096, ' ... (message truncated)');
+        $end = ' ... (message truncated to 4096 bytes)';
+        $params['text'] = str_limit($message, 4096 - mb_strwidth($end, 'UTF-8'), $end);
 
         app('telegram')->bot()->sendMessage($params);
     }
@@ -114,7 +115,6 @@ class Helpers
     public static function escapeMarkdown($string)
     {
         return htmlspecialchars($string);
-        //return preg_replace('/([*_])/i', '\\\\$1', $string);
     }
 
     /**
