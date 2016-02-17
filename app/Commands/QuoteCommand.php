@@ -95,7 +95,7 @@ class QuoteCommand extends BaseCommand
             return;
         }
 
-        $response = sprintf('%s' . PHP_EOL, Helpers::escapeMarkdown($quote->content));
+        $response = sprintf('<b>%s</b>' . PHP_EOL, Helpers::escapeMarkdown($quote->content));
         $quotee = AsukaDB::getUser($quote->user_id);
         $quoter = AsukaDB::getUser($quote->added_by_id);
 
@@ -108,7 +108,7 @@ class QuoteCommand extends BaseCommand
             $citation .= sprintf(' (%s)', $quotee->username);
         }
 
-        $response .= sprintf('-- %s, %s (#%d)' . PHP_EOL,
+        $response .= sprintf('-- <i>%s, %s (#%d)</i>' . PHP_EOL,
             Helpers::escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
 
         $addedBy = $quoter->first_name;
@@ -126,6 +126,6 @@ class QuoteCommand extends BaseCommand
             $response .= sprintf('Comment: %s', Helpers::escapeMarkdown($quote->comment));
         }
 
-        $this->reply($response, ['disable_web_page_preview' => true]);
+        $this->reply($response, ['disable_web_page_preview' => true, 'parse_mode' => 'HTML']);
     }
 }
