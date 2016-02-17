@@ -39,12 +39,8 @@ class BotMiddleware
             $botKey = $request->route()[2]['botKey'];
         }
 
-        if (!$botKey) {
-            throw new NotFoundHttpException;
-        }
-
         $telegram = app('telegram');
-        if ($botKey != $telegram->getBotConfig(config('telegram.default'))['token']) {
+        if (!$botKey || $botKey != $telegram->getBotConfig(config('telegram.default'))['token']) {
             throw new NotFoundHttpException;
         }
 
