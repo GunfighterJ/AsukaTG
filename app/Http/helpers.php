@@ -107,7 +107,7 @@ class Helpers
     }
 
     /**
-     * Escapes Markdown special characters in a string with backslashes.
+     * Escapes HTML special characters in a string for formatting purposes.
      *
      * @param $string
      * @return mixed

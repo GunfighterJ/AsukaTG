@@ -35,13 +35,13 @@ class BotController extends Controller
         $message = $telegram->getWebhookUpdates()->getMessage();
 
         if (!$message->getFrom()) {
-            return response('OK');
+            return response();
         }
 
         AsukaDB::createOrUpdateUser($message->getFrom());
 
         if (AsukaDB::getUser($message->getFrom()->getId())->ignored) {
-            return response('OK');
+            return response();
         }
 
         if ($message->getChat()->getType() == 'group') {
@@ -57,7 +57,7 @@ class BotController extends Controller
 
         $telegram->commandsHandler(true);
 
-        return response('OK');
+        return response();
     }
 
     function updateWebhook($action, $botKey)
