@@ -67,6 +67,7 @@ class MorseCommand extends BaseCommand
         '/' => '-..-.',
         '(' => '-.--.',
         ')' => '-.--.-',
+        ' ' => '/',
     ];
 
     protected $description = 'Translates text to morse code.';

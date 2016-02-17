@@ -100,7 +100,7 @@ class Helpers
     public static function sendMessage($message, $chatId, $params = [])
     {
         $params['chat_id'] = $chatId;
-        $params['text'] = $message;
+        $params['text'] = str_limit($message, 4096);
 
         app('telegram')->bot()->sendMessage($params);
     }
