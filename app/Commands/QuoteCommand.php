@@ -101,24 +101,23 @@ class QuoteCommand extends BaseCommand
 
         $citation = $quotee->first_name;
         if ($quotee->last_name) {
-            $citation .= sprintf(' %s', Helpers::escapeMarkdown($quotee->last_name));
+            $citation .= sprintf(' %s', $quotee->last_name);
         }
 
         if ($quotee->username) {
-            $citation .= sprintf(' (%s)', Helpers::escapeMarkdown($quotee->username));
+            $citation .= sprintf(' (%s)', $quotee->username);
         }
 
         $response .= sprintf('-- <i>%s, %s (#%d)</i>' . PHP_EOL,
-            Helpers::escapeMarkdown($citation),
-            Helpers::escapeMarkdown(date('D, jS M Y H:i:s T', $quote->message_timestamp)), $quote->id);
+            Helpers::escapeMarkdown($citation), date('D, jS M Y H:i:s T', $quote->message_timestamp), $quote->id);
 
-        $addedBy = Helpers::escapeMarkdown($quoter->first_name);
+        $addedBy = $quoter->first_name;
         if ($quoter->last_name) {
-            $addedBy .= sprintf(' %s', Helpers::escapeMarkdown($quoter->last_name));
+            $addedBy .= sprintf(' %s', $quoter->last_name);
         }
 
         if ($quoter->username) {
-            $addedBy .= sprintf(' (%s)', Helpers::escapeMarkdown($quoter->username));
+            $addedBy .= sprintf(' (%s)', $quoter->username);
         }
 
         $response .= sprintf(PHP_EOL . 'Added by %s' . PHP_EOL, Helpers::escapeMarkdown($addedBy));
