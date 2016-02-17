@@ -105,7 +105,7 @@ class QuoteCommand extends BaseCommand
         }
 
         if ($quotee->username) {
-            $citation .= sprintf(' (@%s)', $quotee->username);
+            $citation .= sprintf(' (%s)', $quotee->username);
         }
 
         $response .= sprintf('-- <i>%s, %s (#%d)</i>' . PHP_EOL,
@@ -117,7 +117,7 @@ class QuoteCommand extends BaseCommand
         }
 
         if ($quoter->username) {
-            $addedBy .= sprintf(' (<i>@%s</i>)', $quoter->username);
+            $addedBy .= sprintf(' (%s)', $quoter->username);
         }
 
         $response .= sprintf(PHP_EOL . 'Added by %s' . PHP_EOL, Helpers::escapeMarkdown($addedBy));
