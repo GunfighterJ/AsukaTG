@@ -83,18 +83,24 @@ class ImdbCommand extends BaseCommand
             $results = json_decode($json, true);
         }
 
-        $response = implode(PHP_EOL, [
-            sprintf('<b>URL:</b> http://www.imdb.com/title/%s', Helpers::escapeMarkdown($results['imdbID'])),
-            sprintf('<b>Title:</b> %s', Helpers::escapeMarkdown($results['Title'])),
-            sprintf('<b>Year:</b> %d', Helpers::escapeMarkdown($results['Year'])),
-            sprintf('<b>Genre:</b> %s', Helpers::escapeMarkdown($results['Genre'])),
-            sprintf('<b>IMDb Score:</b> %.1f/10', Helpers::escapeMarkdown($results['imdbRating'])),
-            sprintf('<b>Runtime:</b> %s', Helpers::escapeMarkdown($results['Runtime'])),
-            sprintf('<b>Rating:</b> %s', Helpers::escapeMarkdown($results['Rated'])),
-            sprintf('<b>Stars:</b> %s', Helpers::escapeMarkdown($results['Actors'])),
-            sprintf('<b>Director:</b> %s', Helpers::escapeMarkdown($results['Director'])),
-            PHP_EOL . trim($results['Plot']),
-        ]);
+        $imdbInfo = [
+            'URL' => 'http://www.imdb.com/title/' . $results['imdbID'],
+            'Title' => $results['Title'],
+            'Year' => $results['Year'],
+            'Genre' => $results['Genre'],
+            'IMDb Score' => $results['imdbRating'],
+            'Runtime' => $results['Runtime'],
+            'Rating' => $results['Rated'],
+            'Actors' => $results['Actors'],
+            'Director' => $results['Director']
+        ];
+
+        $response = '';
+        foreach ($imdbInfo as $item => $value) {
+            $response .= sprintf('<b>%s:</b> %s' . PHP_EOL, $item, Helpers::escapeMarkdown($value));
+        }
+
+        $response .= PHP_EOL . trim(Helpers::escapeMarkdown($results['Plot']));
 
         $this->reply($response, ['disable_web_page_preview' => true, 'parse_mode' => 'HTML']);
     }
