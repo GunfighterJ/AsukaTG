@@ -42,6 +42,7 @@ class ImdbCommand extends BaseCommand
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $queryArgs = [
+            'plot' => 'full',
             't'    => trim($arguments),
             'type' => 'movie',
             'r'    => 'json'
