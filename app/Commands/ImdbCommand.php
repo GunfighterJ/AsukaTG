@@ -47,7 +47,7 @@ class ImdbCommand extends BaseCommand
             'r'    => 'json'
         ];
 
-        $json = Helpers::curlGetContents(sprintf('%s/?%s', self::OMDB_API_ENDPOINT, http_build_query($queryArgs)));
+        $json = Helpers::urlGetContents(sprintf('%s/?%s', self::OMDB_API_ENDPOINT, http_build_query($queryArgs)));
         $results = json_decode($json, true);
 
         if (!$results) {
@@ -60,7 +60,7 @@ class ImdbCommand extends BaseCommand
         if (array_key_exists('Error', $results)) {
             $queryArgs['s'] = $queryArgs['t'];
             unset($queryArgs['t']);
-            $json = Helpers::curlGetContents(sprintf('%s/?%s', self::OMDB_API_ENDPOINT, http_build_query($queryArgs)));
+            $json = Helpers::urlGetContents(sprintf('%s/?%s', self::OMDB_API_ENDPOINT, http_build_query($queryArgs)));
             $results = json_decode($json, true);
 
             if (!$results) {
@@ -78,7 +78,7 @@ class ImdbCommand extends BaseCommand
             unset($queryArgs['s']);
             $queryArgs['i'] = $results['Search'][0]['imdbID'];
             $queryArgs['plot'] = 'full';
-            $json = Helpers::curlGetContents(sprintf('%s/?%s', self::OMDB_API_ENDPOINT, http_build_query($queryArgs)));
+            $json = Helpers::urlGetContents(sprintf('%s/?%s', self::OMDB_API_ENDPOINT, http_build_query($queryArgs)));
             $results = json_decode($json, true);
         }
 

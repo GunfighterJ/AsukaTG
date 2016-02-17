@@ -42,12 +42,20 @@ class GoogleCommand extends BaseCommand
 
         $query = trim(rawurlencode($arguments));
         $url = sprintf('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=%s', $query);
-        $body = Helpers::curlGetContents($url);
+        $body = Helpers::urlGetContents($url);
         $json = json_decode($body);
 
-        if (!$json || !count($json->responseData->results)) {
+        if (!$json) {
             $this->reply('No results found!');
+            return;
+        }
 
+        if (!$json->responseData || !count($json->responseData->results)) {
+            if ($json->responseDetails) {
+                $this->reply($json->responseDetails);
+                return;
+            }
+            $this->reply('No results found!');
             return;
         }
 

@@ -19,9 +19,11 @@
 namespace Asuka\Http;
 
 use Exception;
+use GuzzleHttp\Exception\RequestException;
 use Telegram\Bot\Objects\Chat;
 use Telegram\Bot\Objects\Message;
 use Telegram\Bot\Objects\User;
+use GuzzleHttp\Client;
 
 class Helpers
 {
@@ -63,38 +65,29 @@ class Helpers
      * Similar to file_get_contents() but only works on URLs and uses cURL.
      *
      * @param $url
-     * @param bool $dieOnError Exit the whole script if curl throws an error.
+     * @param bool $dieOnError Exit the whole script if an error is thrown.
      * @return mixed
      */
-    public static function curlGetContents($url, $dieOnError = true)
+    public static function urlGetContents($url, $dieOnError = true)
     {
-        $curlOpts = [
-            CURLOPT_URL            => $url,
-            CURLOPT_HEADER         => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CONNECTTIMEOUT => 10,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_USERAGENT      => 'AsukaTG (https://github.com/TheReverend403/AsukaTG)',
-            CURLOPT_MAXREDIRS      => 5,
-            CURLOPT_FAILONERROR    => true,
-        ];
+        $client = new Client();
 
-        $ch = curl_init();
-        curl_setopt_array($ch, $curlOpts);
-        $output = curl_exec($ch);
+        try {
+            $response = $client->get($url);
+        } catch (RequestException $ex) {
+            if ($ex->hasResponse()) {
+                $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
+                self::sendMessage($ex->getResponse(), $message->getChat()->getId(), $message->getMessageId());
+            }
 
-        if (curl_errno($ch)) {
-            $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
-            self::sendMessage(curl_error($ch), $message->getChat()->getId(), $message->getMessageId());
             if ($dieOnError) {
-                curl_close($ch);
                 app()->abort(200);
             }
+
+            return null;
         }
 
-        curl_close($ch);
-
-        return $output;
+        return $response->getBody();
     }
 
     /**
