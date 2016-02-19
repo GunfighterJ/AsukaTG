@@ -37,7 +37,7 @@ class BotController extends Controller
         $message = $telegram->getWebhookUpdates()->getMessage();
 
         // Check if this group is authorised to use the bot
-        if ($message->getChat()->getType() === 'group') {
+        if ($message->getChat()->getType() === 'group' && count(config('asuka.groups.groups_list'))) {
             if (config('asuka.groups.groups_mode') === 'whitelist'
                 && !in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))) {
                 return response('OK');
