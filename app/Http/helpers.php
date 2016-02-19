@@ -124,7 +124,7 @@ class Helpers
      * @param $max
      * @return int random integer between $min and $max
      */
-    public static function getRandomInt($min, $max)
+    public static function getRandomInt($min = 0, $max = PHP_INT_MAX)
     {
         try {
             // Uses random_compat for PHP < 7
