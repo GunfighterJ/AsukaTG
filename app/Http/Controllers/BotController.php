@@ -51,7 +51,7 @@ class BotController extends Controller
             }
 
             // Store this group if it's a new group or the title was updated
-            if ($message->getGroupChatCreated() ||
+            if (($message->getGroupChatCreated() || $message->getSupergroupChatCreated()) ||
                 ($message->getNewChatParticipant() && Helpers::userIsMe($message->getNewChatParticipant()))) {
                 AsukaDB::createOrUpdateGroup($message->getChat());
             }
