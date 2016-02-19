@@ -38,11 +38,11 @@ class BotController extends Controller
 
         // Check if this group is authorised to use the bot
         if ($message->getChat()->getType() === 'group') {
-            if (config('asuka.groups.groups_mode' === 'whitelist')
+            if (config('asuka.groups.groups_mode') === 'whitelist'
                 && !in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))) {
                 return response('OK');
                 // blacklist
-            } elseif (config('asuka.groups.groups_mode' === 'blacklist')
+            } elseif (config('asuka.groups.groups_mode') === 'blacklist'
                 && in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))) {
                 return response('OK');
             }
