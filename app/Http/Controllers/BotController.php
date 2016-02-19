@@ -37,13 +37,13 @@ class BotController extends Controller
         $message = $telegram->getWebhookUpdates()->getMessage();
 
         // Check if this group is authorised to use the bot
-        if ($message->getChat()->getType() === 'group' && count(config('asuka.groups.groups_list'))) {
-            if (config('asuka.groups.groups_mode' == 'whitelist')) {
-                if (!in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))) {
-                    return response('OK');
-                }
+        if ($message->getChat()->getType() === 'group') {
+            if (config('asuka.groups.groups_mode' === 'whitelist')
+                && !in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))) {
+                return response('OK');
                 // blacklist
-            } elseif (in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))) {
+            } elseif (config('asuka.groups.groups_mode' === 'blacklist')
+                && in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))) {
                 return response('OK');
             }
         }
