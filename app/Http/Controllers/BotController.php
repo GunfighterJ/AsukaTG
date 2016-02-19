@@ -20,6 +20,8 @@ namespace Asuka\Http\Controllers;
 
 use Asuka\Http\AsukaDB;
 use Asuka\Http\Helpers;
+use Illuminate\Support\Facades\Log;
+use Monolog\Logger;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class BotController extends Controller
@@ -36,12 +38,12 @@ class BotController extends Controller
 
         // Check if this group is authorised to use the bot
         if ($message->getChat()->getType() === 'group' && count(config('asuka.groups.groups_list'))) {
-            if (config('asuka.groups.groups_mode' === 'whitelist')) {
-                if (array_search($message->getChat()->getId(), config('asuka.groups.groups_list')) === false) {
+            if (config('asuka.groups.groups_mode' == 'whitelist')) {
+                if (!in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))) {
                     return response('OK');
                 }
                 // blacklist
-            } elseif (array_search($message->getChat()->getId(), config('asuka.groups.groups_list')) !== false) {
+            } elseif (in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))) {
                 return response('OK');
             }
         }
