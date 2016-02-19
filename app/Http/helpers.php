@@ -118,8 +118,7 @@ class Helpers
     }
 
     /**
-     * Tries to use random_int() (random_compat or PHP 7) to get a random integer and falls back to mt_rand() on failure.
-     * Not cryptographically secure due to the fallback.
+     * Tries to use random_int() (random_compat or PHP 7) to get a random integer
      *
      * @param $min
      * @param $max
@@ -133,13 +132,14 @@ class Helpers
         } catch (Exception $ex) {
             $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
 
-            $error = 'Error occurred in random_int(), falling back to mt_rand()' . PHP_EOL;
+            $error = 'Error occurred in random_int()' . PHP_EOL;
             $error .= $ex->getMessage();
 
             self::sendMessage($error, $message->getChat()->getId(), $message->getMessageId());
-
-            return mt_rand($min, $max);
+            app()->abort(200);
         }
+
+        return null;
     }
 }
 
