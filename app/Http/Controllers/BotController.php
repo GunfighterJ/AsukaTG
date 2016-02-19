@@ -34,6 +34,18 @@ class BotController extends Controller
         $telegram = app('telegram')->bot();
         $message = $telegram->getWebhookUpdates()->getMessage();
 
+        // Check if this group is authorised to use the bot
+        if ($message->getChat()->getType() === 'group' && count(config('asuka.groups.groups_list'))) {
+            if (config('asuka.groups.groups_mode' === 'whitelist')) {
+                if (!array_search($message->getChat()->getId(), config('asuka.groups.groups_list'))) {
+                    return response('OK');
+                }
+                // blacklist
+            } elseif (array_search($message->getChat()->getId(), config('asuka.groups.groups_list'))) {
+                return response('OK');
+            }
+        }
+
         if (!$message->getFrom()) {
             return response('OK');
         }
@@ -44,7 +56,7 @@ class BotController extends Controller
             return response('OK');
         }
 
-        if ($message->getChat()->getType() == 'group') {
+        if ($message->getChat()->getType() === 'group') {
             if ($message->getGroupChatCreated() ||
                 ($message->getNewChatParticipant() && Helpers::userIsMe($message->getNewChatParticipant()))) {
                 AsukaDB::createOrUpdateGroup($message->getChat());
@@ -66,9 +78,9 @@ class BotController extends Controller
 
         $bot = $telegram->bot();
 
-        if ($action == 'set') {
+        if ($action === 'set') {
             return $bot->setWebhook(['url' => route('bot.webhook', ['botKey' => $botKey])]);
-        } elseif ($action == 'remove') {
+        } elseif ($action === 'remove') {
             return $bot->removeWebhook();
         }
 

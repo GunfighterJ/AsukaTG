@@ -23,6 +23,8 @@ $app = new Laravel\Lumen\Application(
 
 // $app->withEloquent();
 
+$app->configure('asuka');
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
