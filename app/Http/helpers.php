@@ -76,13 +76,13 @@ class Helpers
             $response = $client->get($url);
         } catch (RequestException $ex) {
             if ($ex->hasResponse()) {
-                $errorMsg = sprintf('%s %s', $ex->getResponse()->getStatusCode(), $ex->getResponse()->getReasonPhrase());
+                $errorMsg = sprintf('%s %s' . PHP_EOL, $ex->getResponse()->getStatusCode(), $ex->getResponse()->getReasonPhrase());
                 $errorMsg .= sprintf('URL: %s', $ex->getRequest()->getUri());
             } else {
                 $errorMsg = $ex->getMessage();
             }
 
-            $errorMsg = sprintf('Error: %s' . PHP_EOL, $errorMsg);
+            $errorMsg = sprintf('Error: %s', $errorMsg);
             $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
 
             self::sendMessage($errorMsg, $message->getChat()->getId(), [
