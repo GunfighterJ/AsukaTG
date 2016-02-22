@@ -81,8 +81,11 @@ class Helpers
                 $errorMsg = $ex->getMessage();
             }
 
+            $errorMsg = sprintf('Error: %s', $errorMsg);
             $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
-            self::sendMessage($errorMsg, $message->getChat()->getId(), $message->getMessageId());
+            self::sendMessage($errorMsg, $message->getChat()->getId(), [
+                'reply_to_message_id' => $message->getMessageId()
+            ]);
 
             if ($dieOnError) {
                 app()->abort(200);
