@@ -76,7 +76,7 @@ class Helpers
             $response = $client->get($url);
         } catch (RequestException $ex) {
             if ($ex->hasResponse()) {
-                $errorMsg = $ex->getResponse();
+                $errorMsg = $ex->getResponse()->getReasonPhrase();
             } else {
                 $errorMsg = $ex->getMessage();
             }
