@@ -86,7 +86,8 @@ class Helpers
             $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
 
             self::sendMessage($errorMsg, $message->getChat()->getId(), [
-                'reply_to_message_id' => $message->getMessageId()
+                'reply_to_message_id' => $message->getMessageId(),
+                'parse_mode'          => 'HTML'
             ]);
 
             if ($dieOnError) {
