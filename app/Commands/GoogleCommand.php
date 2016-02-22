@@ -29,10 +29,12 @@ class GoogleCommand extends BaseCommand
     public function handle($arguments)
     {
         if (empty($arguments)) {
-            $badArgsResponse = implode(PHP_EOL, [
+            $badArgsResponse = implode(
+                PHP_EOL, [
                 'Please supply some search terms.',
                 'Example: /g What happens if you Google Google?',
-            ]);
+                ]
+            );
             $this->reply($badArgsResponse);
 
             return;
@@ -59,8 +61,10 @@ class GoogleCommand extends BaseCommand
             return;
         }
 
-        $response = sprintf('About %s results (%.2f seconds)' . PHP_EOL,
-            $json->responseData->cursor->resultCount, $json->responseData->cursor->searchResultTime);
+        $response = sprintf(
+            'About %s results (%.2f seconds)' . PHP_EOL,
+            $json->responseData->cursor->resultCount, $json->responseData->cursor->searchResultTime
+        );
 
         $response .= $json->responseData->results[0]->unescapedUrl;
 

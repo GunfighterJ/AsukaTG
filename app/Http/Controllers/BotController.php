@@ -41,18 +41,21 @@ class BotController extends Controller
             // Check if this group is authorised to use the bot
             if (count(config('asuka.groups.groups_list'))) {
                 if (config('asuka.groups.groups_mode') === 'whitelist'
-                    && !in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))) {
+                    && !in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))
+                ) {
                     return response('OK');
                     // blacklist
                 } elseif (config('asuka.groups.groups_mode') === 'blacklist'
-                    && in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))) {
+                    && in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))
+                ) {
                     return response('OK');
                 }
             }
 
             // Store this group if it's a new group or the title was updated
-            if (($message->getGroupChatCreated() || $message->getSupergroupChatCreated()) ||
-                ($message->getNewChatParticipant() && Helpers::userIsMe($message->getNewChatParticipant()))) {
+            if (($message->getGroupChatCreated() || $message->getSupergroupChatCreated()) 
+                || ($message->getNewChatParticipant() && Helpers::userIsMe($message->getNewChatParticipant()))
+            ) {
                 AsukaDB::createOrUpdateGroup($message->getChat());
             }
 

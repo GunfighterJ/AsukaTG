@@ -29,7 +29,7 @@ class BotMiddleware
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param  \Closure                 $next
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -47,8 +47,12 @@ class BotMiddleware
         if ($request->getMethod() != Request::METHOD_POST) {
             $ownerId = $telegram->getBotConfig(config('telegram.default'))['owner_id'];
             if ($ownerId) {
-                Helpers::sendMessage(sprintf('The IP %s just accessed %s',
-                    $request->getClientIp(), $request->url()), $ownerId);
+                Helpers::sendMessage(
+                    sprintf(
+                        'The IP %s just accessed %s',
+                        $request->getClientIp(), $request->url()
+                    ), $ownerId
+                );
             }
         }
 

@@ -31,11 +31,13 @@ class RollCommand extends BaseCommand
     public function handle($arguments)
     {
         // A default response for when the user is an idiot.
-        $badArgsResponse = implode(PHP_EOL, [
+        $badArgsResponse = implode(
+            PHP_EOL, [
             'Please specify the amount and type of dice to roll.',
             'Command must be formatted as /roll <1-128>d<1-120>',
             'Example: /roll 3d6',
-        ]);
+            ]
+        );
 
         if (empty($arguments)) {
             $this->reply($badArgsResponse);
@@ -62,8 +64,12 @@ class RollCommand extends BaseCommand
         }
 
         if ($diceType < self::DIE_MIN_FACES || $diceType > self::DIE_MAX_FACES) {
-            $this->reply(sprintf('Die type must be between %d and %d (inclusive).' . PHP_EOL,
-                self::DIE_MIN_FACES, self::DIE_MAX_FACES));
+            $this->reply(
+                sprintf(
+                    'Die type must be between %d and %d (inclusive).' . PHP_EOL,
+                    self::DIE_MIN_FACES, self::DIE_MAX_FACES
+                )
+            );
 
             return;
         }

@@ -32,13 +32,15 @@ class DecideCommand extends BaseCommand
 
     public function handle($arguments)
     {
-        $badArgsResponse = implode(PHP_EOL, [
+        $badArgsResponse = implode(
+            PHP_EOL, [
             'Please supply at least 1 choice.',
             'Example: /decide Eat cookies?',
             'Example: /decide Cookies | Cake',
             'Example: /decide Cookies or Cake',
             'Example: /decide Cookies, Cake, Pie',
-        ]);
+            ]
+        );
 
         if (empty($arguments)) {
             $this->reply($badArgsResponse);

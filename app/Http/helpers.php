@@ -30,7 +30,7 @@ class Helpers
     /**
      * Checks to see if a given user is actually the bot.
      *
-     * @param User $user The user we're comparing.
+     * @param  User $user The user we're comparing.
      * @return bool
      */
     public static function userIsMe(User $user)
@@ -41,8 +41,8 @@ class Helpers
     /**
      * Checks to see if two users are actually the same user.
      *
-     * @param User $user1
-     * @param User $user2
+     * @param  User $user1
+     * @param  User $user2
      * @return bool
      */
     public static function usersAreSame(User $user1, User $user2)
@@ -53,7 +53,7 @@ class Helpers
     /**
      * Checks whether or not a user is the bot's owner.
      *
-     * @param User $user
+     * @param  User $user
      * @return bool
      */
     public static function userIsOwner(User $user)
@@ -64,8 +64,8 @@ class Helpers
     /**
      * Similar to file_get_contents() but only works on URLs and uses cURL.
      *
-     * @param $url
-     * @param bool $dieOnError Exit the whole script if an error is thrown.
+     * @param  $url
+     * @param  bool $dieOnError Exit the whole script if an error is thrown.
      * @return mixed
      */
     public static function urlGetContents($url, $dieOnError = true)
@@ -76,9 +76,13 @@ class Helpers
             $response = $client->get($url);
         } catch (RequestException $ex) {
             if ($ex->hasResponse()) {
-                $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
-                self::sendMessage($ex->getResponse(), $message->getChat()->getId(), $message->getMessageId());
+                $errorMsg = $ex->getResponse();
+            } else {
+                $errorMsg = $ex->getMessage();
             }
+
+            $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
+            self::sendMessage($errorMsg, $message->getChat()->getId(), $message->getMessageId());
 
             if ($dieOnError) {
                 app()->abort(200);
@@ -95,7 +99,7 @@ class Helpers
      *
      * @param $message
      * @param $chatId
-     * @param array $params Extra Telegram Bot API parameters to send with this message.
+     * @param array   $params Extra Telegram Bot API parameters to send with this message.
      */
     public static function sendMessage($message, $chatId, $params = [])
     {
@@ -109,7 +113,7 @@ class Helpers
     /**
      * Escapes HTML special characters in a string for formatting purposes.
      *
-     * @param $string
+     * @param  $string
      * @return mixed
      */
     public static function escapeMarkdown($string)
@@ -120,8 +124,8 @@ class Helpers
     /**
      * Tries to use random_int() (random_compat or PHP 7) to get a random integer
      *
-     * @param $min
-     * @param $max
+     * @param  $min
+     * @param  $max
      * @return int random integer between $min and $max
      */
     public static function getRandomInt($min = 0, $max = PHP_INT_MAX)
@@ -148,7 +152,7 @@ class AsukaDB
     /**
      * Creates a new quote from a Message containing another Message as a reply.
      *
-     * @param Message $message The Message to make a quote from. Assumed to contain a valid reply.
+     * @param  Message $message The Message to make a quote from. Assumed to contain a valid reply.
      * @return int|null Qoute ID on success, null on failure.
      */
     public static function createQuote(Message $message)
@@ -175,9 +179,11 @@ class AsukaDB
         if (!$existing) {
             return $db->insertGetId($values);
         } else {
-            Helpers::sendMessage(sprintf('I already have that quote saved as #%s.', $existing), $groupId, [
+            Helpers::sendMessage(
+                sprintf('I already have that quote saved as #%s.', $existing), $groupId, [
                 'reply_to_message_id' => $message->getMessageId()
-            ]);
+                ]
+            );
 
             return null;
         }
@@ -186,7 +192,7 @@ class AsukaDB
     /**
      * Adds a new {@User} to the database, or updates an existing one if it already exists.
      *
-     * @param User $user The user to add to the database.
+     * @param User  $user   The user to add to the database.
      * @param array $params
      */
     public static function createOrUpdateUser(User $user, $params = [])
@@ -211,7 +217,7 @@ class AsukaDB
     /**
      * Adds a new {@User} to the database, or updates an existing one if it already exists.
      *
-     * @param User $user The user to ignore or unignore to the database.
+     * @param User $user    The user to ignore or unignore to the database.
      * @param bool $ignored
      */
     public static function updateUserIgnore(User $user, $ignored = true)
@@ -223,8 +229,8 @@ class AsukaDB
      * Fetches quote data for a quote with an ID matching $id, or a random quote if $id is not specified.
      * Optionally specify a group ID to only get quotes originating from that group.
      *
-     * @param null $id
-     * @param int|null $groupId
+     * @param  null     $id
+     * @param  int|null $groupId
      * @return mixed|static Returns a quote object on success.
      */
     public static function getQuote($id = null, $groupId = null)
@@ -247,7 +253,7 @@ class AsukaDB
     /**
      * Fetches user data for a user with an ID matching $id
      *
-     * @param null $id
+     * @param  null $id
      * @return mixed|static Returns a user object on success.
      */
     public static function getUser($id)

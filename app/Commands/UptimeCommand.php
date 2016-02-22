@@ -37,12 +37,14 @@ class UptimeCommand extends BaseCommand
 
         $uptime = $system->getUptime();
 
-        $response = implode(', ', [
+        $response = implode(
+            ', ', [
             sprintf(ngettext('%d day', '%d days', $uptime->d), $uptime->d),
             sprintf(ngettext('%d hour', '%d hours', $uptime->h), $uptime->h),
             sprintf(ngettext('%d minute', '%d minutes', $uptime->i), $uptime->i),
             sprintf(ngettext('%d second', '%d seconds', $uptime->s), $uptime->s),
-        ]);
+            ]
+        );
 
         $this->reply($response);
     }
