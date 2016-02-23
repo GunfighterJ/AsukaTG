@@ -30,9 +30,10 @@ class GoogleCommand extends BaseCommand
     {
         if (empty($arguments)) {
             $badArgsResponse = implode(
-                PHP_EOL, [
-                'Please supply some search terms.',
-                'Example: /g What happens if you Google Google?',
+                PHP_EOL,
+                [
+                    'Please supply some search terms.',
+                    'Example: /g What happens if you Google Google?',
                 ]
             );
             $this->reply($badArgsResponse);

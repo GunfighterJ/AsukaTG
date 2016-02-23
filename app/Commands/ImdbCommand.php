@@ -31,9 +31,10 @@ class ImdbCommand extends BaseCommand
     {
         if (empty($arguments)) {
             $badArgsResponse = implode(
-                PHP_EOL, [
-                'Please supply some search terms.',
-                'Example: /imdb Hitchhikers Guide to the Galaxy',
+                PHP_EOL,
+                [
+                    'Please supply some search terms.',
+                    'Example: /imdb Hitchhikers Guide to the Galaxy',
                 ]
             );
             $this->reply($badArgsResponse);
