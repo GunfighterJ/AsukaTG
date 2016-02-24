@@ -18,65 +18,14 @@
 
 namespace Asuka\Commands;
 
+use Asuka\Http\Helpers;
+
 class SpurdoCommand extends BaseCommand
 {
-    const SPURDO_REPLACEMENTS = [
-        'epic' => 'ebin',
-        'wh'   => 'w',
-        'th'   => 'd',
-        'af'   => 'ab',
-        'ap'   => 'ab',
-        'ca'   => 'ga',
-        'ck'   => 'gg',
-        'co'   => 'go',
-        'ev'   => 'eb',
-        'ex'   => 'egz',
-        'et'   => 'ed',
-        'iv'   => 'ib',
-        'it'   => 'id',
-        'ke'   => 'ge',
-        'nt'   => 'nd',
-        'op'   => 'ob',
-        'ot'   => 'od',
-        'po'   => 'bo',
-        'pe'   => 'be',
-        'pi'   => 'bi',
-        'up'   => 'ub',
-        'va'   => 'ba',
-        'cr'   => 'gr',
-        'kn'   => 'gn',
-        'lt'   => 'ld',
-        'mm'   => 'm',
-        'pr'   => 'br',
-        'ts'   => 'dz',
-        'tr'   => 'dr',
-        'bs'   => 'bz',
-        'ds'   => 'dz',
-        'es'   => 'es',
-        'fs'   => 'fz',
-        'gs'   => 'gz',
-        ' is'  => ' iz',
-        'ls'   => 'lz',
-        'ms'   => 'mz',
-        'ns'   => 'nz',
-        'rs'   => 'rz',
-        'ss'   => 'sz',
-        'us'   => 'uz',
-        'ws'   => 'wz',
-        'ys'   => 'yz',
-        'alk'  => 'olk',
-        'ing'  => 'ign',
-        'ic'   => 'ig',
-        'ng'   => 'nk',
-        'kek'  => 'geg',
-        'some' => 'sum',
-        'meme' => 'maymay',
-    ];
-
-    const EBIN_FACES = [':D', ':DD', ':DDD', ':-D', 'XD', 'XXD', 'XDD', 'XXDD', 'xD', 'xDD', ':dd'];
-
     protected $description = 'Spurdos whatever input you send.';
     protected $name = 'spurdo';
+
+    const SPURDO_API = 'https://spurdo.pste.pw/api';
 
     public function handle($arguments)
     {
@@ -85,7 +34,7 @@ class SpurdoCommand extends BaseCommand
         $replyToSpurdo = $message->getReplyToMessage();
         if (!$replyToSpurdo) {
             if ($arguments) {
-                $response = strtolower($arguments);
+                $toSpurdo = strtolower($arguments);
             } else {
                 $this->reply('Please supply me with either a reply, or some text.');
 
@@ -99,25 +48,16 @@ class SpurdoCommand extends BaseCommand
                 return;
             }
 
-            $response = strtolower($replyToSpurdo->getText());
+            $toSpurdo = strtolower($replyToSpurdo->getText());
         }
 
-        foreach (self::SPURDO_REPLACEMENTS as $match => $replacement) {
-            $response = str_replace($match, $replacement, $response);
-        }
+        $apiRequest = sprintf('%s?%s', self::SPURDO_API, http_build_query(['text' => $toSpurdo]));
+        $json = json_decode(Helpers::urlGetContents($apiRequest));
 
-        while (preg_match('/\.|,|\?|!(?=\s|$|\.)/m', $response)) {
-            $response = preg_replace(
-                '/\.|,|\?|!(?=\s|$|\.)/m',
-                sprintf(' %s', self::EBIN_FACES[array_rand(self::EBIN_FACES)]), $response, 1
-            );
-        }
-
-        foreach (self::EBIN_FACES as $ebinFace) {
-            if (str_contains($response, $ebinFace)) {
-                $response .= sprintf(' %s', self::EBIN_FACES[array_rand(self::EBIN_FACES)]);
-                break;
-            }
+        if ($json->status === 0) {
+            $response = $json->text;
+        } else {
+            $response = $json->error;
         }
 
         $params = ['disable_web_page_preview' => true];
