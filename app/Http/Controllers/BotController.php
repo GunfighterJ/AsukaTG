@@ -59,21 +59,25 @@ class BotController extends Controller
                 if (config('asuka.groups.groups_mode') === 'whitelist'
                     && !in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))
                 ) {
-                    Helpers::sendMessage(
-                        'This group is not whitelisted to use this bot.',
-                        $message->getChat()->getId(),
-                        ['reply_to_message_id' => $message->getMessageId()]
-                    );
+                    if (starts_with($message->getText(), '/')) {
+                        Helpers::sendMessage(
+                            'This group is not whitelisted to use this bot.',
+                            $message->getChat()->getId(),
+                            ['reply_to_message_id' => $message->getMessageId()]
+                        );
+                    }
                     return response('OK');
                     // blacklist
                 } elseif (config('asuka.groups.groups_mode') === 'blacklist'
                     && in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))
                 ) {
-                    Helpers::sendMessage(
-                        'This group is blacklisted from using this bot.',
-                        $message->getChat()->getId(),
-                        ['reply_to_message_id' => $message->getMessageId()]
-                    );
+                    if (starts_with($message->getText(), '/')) {
+                        Helpers::sendMessage(
+                            'This group is blacklisted from using this bot.',
+                            $message->getChat()->getId(),
+                            ['reply_to_message_id' => $message->getMessageId()]
+                        );
+                    }
                     return response('OK');
                 }
             }
