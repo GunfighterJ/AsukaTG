@@ -47,6 +47,12 @@ class BotController extends Controller
             AsukaDB::updateGroup($message->getChat());
         }
 
+        if (!$message->getFrom()) {
+            return response('OK');
+        }
+
+        AsukaDB::createOrUpdateUser($message->getFrom());
+
         if (in_array($message->getChat()->getType(), ['group', 'supergroup'])) {
             // Check if this group is authorised to use the bot
             if (count(config('asuka.groups.groups_list'))) {
@@ -62,12 +68,6 @@ class BotController extends Controller
                 }
             }
         }
-
-        if (!$message->getFrom()) {
-            return response('OK');
-        }
-
-        AsukaDB::createOrUpdateUser($message->getFrom());
 
         if (AsukaDB::getUser($message->getFrom()->getId())->ignored) {
             return response('OK');
