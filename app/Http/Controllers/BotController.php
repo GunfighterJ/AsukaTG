@@ -20,8 +20,6 @@ namespace Asuka\Http\Controllers;
 
 use Asuka\Http\AsukaDB;
 use Asuka\Http\Helpers;
-use Illuminate\Support\Facades\Log;
-use Monolog\Logger;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class BotController extends Controller
@@ -42,7 +40,7 @@ class BotController extends Controller
 
         AsukaDB::createOrUpdateUser($message->getFrom());
 
-        if (in_array($message->getChat()->getType(), ['group', 'supergroup'])) {
+        if (Helpers::isGroup($message->getChat())) {
             // Store this group if it's a new group or the title was updated
             if (($message->getGroupChatCreated() || $message->getSupergroupChatCreated())
                 || ($message->getNewChatParticipant() && Helpers::userIsMe($message->getNewChatParticipant()))
@@ -55,31 +53,8 @@ class BotController extends Controller
             }
 
             // Check if this group is authorised to use the bot
-            if (count(config('asuka.groups.groups_list'))) {
-                if (config('asuka.groups.groups_mode') === 'whitelist'
-                    && !in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))
-                ) {
-                    if (starts_with($message->getText(), '/')) {
-                        Helpers::sendMessage(
-                            'This group is not whitelisted to use this bot.',
-                            $message->getChat()->getId(),
-                            ['reply_to_message_id' => $message->getMessageId()]
-                        );
-                    }
-                    return response('OK');
-                    // blacklist
-                } elseif (config('asuka.groups.groups_mode') === 'blacklist'
-                    && in_array($message->getChat()->getId(), config('asuka.groups.groups_list'))
-                ) {
-                    if (starts_with($message->getText(), '/')) {
-                        Helpers::sendMessage(
-                            'This group is blacklisted from using this bot.',
-                            $message->getChat()->getId(),
-                            ['reply_to_message_id' => $message->getMessageId()]
-                        );
-                    }
-                    return response('OK');
-                }
+            if (!Helpers::groupIsAuthorized($message->getChat())) {
+                return response('OK');
             }
         }
 

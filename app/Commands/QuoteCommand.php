@@ -32,7 +32,7 @@ class QuoteCommand extends BaseCommand
         // Detect a reply and add it as a quote
         $quoteSource = $message->getReplyToMessage();
         if ($quoteSource) {
-            if (!in_array($this->getUpdate()->getMessage()->getChat()->getType(), ['group', 'supergroup'])) {
+            if (!Helpers::isGroup($message->getChat())) {
                 $this->reply('You can only add quotes in a group.');
 
                 return;
@@ -44,7 +44,7 @@ class QuoteCommand extends BaseCommand
                 return;
             }
 
-            if (starts_with(trim($quoteSource->getText()), '/')) {
+            if (Helpers::isCommand($message)) {
                 $this->reply('Don\'t be silly, why would you quote commands?');
 
                 return;

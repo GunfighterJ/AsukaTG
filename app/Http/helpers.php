@@ -62,6 +62,62 @@ class Helpers
     }
 
     /**
+     * Checks to see if a Chat is a group or supergroup.
+     *
+     * @param Chat $chat
+     * @return bool
+     */
+    public static function isGroup(Chat $chat) {
+        return in_array($chat->getType(), ['group', 'supergroup']);
+    }
+
+    /**
+     *  Checks to see if a message is a command.
+     *
+     * @param Message $message
+     * @return bool
+     */
+    public static function isCommand(Message $message) {
+        return starts_with(trim($message->getText()), '/');
+    }
+
+    /**
+     * Checks to see if a group is authorized to use the bot.
+     *
+     * @param Chat $group
+     * @return bool
+     */
+    public static function groupIsAuthorized(Chat $group) {
+        $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
+
+        if (count(config('asuka.groups.groups_list'))) {
+            if (config('asuka.groups.groups_mode') === 'whitelist'
+                && !in_array($group->getId(), config('asuka.groups.groups_list'))) {
+                if (self::isCommand($message)) {
+                    self::sendMessage(
+                        'This group is not whitelisted to use this bot.',
+                        $group->getId(),
+                        ['reply_to_message_id' => $message->getMessageId()]
+                    );
+                }
+                return false;
+                // blacklist
+            } elseif (config('asuka.groups.groups_mode') === 'blacklist'
+                && in_array($group->getId(), config('asuka.groups.groups_list'))) {
+                if (self::isCommand($message)) {
+                    self::sendMessage(
+                        'This group is blacklisted from using this bot.',
+                        $group->getId(),
+                        ['reply_to_message_id' => $message->getMessageId()]
+                    );
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Similar to file_get_contents() but only works on URLs and uses cURL.
      *
      * @param  $url
@@ -276,14 +332,26 @@ class AsukaDB
      */
     public static function createOrUpdateGroup(Chat $group)
     {
-        $db = app('db')->connection()->table('groups');
+        $db = app('db')->connection();
+
+        // Migrate quotes to supergroup.
+        $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
+        if ($message->getSupergroupChatCreated()) {
+            $oldId = $message->getMigrateFromChatId();
+            $newId = $message->getMigrateToChatId();
+
+            $db->table('quotes')->where('group_id', $oldId)->update(['group_id' => $newId]);
+            $db->table('groups')->where('id', $oldId)->update(['id' => $newId]);
+            return;
+        }
+
         $values = [
             'id'    => $group->getId(),
             'title' => $group->getTitle(),
         ];
 
-        if (!$db->where('id', $group->getId())->limit(1)->value('id')) {
-            $db->insert($values);
+        if (!$db->table('groups')->where('id', $group->getId())->limit(1)->value('id')) {
+            $db->table('groups')->insert($values);
         } else {
             self::updateGroup($group);
         }
