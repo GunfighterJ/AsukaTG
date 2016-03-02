@@ -36,17 +36,6 @@ class BotController extends Controller
         $telegram = app('telegram')->bot();
         $message = $telegram->getWebhookUpdates()->getMessage();
 
-        // Store this group if it's a new group or the title was updated
-        if (($message->getGroupChatCreated() || $message->getSupergroupChatCreated())
-            || ($message->getNewChatParticipant() && Helpers::userIsMe($message->getNewChatParticipant()))
-        ) {
-            AsukaDB::createOrUpdateGroup($message->getChat());
-        }
-
-        if ($message->getNewChatTitle()) {
-            AsukaDB::updateGroup($message->getChat());
-        }
-
         if (!$message->getFrom()) {
             return response('OK');
         }
@@ -54,6 +43,17 @@ class BotController extends Controller
         AsukaDB::createOrUpdateUser($message->getFrom());
 
         if (in_array($message->getChat()->getType(), ['group', 'supergroup'])) {
+            // Store this group if it's a new group or the title was updated
+            if (($message->getGroupChatCreated() || $message->getSupergroupChatCreated())
+                || ($message->getNewChatParticipant() && Helpers::userIsMe($message->getNewChatParticipant()))
+            ) {
+                AsukaDB::createOrUpdateGroup($message->getChat());
+            }
+
+            if ($message->getNewChatTitle()) {
+                AsukaDB::updateGroup($message->getChat());
+            }
+
             // Check if this group is authorised to use the bot
             if (count(config('asuka.groups.groups_list'))) {
                 if (config('asuka.groups.groups_mode') === 'whitelist'
