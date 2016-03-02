@@ -44,7 +44,7 @@ class QuoteCommand extends BaseCommand
                 return;
             }
 
-            if (Helpers::isCommand($message)) {
+            if (Helpers::isCommand($quoteSource)) {
                 $this->reply('Don\'t be silly, why would you quote commands?');
 
                 return;
