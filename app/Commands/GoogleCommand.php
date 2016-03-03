@@ -62,12 +62,20 @@ class GoogleCommand extends BaseCommand
             return;
         }
 
+        $cursor = $json->responseData->cursor;
         $response = sprintf(
-            'About %s results (%.2f seconds)' . PHP_EOL,
-            $json->responseData->cursor->resultCount, $json->responseData->cursor->searchResultTime
+            'About %s results (%.2f seconds)' . PHP_EOL . PHP_EOL,
+            $cursor->resultCount,
+            $cursor->searchResultTime
         );
 
-        $response .= $json->responseData->results[0]->unescapedUrl;
+        $results = collect($json->responseData->results)->slice(0, 5);
+        foreach ($results->all() as $result) {
+            $response .= sprintf('<b>%s.</b> <a href="%s">%s</a>' . PHP_EOL,
+                $results->search($result) + 1,
+                Helpers::escapeMarkdown($result->url),
+                Helpers::escapeMarkdown($result->titleNoFormatting));
+        }
 
         $this->reply($response);
     }
