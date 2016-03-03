@@ -44,7 +44,7 @@ class GoogleCommand extends BaseCommand
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $query = trim(rawurlencode($arguments));
-        $url = sprintf('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=%s&rsz=4', $query);
+        $url = sprintf('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=%s&rsz=5', $query);
         $body = Helpers::urlGetContents($url);
         $json = json_decode($body);
 
