@@ -64,7 +64,7 @@ class GoogleCommand extends BaseCommand
 
         $cursor = $json->responseData->cursor;
         $response = sprintf(
-            'About %s results (%.2f seconds)' . PHP_EOL . PHP_EOL,
+            'About %s results (%.2f seconds)' . PHP_EOL,
             $cursor->resultCount,
             $cursor->searchResultTime
         );
