@@ -69,12 +69,12 @@ class GoogleCommand extends BaseCommand
             $cursor->searchResultTime
         );
 
-        $results = collect($json->responseData->results)->slice(0, 5);
+        $results = collect($json->responseData->results)->slice(0, 6);
         foreach ($results->all() as $result) {
             $response .= sprintf('<b>%s.</b> <a href="%s">%s</a>' . PHP_EOL,
                 $results->search($result) + 1,
                 Helpers::escapeMarkdown($result->url),
-                Helpers::escapeMarkdown($result->titleNoFormatting));
+                Helpers::escapeMarkdown(html_entity_decode($result->titleNoFormatting, ENT_QUOTES | ENT_HTML401)));
         }
 
         $this->reply($response, ['parse_mode' => 'HTML', 'disable_web_page_preview' => true]);
