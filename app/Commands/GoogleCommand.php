@@ -44,7 +44,7 @@ class GoogleCommand extends BaseCommand
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
         $query = trim(rawurlencode($arguments));
-        $url = sprintf('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=%s', $query);
+        $url = sprintf('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=%s&rsz=4', $query);
         $body = Helpers::urlGetContents($url);
         $json = json_decode($body);
 
@@ -69,7 +69,7 @@ class GoogleCommand extends BaseCommand
             $cursor->searchResultTime
         );
 
-        $results = collect($json->responseData->results)->slice(0, 6);
+        $results = collect($json->responseData->results)->slice(0, 5);
         foreach ($results->all() as $result) {
             $response .= sprintf('<b>%s.</b> <a href="%s">%s</a>' . PHP_EOL,
                 $results->search($result) + 1,
