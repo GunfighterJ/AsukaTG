@@ -77,6 +77,6 @@ class GoogleCommand extends BaseCommand
                 Helpers::escapeMarkdown($result->titleNoFormatting));
         }
 
-        $this->reply($response);
+        $this->reply($response, ['parse_mode' => 'HTML', 'disable_web_page_preview' => true]);
     }
 }
