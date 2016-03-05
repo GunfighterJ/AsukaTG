@@ -7,4 +7,5 @@ return [
             return intval(trim($val));
         }, explode(',', env('ASUKA_GROUPS_LIST', '')))
     ],
+    'botan_key' => env('BOTAN_KEY', null),
 ];

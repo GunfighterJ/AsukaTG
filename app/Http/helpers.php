@@ -163,8 +163,12 @@ class Helpers
      * @param $chatId
      * @param array   $params Extra Telegram Bot API parameters to send with this message.
      */
-    public static function sendMessage($message, $chatId, $params = [])
+    public static function sendMessage($message, $chatId = null, $params = [])
     {
+        if (!$chatId) {
+            $chatId = app('telegram')->bot()->getWebhookUpdates()->getMessage()->getChat()->getId();
+        }
+
         $params['chat_id'] = $chatId;
         $end = ' ... (message truncated to 4096 bytes)';
         $params['text'] = str_limit($message, 4096 - mb_strwidth($end, 'UTF-8'), $end);

@@ -19,6 +19,8 @@
 namespace Asuka\Commands;
 
 use Asuka\Http\Helpers;
+use Exception;
+use IPRIT\BotanSDK\Botan;
 use Telegram\Bot\Commands\Command;
 
 class BaseCommand extends Command

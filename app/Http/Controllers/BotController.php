@@ -20,6 +20,8 @@ namespace Asuka\Http\Controllers;
 
 use Asuka\Http\AsukaDB;
 use Asuka\Http\Helpers;
+use Exception;
+use IPRIT\BotanSDK\Botan;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class BotController extends Controller
@@ -39,6 +41,24 @@ class BotController extends Controller
         }
 
         AsukaDB::createOrUpdateUser($message->getFrom());
+
+        if (Helpers::isCommand($message) && config('asuka.botan_key') !== null) {
+            try {
+                $botan = new Botan(config('asuka.botan_key'));
+            } catch (Exception $ex) {
+                Helpers::sendMessage($ex->getMessage());
+            }
+
+            $messageJson = json_decode($message->toJson());
+
+            try {
+                if (isset($botan)) {
+                    $botan->track($messageJson, substr($message->getText(), ltrim('/', explode(' ', $message->getText())[0])));
+                }
+            } catch (Exception $ex) {
+                Helpers::sendMessage($ex->getMessage());
+            }
+        }
 
         if (Helpers::isGroup($message->getChat())) {
             // Store this group if it's a new group or the title was updated

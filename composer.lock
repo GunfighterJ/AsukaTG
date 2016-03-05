@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "94271bf42d5569f7fae20b6a51ec75c0",
-    "content-hash": "c2557300ff2cb3a4d084e25fd2a0d484",
+    "hash": "9fb77b8473f0e37d88089fe889056ca2",
+    "content-hash": "c0a619301e3ff68c3d30253008b11e0c",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -1305,6 +1305,53 @@
             "time": "2016-02-02 16:45:07"
         },
         {
+            "name": "iprit/botan-php",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/IPRIT/botan-php.git",
+                "reference": "4806e2281de26a18854edfe01ee12eed07a209bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/IPRIT/botan-php/zipball/4806e2281de26a18854edfe01ee12eed07a209bb",
+                "reference": "4806e2281de26a18854edfe01ee12eed07a209bb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "IPRIT\\BotanSDK\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Aleksandr Belov",
+                    "email": "ipritoflex7@gmail.com"
+                }
+            ],
+            "description": "PHP SDK for Botan.io",
+            "homepage": "http://github.com/IPRIT/botan-php",
+            "keywords": [
+                "api",
+                "bot",
+                "botan",
+                "botan.io",
+                "botanio",
+                "sdk",
+                "stats",
+                "telegram"
+            ],
+            "time": "2015-08-11 14:59:33"
+        },
+        {
             "name": "irazasyed/telegram-bot-sdk",
             "version": "dev-master",
             "source": {
@@ -1314,7 +1361,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/irazasyed/telegram-bot-sdk/zipball/743a86c4027c88d82e562fac370d766b92a36a08",
+                "url": "https://api.github.com/repos/irazasyed/telegram-bot-sdk/zipball/67d1d0169e747741d981c1a3b2c74efbb4e2533f",
                 "reference": "743a86c4027c88d82e562fac370d766b92a36a08",
                 "shasum": ""
             },
