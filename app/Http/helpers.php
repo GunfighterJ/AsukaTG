@@ -166,7 +166,9 @@ class Helpers
     public static function sendMessage($message, $chatId = null, $params = [])
     {
         if (!$chatId) {
-            $chatId = app('telegram')->bot()->getWebhookUpdates()->getMessage()->getChat()->getId();
+            $chatId = app('telegram')->bot()->getWebhookUpdates()->getMessage()
+                ? app('telegram')->bot()->getWebhookUpdates()->getMessage()->getChat()->getId()
+                : config('telegram.bots.common.owner_id');
         }
 
         $params['chat_id'] = $chatId;
