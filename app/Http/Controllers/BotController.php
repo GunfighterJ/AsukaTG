@@ -55,7 +55,7 @@ class BotController extends Controller
                 if (isset($botan)) {
                     $botan->track(
                         $messageJson,
-                        camel_case(ltrim('/', explode(' ', explode('@', $message->getText())[0])[0])));
+                        camel_case(ltrim(explode(' ', explode('@', $message->getText())[0])[0], '/')));
                 }
             } catch (Exception $ex) {
                 Helpers::sendMessage($ex->getMessage());
