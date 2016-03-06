@@ -42,26 +42,6 @@ class BotController extends Controller
 
         AsukaDB::createOrUpdateUser($message->getFrom());
 
-        if (Helpers::isCommand($message) && config('asuka.botan_key') !== null) {
-            try {
-                $botan = new Botan(config('asuka.botan_key'));
-            } catch (Exception $ex) {
-                Helpers::sendMessage($ex->getMessage());
-            }
-
-            $messageJson = json_decode($message->toJson());
-
-            try {
-                if (isset($botan)) {
-                    $botan->track(
-                        $messageJson,
-                        studly_case(ltrim(explode(' ', explode('@', $message->getText())[0])[0], '/')));
-                }
-            } catch (Exception $ex) {
-                Helpers::sendMessage($ex->getMessage());
-            }
-        }
-
         if (Helpers::isGroup($message->getChat())) {
             // Store this group if it's a new group or the title was updated
             if (($message->getGroupChatCreated() || $message->getSupergroupChatCreated())

@@ -6,6 +6,5 @@ return [
         'groups_list' => array_map(function($val) {
             return intval(trim($val));
         }, explode(',', env('ASUKA_GROUPS_LIST', '')))
-    ],
-    'botan_key' => env('BOTAN_KEY', null),
+    ]
 ];
