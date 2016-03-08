@@ -38,7 +38,7 @@ class BotController extends Controller
             ->select('users.first_name', 'users.last_name', 'users.username', 'quotes.content as quote_content', 'quotes.created_at', 'groups.title as group_title')
             ->get();
 
-        return response()->json(collect($quotes));
+        return response()->json(collect($quotes), 200, [], JSON_UNESCAPED_SLASHES);
     }
 
     function webhook()
