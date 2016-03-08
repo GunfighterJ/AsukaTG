@@ -28,7 +28,7 @@ class BotController extends Controller
 {
     function index()
     {
-        return app('telegram')->bot()->getMe()->toJson();
+        return response()->json(app('telegram')->bot()->getMe());
     }
 
     function webhook()
