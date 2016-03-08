@@ -31,16 +31,6 @@ class BotController extends Controller
         return app('telegram')->bot()->getMe()->toJson();
     }
 
-    function quotes() {
-        $quotes = app('db')->connection()->table('quotes')
-            ->join('users', 'users.id', '=', 'quotes.user_id')
-            ->join('groups', 'groups.id', '=', 'quotes.group_id')
-            ->select('users.first_name', 'users.last_name', 'users.username', 'quotes.content as quote_content', 'quotes.created_at', 'groups.title as group_title')
-            ->get();
-
-        return response()->json(collect($quotes), 200, [], JSON_UNESCAPED_SLASHES);
-    }
-
     function webhook()
     {
         $telegram = app('telegram')->bot();
