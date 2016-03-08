@@ -34,7 +34,8 @@ class BotController extends Controller
     function quotes() {
         $quotes = app('db')->connection()->table('quotes')
             ->join('users', 'users.id', '=', 'quotes.user_id')
-            ->select('users.first_name', 'users.last_name', 'users.username', 'quotes.content', 'quotes.created_at')
+            ->join('groups', 'groups.id', '=', 'quotes.group_id')
+            ->select('users.first_name', 'users.last_name', 'users.username', 'quotes.content as quote_content', 'quotes.created_at', 'groups.title as group_title')
             ->get();
 
         return response()->json(collect($quotes));
