@@ -16,6 +16,9 @@
  * along with AsukaTG.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+$app->get('/q',
+    ['as' => 'quotes', 'uses' => 'BotController@quotes']);
+
 $app->get('/{botKey}',
     ['as' => 'bot', 'middleware' => 'bot', 'uses' => 'BotController@index']);
 
