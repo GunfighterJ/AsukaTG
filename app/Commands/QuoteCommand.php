@@ -91,7 +91,14 @@ class QuoteCommand extends BaseCommand
         }
 
         if (!$quote) {
-            $this->reply('No quote found!');
+            $quoteCount = app('db')->connection()->table('quotes')->count() == 0;
+            if ($quoteCount == 0) {
+                $this->reply('I don\'t have any quotes saved yet!');
+            } elseif (isset($quoteId) && ($quoteId < 1 || $quoteId > $quoteCount)) {
+                $this->reply(sprintf('Invalid quote ID. Valid values are between 1 and %d', $quoteCount));
+            } else {
+                $this->reply('No quote found!');
+            }
 
             return;
         }
