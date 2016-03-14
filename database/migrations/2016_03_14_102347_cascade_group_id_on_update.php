@@ -13,7 +13,7 @@ class CascadeGroupIdOnUpdate extends Migration
     public function up()
     {
         Schema::table('quotes', function (Blueprint $table) {
-            $table->dropForeign('group_id');
+            $table->dropForeign('quotes_group_id_foreign');
             $table->foreign('group_id')->references('id')->on('groups')->onUpdate('CASCADE');
         });
     }
@@ -25,6 +25,9 @@ class CascadeGroupIdOnUpdate extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('quotes', function (Blueprint $table) {
+            $table->dropForeign('quotes_group_id_foreign');
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('CASCADE');
+        });
     }
 }
