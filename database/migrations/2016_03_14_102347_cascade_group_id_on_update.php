@@ -13,7 +13,7 @@ class CascadeGroupIdOnUpdate extends Migration
     public function up()
     {
         Schema::table('quotes', function (Blueprint $table) {
-            $table->foreign('group_id')->references('id')->on('groups')->onUpdate('UPDATE');
+            $table->foreign('group_id')->references('id')->on('groups')->onUpdate('CASCADE');
         });
     }
 
