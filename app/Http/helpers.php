@@ -95,7 +95,7 @@ class Helpers
                 && !in_array($group->getId(), config('asuka.groups.groups_list'))) {
                 if (self::isCommand($message)) {
                     self::sendMessage(
-                        'This group is not whitelisted to use this bot.',
+                        sprintf('This group (%s) is not whitelisted to use this bot.', $group->getId()),
                         $group->getId(),
                         ['reply_to_message_id' => $message->getMessageId()]
                     );
@@ -106,7 +106,7 @@ class Helpers
                 && in_array($group->getId(), config('asuka.groups.groups_list'))) {
                 if (self::isCommand($message)) {
                     self::sendMessage(
-                        'This group is blacklisted from using this bot.',
+                        sprintf('This group (%s) is blacklisted from using this bot.', $group->getId()),
                         $group->getId(),
                         ['reply_to_message_id' => $message->getMessageId()]
                     );
