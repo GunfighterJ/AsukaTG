@@ -346,7 +346,6 @@ class AsukaDB
             $oldId = $message->getMigrateFromChatId();
             $newId = $message->getMigrateToChatId();
 
-            $db->table('quotes')->where('group_id', $oldId)->update(['group_id' => $newId]);
             $db->table('groups')->where('id', $oldId)->update(['id' => $newId]);
             return;
         }
