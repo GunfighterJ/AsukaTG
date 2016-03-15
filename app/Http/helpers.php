@@ -176,7 +176,7 @@ class Helpers
 
         $params['chat_id'] = $chatId;
         $end = ' ... (message truncated to 4096 bytes)';
-        $params['text'] = mb_strimwidth($message, 0, 4096, $end, 'UTF-8');
+        $params['text'] = str_limit($message, 4096 - mb_strwidth($end), $end);
 
         app('telegram')->bot()->sendMessage($params);
     }
