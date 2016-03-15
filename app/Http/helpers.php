@@ -229,7 +229,7 @@ class AsukaDB
         $quoteSource = $message->getReplyToMessage();
         $messageId = $message->getReplyToMessage()->getMessageId();
         $groupId = $quoteSource->getChat()->getId();
-        $comment = trim(mb_strstr($message, ' ')) ?: null;
+        $comment = trim(mb_strstr($message->getText(), ' ')) ?: null;
 
         self::createOrUpdateUser($quoteSource->getFrom());
 
