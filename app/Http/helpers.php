@@ -67,7 +67,8 @@ class Helpers
      * @param Chat $chat
      * @return bool
      */
-    public static function isGroup(Chat $chat) {
+    public static function isGroup(Chat $chat)
+    {
         return in_array($chat->getType(), ['group', 'supergroup']);
     }
 
@@ -77,7 +78,8 @@ class Helpers
      * @param Message $message
      * @return bool
      */
-    public static function isCommand(Message $message) {
+    public static function isCommand(Message $message)
+    {
         return starts_with(trim($message->getText()), '/');
     }
 
@@ -87,7 +89,8 @@ class Helpers
      * @param Chat $group
      * @return bool
      */
-    public static function groupIsAuthorized(Chat $group) {
+    public static function groupIsAuthorized(Chat $group)
+    {
         $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
 
         if (count(config('asuka.groups.groups_list'))) {
@@ -173,7 +176,7 @@ class Helpers
 
         $params['chat_id'] = $chatId;
         $end = ' ... (message truncated to 4096 bytes)';
-        $params['text'] = str_limit($message, 4096 - mb_strwidth($end, 'UTF-8'), $end);
+        $params['text'] = mb_strimwidth($message, 0, 4096, $end, 'UTF-8');
 
         app('telegram')->bot()->sendMessage($params);
     }
@@ -248,9 +251,9 @@ class AsukaDB
             return $db->insertGetId($values);
         } else {
             Helpers::sendMessage(
-                sprintf('I already have that quote saved as #%s.', $existing), $groupId, [
-                'reply_to_message_id' => $message->getMessageId()
-                ]
+                sprintf('I already have that quote saved as #%s.', $existing),
+                $groupId,
+                ['reply_to_message_id' => $message->getMessageId()]
             );
 
             return null;
