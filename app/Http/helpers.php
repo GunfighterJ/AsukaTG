@@ -229,7 +229,7 @@ class AsukaDB
         $quoteSource = $message->getReplyToMessage();
         $messageId = $message->getReplyToMessage()->getMessageId();
         $groupId = $quoteSource->getChat()->getId();
-        $comment = trim(mb_strstr($message, ' '));
+        $comment = trim(mb_strstr($message, ' ')) ?: null;
 
         self::createOrUpdateUser($quoteSource->getFrom());
 
@@ -240,7 +240,7 @@ class AsukaDB
             'message_id'        => $messageId,
             'message_timestamp' => $quoteSource->getDate(),
             'content'           => $quoteSource->getText(),
-            'comment'           => empty($comment) ? null : $comment,
+            'comment'           => $comment,
         ];
 
         $existing = $db->where('message_id', $messageId)->where('group_id', $groupId)->limit(1)->value('id');
