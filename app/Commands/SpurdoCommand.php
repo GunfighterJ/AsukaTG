@@ -51,7 +51,7 @@ class SpurdoCommand extends BaseCommand
             $toSpurdo = strtolower($replyToSpurdo->getText());
         }
 
-        $apiRequest = sprintf('%s?%s', self::SPURDO_API, http_build_query(['text' => $toSpurdo]));
+        $apiRequest = sprintf('%s?text=%s', self::SPURDO_API, urlencode(utf8_encode($toSpurdo)));
         $json = json_decode(Helpers::urlGetContents($apiRequest));
 
         if ($json->status === 0) {

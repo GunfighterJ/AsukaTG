@@ -46,6 +46,7 @@ return [
             'username'  => env('TELEGRAM_BOT_USERNAME', 'MyTelegramBot'),
             'token' => env('TELEGRAM_BOT_TOKEN', 'YOUR-BOT-TOKEN'),
             'owner_id' => env('TELEGRAM_OWNER_ID', 0),
+            'use_emojify' => env('TELEGRAM_USE_EMOJIFY', true),
             'commands' => [
 //                Acme\Project\Commands\MyTelegramBot\BotCommand::class
             ]
