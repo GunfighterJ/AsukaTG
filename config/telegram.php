@@ -127,7 +127,6 @@ return [
         Commands\MorseCommand::class,
         Commands\QuoteCommand::class,
         Commands\RollCommand::class,
-        Commands\StartCommand::class,
         Commands\SpurdoCommand::class,
         Commands\UnignoreCommand::class,
         Commands\UptimeCommand::class,

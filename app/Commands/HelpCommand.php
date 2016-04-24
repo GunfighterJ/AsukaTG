@@ -22,6 +22,7 @@ class HelpCommand extends BaseCommand
 {
     protected $description = 'Displays a list of bot commands.';
     protected $name = 'help';
+    protected $aliases = 'start';
 
     public function handle($arguments)
     {
@@ -39,16 +40,5 @@ class HelpCommand extends BaseCommand
 
         $response .= PHP_EOL . 'My source code can be found at https://github.com/TheReverend403/AsukaTG';
         $this->reply($response);
-    }
-}
-
-class StartCommand extends BaseCommand
-{
-    protected $description = 'Displays a list of bot commands.';
-    protected $name = 'start';
-
-    public function handle($arguments)
-    {
-        $this->triggerCommand('help');
     }
 }
