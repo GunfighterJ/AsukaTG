@@ -22,7 +22,7 @@ class HelpCommand extends BaseCommand
 {
     protected $description = 'Displays a list of bot commands.';
     protected $name = 'help';
-    protected $aliases = 'start';
+    protected $aliases = ['start'];
 
     public function handle($arguments)
     {
