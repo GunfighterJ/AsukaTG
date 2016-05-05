@@ -55,7 +55,7 @@ class GoogleCommand extends BaseCommand
 
         if (!$json->responseData || !count($json->responseData->results)) {
             if ($json->responseDetails) {
-                $this->reply($json->responseDetails);
+                $this->reply($json->responseDetails, ['disable_web_page_preview' => true]);
                 return;
             }
             $this->reply('No results found!');
