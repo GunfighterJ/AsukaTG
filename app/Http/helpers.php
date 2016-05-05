@@ -141,7 +141,6 @@ class Helpers
             }
 
             $errorMsg = sprintf('<b>Error:</b> %s' . PHP_EOL, self::escapeMarkdown($errorMsg));
-            $errorMsg .= sprintf('<b>URL:</b> %s', self::escapeMarkdown($ex->getRequest()->getUri()));
             $message = app('telegram')->bot()->getWebhookUpdates()->getMessage();
 
             self::sendMessage($errorMsg, $message->getChat()->getId(), [
