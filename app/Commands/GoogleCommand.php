@@ -28,6 +28,11 @@ class GoogleCommand extends BaseCommand
 
     public function handle($arguments)
     {
+        if (!config('asuka.keys.google.api_key') || !config('asuka.keys.google.custom_search_engine_id')) {
+            $this->reply('Missing custom search credentials!');
+            return;
+        }
+        
         if (empty($arguments)) {
             $badArgsResponse = implode(
                 PHP_EOL,
@@ -43,8 +48,14 @@ class GoogleCommand extends BaseCommand
 
         $this->replyWithChatAction(['action' => Actions::TYPING]);
 
-        $query = trim(rawurlencode($arguments));
-        $url = sprintf('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=%s&rsz=5', $query);
+        $query = trim($arguments);
+        $queryParams = [
+            'alt' => 'json',
+            'cx' => config('asuka.keys.google.custom_search_engine_id'),
+            'key' => config('asuka.keys.google.api_key'),
+            'q' => $query
+        ];
+        $url = sprintf('https://www.googleapis.com/customsearch/v1?%s', http_build_query($queryParams));
         $body = Helpers::urlGetContents($url);
         $json = json_decode($body);
 
@@ -53,7 +64,7 @@ class GoogleCommand extends BaseCommand
             return;
         }
 
-        if (!$json->responseData || !count($json->responseData->results)) {
+        if (!$json->items || !count($json->items)) {
             if ($json->responseDetails) {
                 $this->reply($json->responseDetails, ['disable_web_page_preview' => true]);
                 return;
@@ -62,20 +73,20 @@ class GoogleCommand extends BaseCommand
             return;
         }
 
-        $cursor = $json->responseData->cursor;
+        $searchInformation = $json->searchInformation;
         $response = sprintf(
             'About %s results (%.2f seconds)' . PHP_EOL,
-            $cursor->resultCount,
-            $cursor->searchResultTime
+            $searchInformation->totalResults,
+            $searchInformation->searchTime
         );
 
-        $results = collect($json->responseData->results)->slice(0, 5);
+        $results = collect($json->items)->slice(0, 5);
         foreach ($results->all() as $result) {
             $response .= sprintf(
                 '<b>%s.</b> <a href="%s">%s</a>' . PHP_EOL,
                 $results->search($result) + 1,
-                Helpers::escapeMarkdown($result->url),
-                Helpers::escapeMarkdown(html_entity_decode($result->titleNoFormatting, ENT_QUOTES | ENT_HTML401))
+                Helpers::escapeMarkdown($result->link),
+                Helpers::escapeMarkdown(html_entity_decode($result->title, ENT_QUOTES | ENT_HTML401))
             );
         }
 
