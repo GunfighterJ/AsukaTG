@@ -75,15 +75,15 @@ class GoogleCommand extends BaseCommand
 
         $searchInformation = $json->searchInformation;
         $response = sprintf(
-            'About %s results (%.2f seconds)' . PHP_EOL,
-            $searchInformation->totalResults,
-            $searchInformation->searchTime
+            'About %s results (%s seconds)' . PHP_EOL,
+            $searchInformation->formattedTotalResults,
+            $searchInformation->formattedSearchTime
         );
 
         $results = collect($json->items)->slice(0, 5);
         foreach ($results->all() as $result) {
             $response .= sprintf(
-                '<b>%s.</b> <a href="%s">%s</a>' . PHP_EOL,
+                '<b>%s.</b> <a href="http://%s">%s</a>' . PHP_EOL,
                 $results->search($result) + 1,
                 Helpers::escapeMarkdown($result->link),
                 Helpers::escapeMarkdown(html_entity_decode($result->title, ENT_QUOTES | ENT_HTML401))

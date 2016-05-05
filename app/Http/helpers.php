@@ -188,7 +188,7 @@ class Helpers
      */
     public static function escapeMarkdown($string)
     {
-        return htmlspecialchars($string);
+        return htmlentities($string);
     }
 
     /**
