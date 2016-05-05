@@ -83,9 +83,9 @@ class GoogleCommand extends BaseCommand
         $results = collect($json->items)->slice(0, 5);
         foreach ($results->all() as $result) {
             $response .= sprintf(
-                '<b>%s.</b> <a href="http://%s">%s</a>' . PHP_EOL,
+                '<b>%s.</b> <a href="%s">%s</a>' . PHP_EOL,
                 $results->search($result) + 1,
-                $result->displayLink,
+                Helpers::escapeMarkdown($result->link),
                 Helpers::escapeMarkdown(html_entity_decode($result->title, ENT_QUOTES | ENT_HTML401))
             );
         }
