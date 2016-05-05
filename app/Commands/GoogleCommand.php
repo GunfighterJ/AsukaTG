@@ -85,7 +85,7 @@ class GoogleCommand extends BaseCommand
             $response .= sprintf(
                 '<b>%s.</b> <a href="http://%s">%s</a>' . PHP_EOL,
                 $results->search($result) + 1,
-                Helpers::escapeMarkdown($result->link),
+                $result->displayLink,
                 Helpers::escapeMarkdown(html_entity_decode($result->title, ENT_QUOTES | ENT_HTML401))
             );
         }
