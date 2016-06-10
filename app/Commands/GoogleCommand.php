@@ -86,7 +86,7 @@ class GoogleCommand extends BaseCommand
                 '<b>%s.</b> <a href="%s">%s</a>' . PHP_EOL,
                 $results->search($result) + 1,
                 Helpers::escapeMarkdown($result->link),
-                Helpers::escapeMarkdown(html_entity_decode($result->title, ENT_QUOTES | ENT_HTML401))
+                Helpers::escapeMarkdown(html_entity_decode($result->title, ENT_QUOTES | ENT_HTML5))
             );
         }
 

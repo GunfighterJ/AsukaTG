@@ -183,12 +183,12 @@ class Helpers
     /**
      * Escapes HTML special characters in a string for formatting purposes.
      *
-     * @param  $string
+     * @param  $markdown
      * @return mixed
      */
-    public static function escapeMarkdown($string)
+    public static function escapeMarkdown($markdown)
     {
-        return htmlentities($string);
+        return htmlspecialchars($markdown, ENT_NOQUOTES | ENT_HTML5);
     }
 
     /**
