@@ -57,7 +57,7 @@ class QuoteCommand extends BaseCommand
             }
 
             if ($message->isType('text')) {
-                $this->reply(sprintf('I cannot quote %s messages, please send me a text message.', $messageType));
+                $this->reply(sprintf('I cannot quote %s messages, please send me a text message.', $message->detectType()));
 
                 return;
             }
