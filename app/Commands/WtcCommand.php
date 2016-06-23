@@ -16,8 +16,12 @@ class WtcCommand extends BaseCommand
         $html = Helpers::urlGetContents($url);
 
         $dom = new DOMDocument();
-        $dom->loadHTML($html);
-        $commitMessage = $dom->getElementById('content')->getElementsByTagName('p')->item(0)->nodeValue;
+        if ($dom->loadHTML($html)) {
+            $commitMessage = $dom->getElementById('content')->getElementsByTagName('p')->item(0)->nodeValue;
+        } else {
+            $this->reply('Failed to load content from whatthecommit.com', ['disable_web_page_preview' => true]);
+            return;
+        }
 
         $this->reply($commitMessage, ['disable_web_page_preview' => true]);
     }
