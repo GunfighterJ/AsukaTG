@@ -87,8 +87,7 @@ class MorseCommand extends BaseCommand
                 return;
             }
         } else {
-            $messageType = $this->getTelegram()->detectMessageType($replyToMorse);
-            if ($messageType != 'text') {
+            if ($message->isType('text')) {
                 $this->reply(sprintf('I cannot translate %s messages, please send me a text message.', $messageType));
 
                 return;

@@ -130,6 +130,7 @@ return [
         Commands\SpurdoCommand::class,
         Commands\UnignoreCommand::class,
         Commands\UptimeCommand::class,
+        Commands\WtcCommand::class,
     ],
 
     /*

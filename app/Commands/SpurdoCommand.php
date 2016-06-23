@@ -41,8 +41,7 @@ class SpurdoCommand extends BaseCommand
                 return;
             }
         } else {
-            $messageType = $this->getTelegram()->detectMessageType($replyToSpurdo);
-            if ($messageType != 'text') {
+            if ($message->isType('text')) {
                 $this->reply(sprintf('I cannot spurdo %s messages, please send me a text message.', $messageType));
 
                 return;
