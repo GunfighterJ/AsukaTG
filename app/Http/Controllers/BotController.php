@@ -36,7 +36,7 @@ class BotController extends Controller
         $telegram = app('telegram')->bot();
         $message = $telegram->getWebhookUpdates()->getMessage();
 
-        if (!$message->getFrom()) {
+        if (!$message || !$message->getFrom()) {
             return response('OK');
         }
 
