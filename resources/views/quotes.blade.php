@@ -40,7 +40,7 @@
                             <td>{{ $citation }}</td>
                             <td>{{ $quote->content }}</td>
                             <?php
-                                $quoter = \Asuka\Http\AsukaDB::getUser($quote->from_id);
+                                $quoter = \Asuka\Http\AsukaDB::getUser($quote->added_by_id);
                                 $citation = $quoter->first_name;
                                 if ($quoter->last_name) {
                                     $citation .= sprintf(' %s', $quoter->last_name);
