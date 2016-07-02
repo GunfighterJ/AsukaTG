@@ -30,7 +30,7 @@
             </thead>
             <tbody>
             @foreach ($quotes as $quote)
-                <tr>
+                <tr id="{{ $quote->id }}">
                     <?php
                     $quotee = \Asuka\Http\AsukaDB::getUser($quote->user_id);
                     $citation = $quotee->first_name;
