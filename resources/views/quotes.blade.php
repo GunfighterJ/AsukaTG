@@ -25,7 +25,8 @@
                         </thead>
                         <tbody>
                         @foreach ($quotes as $quote)
-                            <?php
+                            <tr>
+                                <?php
                                 $quotee = \Asuka\Http\AsukaDB::getUser($quote->user_id);
                                 $citation = $quotee->first_name;
                                 if ($quotee->last_name) {
@@ -35,11 +36,11 @@
                                 if ($quotee->username) {
                                     $citation .= sprintf(' (@%s)', $quotee->username);
                                 }
-                            ?>
-                            <td>{{ $quote->id }}</td>
-                            <td>{{ $citation }}</td>
-                            <td>{{ $quote->content }}</td>
-                            <?php
+                                ?>
+                                <td>{{ $quote->id }}</td>
+                                <td>{{ $citation }}</td>
+                                <td>{{ $quote->content }}</td>
+                                <?php
                                 $quoter = \Asuka\Http\AsukaDB::getUser($quote->added_by_id);
                                 $citation = $quoter->first_name;
                                 if ($quoter->last_name) {
@@ -49,11 +50,12 @@
                                 if ($quoter->username) {
                                     $citation .= sprintf(' (@%s)', $quoter->username);
                                 }
-                            ?>
-                            <td>{{ $citation }}</td>
-                            <td>{{ date('D, jS M Y H:i:s T', $quote->message_timestamp) }}</td>
-                            <td>{{ $quote->comment ?: 'N/A' }}</td>
-                        @endforeach
+                                ?>
+                                <td>{{ $citation }}</td>
+                                <td>{{ date('D, jS M Y H:i:s T', $quote->message_timestamp) }}</td>
+                                <td>{{ $quote->comment ?: 'N/A' }}</td>
+                                @endforeach
+                            </tr>
                     </table>
                 <hr>
             </div>
