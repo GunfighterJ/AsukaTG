@@ -4,7 +4,7 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
     <div class="text-center">
         <h1>Telegram Quotes</h1>
     </div>
