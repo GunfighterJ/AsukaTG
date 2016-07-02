@@ -11,7 +11,7 @@
 <body>
 <div class="container-fluid">
     <div class="text-center">
-        <h1><a href="https://telegram.me/{{ $botName }}">&commat;{{ $botName }}</a> Quotes</h1>
+        <h1><a href="https://telegram.me/{{ $botName }}">&commat;{{ $botName }}</a> Quotes<small>Disclaimer: The stories and information posted here are artistic works of fiction, falsehood and edgy humour. Only a fool would take anything posted here as fact.</small></h1>
         <h5>View any of these quotes along with extra quote info in Telegram by messaging <a href="https://telegram.me/{{ $botName }}">&commat;{{ $botName }}</a> with the command <code>/q [quote id]</code></h5>
     </div>
     @if (count($quotes))
