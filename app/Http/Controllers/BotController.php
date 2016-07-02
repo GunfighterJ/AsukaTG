@@ -81,4 +81,10 @@ class BotController extends Controller
 
         throw new NotFoundHttpException;
     }
+
+    public function showQuotes()
+    {
+        $quotes = app('db')->connection()->table('quotes')->paginate(30);
+        return view('quotes')->with('quotes', $quotes);
+    }
 }
