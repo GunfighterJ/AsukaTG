@@ -7,6 +7,7 @@
 <div class="container-fluid">
     <div class="text-center">
         <h1>Telegram Quotes</h1>
+        <h5>View any of these quotes in Telegram by messaging <a href="https://telegram.me/{{ $botName }}">{{ $botName }}</a> with the command <code>/q [quote id]</code></h5>
     </div>
     <hr>
     @if (count($quotes))
@@ -38,18 +39,6 @@
                     <td>{{ $quote->id }}</td>
                     <td>{{ $citation }}</td>
                     <td>{{ $quote->content }}</td>
-                    <?php
-                    $quoter = \Asuka\Http\AsukaDB::getUser($quote->added_by_id);
-                    $citation = $quoter->first_name;
-                    if ($quoter->last_name) {
-                        $citation .= sprintf(' %s', $quoter->last_name);
-                    }
-
-                    if ($quoter->username) {
-                        $citation .= sprintf(' (@%s)', $quoter->username);
-                    }
-                    ?>
-                    <td>{{ $citation }}</td>
                     <td>{{ date('D, jS M Y H:i:s T', $quote->message_timestamp) }}</td>
                     <td>{{ $quote->comment ?: 'N/A' }}</td>
                     @endforeach
