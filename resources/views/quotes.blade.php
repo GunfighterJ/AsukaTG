@@ -7,7 +7,7 @@
 <div class="container-fluid">
     <div class="text-center">
         <h1>Telegram Quotes</h1>
-        <h5>View any of these quotes in Telegram by messaging <a href="https://telegram.me/{{ $botName }}">{{ $botName }}</a> with the command <code>/q [quote id]</code></h5>
+        <h5>View any of these quotes along with extra quote info in Telegram by messaging <a href="https://telegram.me/{{ $botName }}">{{ $botName }}</a> with the command <code>/q [quote id]</code></h5>
     </div>
     <hr>
     @if (count($quotes))
@@ -17,7 +17,6 @@
                 <th>ID</th>
                 <th>From</th>
                 <th>Content</th>
-                <th>Added By</th>
                 <th>Date</th>
                 <th>Comment</th>
             </tr>
