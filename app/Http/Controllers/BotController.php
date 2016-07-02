@@ -84,7 +84,7 @@ class BotController extends Controller
 
     public function showQuotes()
     {
-        $quotes = app('db')->connection()->table('quotes')->paginate(30);
+        $quotes = app('db')->connection()->table('quotes')->paginate(100);
         return view('quotes')->with('quotes', $quotes)->with('botName', app('telegram')->bot()->getMe()->getUsername());
     }
 }

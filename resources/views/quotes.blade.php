@@ -9,8 +9,10 @@
         <h1><a href="https://telegram.me/{{ $botName }}">&commat;{{ $botName }}</a> Quotes</h1>
         <h5>View any of these quotes along with extra quote info in Telegram by messaging <a href="https://telegram.me/{{ $botName }}">&commat;{{ $botName }}</a> with the command <code>/q [quote id]</code></h5>
     </div>
-    <hr>
     @if (count($quotes))
+        <div class="text-center">
+            {!! $quotes->render() !!}
+        </div>
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -49,6 +51,7 @@
             {!! $quotes->render() !!}
         </div>
     @else
+        <hr>
         <div class="message-area">
             <div class="alert alert-danger">No quotes found...</div>
         </div>
