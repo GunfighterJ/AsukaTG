@@ -2,6 +2,11 @@
 <head>
     <title>&commat;{{ $botName }} Quotes</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        table tr:target {
+            background-color: lightgreen;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
@@ -37,7 +42,7 @@
                         $citation .= sprintf(' (@%s)', $quotee->username);
                     }
                     ?>
-                    <td>{{ $quote->id }}</td>
+                    <td><a href="#{{ $quote->id }}">{{ $quote->id }}</a></td>
                     <td>{{ $citation }}</td>
                     <td>{{ $quote->content }}</td>
                     <td>{{ date('D, jS M Y H:i:s T', $quote->message_timestamp) }}</td>
