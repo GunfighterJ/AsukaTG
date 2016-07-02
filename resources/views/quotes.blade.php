@@ -15,6 +15,7 @@
                     <table class="table table-bordered">
                         <thead>
                         <tr>
+                            <th>ID</th>
                             <th>From</th>
                             <th>Content</th>
                             <th>Added By</th>
@@ -25,7 +26,7 @@
                         <tbody>
                         @foreach ($quotes as $quote)
                             <?php
-                                $quotee = AsukaDB::getUser($quote->user_id);
+                                $quotee = \Asuka\Http\AsukaDB::getUser($quote->user_id);
                                 $citation = $quotee->first_name;
                                 if ($quotee->last_name) {
                                     $citation .= sprintf(' %s', $quotee->last_name);
@@ -35,10 +36,11 @@
                                     $citation .= sprintf(' (@%s)', $quotee->username);
                                 }
                             ?>
+                            <td>{{ $quote->id }}</td>
                             <td>{{ $citation }}</td>
                             <td>{{ $quote->content }}</td>
                             <?php
-                                $quoter = AsukaDB::getUser($quote->from_id);
+                                $quoter = \Asuka\Http\AsukaDB::getUser($quote->from_id);
                                 $citation = $quoter->first_name;
                                 if ($quoter->last_name) {
                                     $citation .= sprintf(' %s', $quoter->last_name);
