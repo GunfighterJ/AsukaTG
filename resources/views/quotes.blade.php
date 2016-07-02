@@ -1,13 +1,13 @@
 <html>
 <head>
-    <title>Telegram Quotes</title>
+    <title>{{ $botName }} Quotes</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container-fluid">
     <div class="text-center">
         <h1>Telegram Quotes</h1>
-        <h5>View any of these quotes along with extra quote info in Telegram by messaging <a href="https://telegram.me/{{ $botName }}">{{ $botName }}</a> with the command <code>/q [quote id]</code></h5>
+        <h5>View any of these quotes along with extra quote info in Telegram by messaging <a href="https://telegram.me/{{ $botName }}">&commat;{{ $botName }}</a> with the command <code>/q [quote id]</code></h5>
     </div>
     <hr>
     @if (count($quotes))
