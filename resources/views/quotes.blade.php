@@ -33,15 +33,15 @@
             @foreach ($quotes as $quote)
                 <tr id="{{ $quote->id }}">
                     <?php
-                    $quotee = \Asuka\Http\AsukaDB::getUser($quote->user_id);
-                    $citation = $quotee->first_name;
-                    if ($quotee->last_name) {
-                        $citation .= sprintf(' %s', $quotee->last_name);
-                    }
+                        $quotee = \Asuka\Http\AsukaDB::getUser($quote->user_id);
+                        $citation = $quotee->first_name;
+                        if ($quotee->last_name) {
+                            $citation .= sprintf(' %s', $quotee->last_name);
+                        }
 
-                    if ($quotee->username) {
-                        $citation .= sprintf(' (@%s)', $quotee->username);
-                    }
+                        if ($quotee->username) {
+                            $citation .= sprintf(' (@%s)', $quotee->username);
+                        }
                     ?>
                     <td><a href="#{{ $quote->id }}">{{ $quote->id }}</a></td>
                     <td>{{ $citation }}</td>
