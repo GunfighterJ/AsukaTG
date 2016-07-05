@@ -87,7 +87,7 @@ class MorseCommand extends BaseCommand
                 return;
             }
         } else {
-            if ($message->isType('text')) {
+            if (!$message->isType('text')) {
                 $this->reply(sprintf('I cannot translate %s messages, please send me a text message.', $messageType));
 
                 return;
